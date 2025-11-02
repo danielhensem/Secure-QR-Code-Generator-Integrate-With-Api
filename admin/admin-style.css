@@ -1,0 +1,435 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
+
+:root {
+  --header-height: 3rem;
+  --nav-width: 68px;
+  --first-color: #535353;
+  --first-color-light: #000000;
+  --white-color: #f7f6fb;
+  --body-font: "Nunito", sans-serif;
+  --normal-font-size: 1rem;
+  --z-fixed: 100;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  margin: var(--header-height) 0 0 0;
+  padding: 0 1rem;
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  transition: 0.5s;
+}
+
+a {
+  text-decoration: none;
+}
+
+.header {
+  width: 100%;
+  height: var(--header-height);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  background-color: var(--white-color);
+  z-index: var(--z-fixed);
+  transition: 0.5s;
+}
+
+.header_toggle {
+  color: var(--first-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.header_img {
+  width: 20px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.header_img img {
+  width: 40px;
+}
+
+.l-navbar {
+  position: fixed;
+  top: 0;
+  left: -30%;
+  width: var(--nav-width);
+  height: 100vh;
+  background-color: var(--first-color);
+  padding: 0.5rem 1rem 0 0;
+  transition: 0.5s;
+  z-index: var(--z-fixed);
+}
+
+.nav {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.nav_logo,
+.nav_link {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  column-gap: 1rem;
+  padding: 0.5rem 0 0.5rem 1.5rem;
+}
+
+.nav_logo {
+  margin-bottom: 2rem;
+}
+
+.nav_logo-icon {
+  font-size: 1.25rem;
+  color: var(--white-color);
+}
+
+.nav_logo-name {
+  color: var(--white-color);
+  font-weight: 700;
+}
+
+.nav_link {
+  position: relative;
+  color: var(--first-color-light);
+  margin-bottom: 1.5rem;
+  transition: 0.3s;
+}
+
+.nav_link:hover {
+  color: var(--white-color);
+}
+
+.nav_icon {
+  font-size: 1.25rem;
+}
+
+.show {
+  left: 0;
+}
+
+.body-pd {
+  padding-left: calc(var(--nav-width) + 1rem);
+}
+
+.active {
+  color: var(--white-color);
+}
+
+.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 2px;
+  height: 32px;
+  background-color: var(--white-color);
+}
+
+.height-100 {
+  height: 100vh;
+}
+
+@media screen and (min-width: 768px) {
+  body {
+    margin: calc(var(--header-height) + 1rem) 0 0 0;
+    padding-left: calc(var(--nav-width) + 2rem);
+  }
+
+  .header {
+    height: calc(var(--header-height) + 1rem);
+    padding: 0 2rem 0 calc(var(--nav-width) + 2rem);
+  }
+
+  .header_img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header_img img {
+    width: 45px;
+  }
+
+  .l-navbar {
+    left: 0;
+    padding: 1rem 1rem 0 0;
+  }
+
+  .show {
+    width: calc(var(--nav-width) + 156px);
+  }
+
+  .body-pd {
+    padding-left: calc(var(--nav-width) + 188px);
+  }
+}
+
+
+
+/*        add product           */
+.main-container h2{
+    text-align: center;
+    font-size: 40px;
+    font-weight: 800;
+}
+.main-container .add-product{
+    display: flex;
+    justify-content: flex-end;
+}
+.main-container .manage-product{
+    margin-top: 40px;
+}
+.main-container .manage-product thead th{
+    padding: 7px 13px;
+    border-bottom: .1px solid rgb(217, 220, 219);
+}
+.main-container .manage-product tbody td{
+    padding: 10px 30px;
+    border-bottom: .1px solid rgb(217, 220, 219);
+}
+.main-container .manage-product tbody .item-icons{
+  text-align: center;
+  font-size: 17px;
+}
+/*        add product           */
+
+.pro-desc{
+  height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+p{
+  padding: 0;
+  margin: 0;
+}
+
+
+/*          dashbord           */
+.dashbord {
+  display: flex;
+  /* flex-wrap: wrap; */
+  justify-content: center;
+}
+.dashboard {
+  display: flex;
+  /* flex-wrap: wrap; */
+  justify-content:center;
+}
+
+.dashbord .dash-card {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px 40px;
+  background-color: rgb(124, 124, 124);
+  margin: 10px;
+  display: flex;
+  color: white;
+  box-shadow: black 1px 1px 10px;    
+  width: auto;
+  max-width: 15%;
+  /* margin: 35px 35px; */
+  border-radius: 30px;
+  
+}
+
+.dashboard .dash-graph{
+  display: flex;
+  /* flex-wrap:wrap; */
+  margin-top: 10px;
+  margin-bottom: 20px;
+  scroll-margin-left: 20px;
+  margin-left:20px; 
+  justify-content: center;
+  align-items: center;
+  background-color: #d8d8d8;
+  box-shadow: black 1px 1px 10px;  
+  min-width: 650px;
+  width: 700px;
+  max-width: 800px;
+  border: 2px;
+  min-height: 500px;
+  max-height: 200px;
+  border-radius: 40px; 
+}
+
+.dashboard-container{
+  display: flex;
+  flex-direction:column;
+  gap: 1px;
+}
+
+.dashboard .dash-pie{
+  display: flex; 
+  /* flex-wrap: wrap; */
+  margin-left : 20px;
+  margin-top: 10px; 
+  margin-right: 20px;
+  justify-content: center; 
+  align-items: center;
+  min-height: 300px;
+  max-height: 200px;
+  background-color:darkslategray;
+  box-shadow: black 1px 1px 10px;
+  width: 250px; 
+  max-width: 250px; 
+  border: 2px; 
+  border-radius: 40px;
+}
+
+.dashboard .dash-pie-desc{
+  display: flex; 
+  /* flex-wrap: wrap; */
+  margin-left : 20px;
+  /* margin-top: px;  */
+  margin-right: 10px;
+  margin-bottom: 20px;
+  justify-content: center; 
+  align-items: center;
+  min-height: 150px;
+  height: 175px;
+  max-height: 175px;
+  background-color:darkgray;
+  box-shadow: black 1px 1px 10px;
+  width: 250px; 
+  max-width: 250px; 
+  border: 2px; 
+  border-radius: 40px;
+}
+
+.dashboard .dash-graph-desc{
+  display: flex; 
+  flex-wrap: wrap;
+  margin-left : 10px;
+  margin-top: 10px; 
+  margin-right: 10px;
+  margin-bottom: 20px;
+  justify-content: center; 
+  align-items: center;
+  min-height: 150px;
+  height: 175px;
+  max-height: 175px;
+  background-color:rgb(255, 255, 255);
+  box-shadow: black 1px 1px 10px;
+  min-width: 87%;
+  max-width: 87%;
+  width: 87%; 
+  border: 2px; 
+  border-radius: 40px;
+}
+
+.dashboard .dash-desc{
+  display: flex; 
+  /* flex-wrap: wrap; */
+  margin-left : 20px;
+  /* margin-top: px;  */
+  margin-right: 10px;
+  margin-bottom: 20px;
+  min-height: 150px;
+  height: 175px;
+  max-height: 175px;
+  background-color:darkgray;
+  box-shadow: black 1px 1px 10px;
+  width: 250px; 
+  max-width: 250px; 
+  border: 2px; 
+  border-radius: 40px;
+}
+.dashbord .dash-card .dash-icons{
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  width: 50px;             /* adjust as needed */
+  height: 50px;            /* adjust as needed */
+  margin: 0 auto;          /* centers flex container itself if needed */
+}
+
+.dashbord .dash-card .dash-desc{
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  font-weight: 150;
+  padding: 2px;
+}
+.dashbord .dash-card ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dashbord .dash-card i{
+  font-size: 40px;
+  color: white;
+}
+.dashbord .dash-card .dash-label{
+  width: 100%;
+  display: flex; 
+  align-items: center;
+  text-align: center;
+  font-size:13px;
+  justify-content: center;
+}
+.dashbord .dash-card .dash-data{
+  display: flex;
+  width:100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
+  font-weight: 900;
+}
+/*          dashbord           */
+
+
+
+.user-subnav{
+  display: flex;
+  justify-content: left;
+  width: 100%;
+  margin-top: 50px;
+  /* background-color: rgb(198, 252, 252); */
+  /* padding: 20px 30px; */
+  padding-top: 40px;
+
+}
+.user-subnav .navlinks{
+  border: 1px #4723d9 inset;
+  border-radius: 40px;
+}
+.user-subnav a{
+  font-size: 23px;
+  color: black;
+  /* margin: 0 20px; */
+  padding: 3px 28px;
+  border-radius: 40px;
+  font-family: var(--body-font);
+  font-weight: 600;
+  
+}
+
+.user-subnav .active{
+  background-color: darkgray;
+  color: rgb(0, 0, 0);
+}
+
+

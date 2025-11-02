@@ -1,0 +1,338 @@
+
+/* footer  */
+
+@media (max-width: 900px) {
+  footer .content .link-boxes{
+    flex-wrap: wrap;
+  }
+  footer .content .link-boxes .input-box{
+    width: 40%;
+    margin-top: 10px;
+  }
+}
+@media (max-width: 700px){
+  footer{
+    position: relative;
+  }
+  .content .top .logo-details{
+    font-size: 26px;
+  }
+  .content .top .media-icons a{
+    height: 35px;
+    width: 35px;
+    font-size: 14px;
+    line-height: 35px;
+  }
+  footer .content .link-boxes .box{
+    width: calc(100% / 3 - 10px);
+  }
+  footer .content .link-boxes .input-box{
+    width: 60%;
+  }
+  .bottom-details .bottom_text span,
+  .bottom-details .bottom_text a{
+    font-size: 12px;
+  }
+  /* caet page  */
+  .cart-section .cart-items .cart-item-card:nth-child(2) .cart-item-img{
+    width: 139px;
+  }
+  .cart-section .cart-items .cart-item-card .cart-item-img{
+    width: 139px;
+  }
+  .cart-section .cart-items .cart-item-card .cart-item-title h3{
+    font-size: 11px;
+  }
+  .cart-section .cart-items .cart-item-card .cart-item-desc p{
+    font-size: 8px;
+  }
+  .cart-section .cart-items .cart-item-price h1{
+    font-size: 11px;
+  }
+  .cart-section .cart-item .cart-item-btn{
+    padding: 20px 35px;
+    gap: 35px;
+  }
+  .cart-section .cart-item .cart-item-btn i{
+    font-size: 10px;
+  }
+  .cart-section .cart-item .cart-item-btn a{
+    font-size: 10px;
+  }
+  .cart-section .cart-item .qty-btns .btn-mins{
+    padding: 0;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .cart-section .cart-item .qty-btns .btn-plus{
+    padding: 0;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .cart-section .cart-item .qty-btns span{
+    font-size: 10px;
+  }
+  /* caet page  */
+}
+@media (max-width: 520px){
+  footer::before{
+    top: 145px;
+  }
+  footer .content .top{
+    flex-direction: column;
+  }
+  .content .top .media-icons{
+    margin-top: 16px;
+  }
+  footer .content .link-boxes .box{
+    width: calc(100% / 2 - 10px);
+  }
+  footer .content .link-boxes .input-box{
+    width: 100%;
+  }
+  .icon {
+    width: 76px;
+    border-end-end-radius: 20px;
+    border-top-right-radius: 20px;
+}
+  /* modal */
+.modal{
+  flex-direction: column;
+  margin: 0;
+  margin-top: 4px;
+}
+.modal1{
+  padding: 0;
+}
+.modal .modal-img img{
+  object-fit: cover;
+  width: 100vw;
+  height: 250px;
+}
+.modal .modal-text{
+  height: 250px;
+  padding-left: 10vw;
+}
+.modal .modal-text p{
+  font-size: 15px;
+  width: 80%;
+}
+.modal .modal-text h1{
+  font-size: 25px;
+  padding: 10px 0;
+}
+.modal button{
+width: 106px;
+  height: 32px;
+  margin: 11px 0;
+  font-size: 12px;
+}
+/* modal */
+}
+
+/* footer  */
+
+/* footer */
+footer {
+  font-family: var(--boldfont);
+  background: var(--white);
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  border-top: #1b1b1b 1px solid;
+  margin-top: 60px;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 100px;
+  height: 1px;
+  width: 100%;
+}
+
+footer .content {
+  max-width: 1250px;
+  margin: auto;
+  padding: 30px 40px 40px 40px;
+}
+
+footer .content .top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+
+.content .top .logo-details {
+  color: var(--black);
+  font-size: 30px;
+  font-family: var(--hading);
+}
+
+.content .top .media-icons {
+  display: flex;
+}
+
+.content .top .media-icons a {
+  height: 40px;
+  width: 40px;
+  margin: 0 8px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  color: var(--black);
+  font-size: 17px;
+  text-decoration: none;
+  transition: all 0.4s ease;
+
+}
+
+.top .media-icons a:nth-child(1) {
+  color: #4267B2;
+
+}
+
+.top .media-icons a:nth-child(2) {
+  color: #1DA1F2;
+}
+
+.top .media-icons a:nth-child(3) {
+  color: #E1306C;
+}
+
+.top .media-icons a:nth-child(4) {
+  color: #0077B5;
+}
+
+.top .media-icons a:nth-child(5) {
+  color: red;
+}
+
+.content .top .media-icons a i {
+  padding: 7px 6px;
+}
+
+footer .content .link-boxes {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+footer .content .link-boxes .box {
+  width: calc(100% / 5 - 10px);
+}
+
+.content .link-boxes .box .link_name {
+  color: #1b1b1b;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  position: relative;
+
+}
+
+.link-boxes .box .link_name::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 35px;
+  background: #1b1b1b;
+}
+
+.content .link-boxes .box li {
+  margin: 6px 0;
+  list-style: none;
+  color: var(--black);
+  font-weight: 400;
+}
+
+.content .link-boxes .box li a {
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: all 0.4s ease
+}
+
+.content .link-boxes .box li a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.content .link-boxes .input-box {
+  margin-right: 55px;
+}
+
+.link-boxes .input-box input {
+  height: 40px;
+  width: calc(100% + 55px);
+  outline: none;
+  border: 2px solid #AFAFB6;
+  background: var(--white);
+  border-radius: 4px;
+  padding: 0 15px;
+  font-size: 15px;
+  color: var(--black);
+  margin-top: 5px;
+}
+
+.link-boxes .input-box input::placeholder {
+  color: #AFAFB6;
+  font-size: 16px;
+}
+
+.link-boxes .input-box input[type="button"] {
+  background: var(--blue);
+  color: var(--white);
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 4px 0;
+  opacity: 0.8;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.input-box input[type="button"]:hover {
+  opacity: 1;
+}
+
+footer .bottom-details {
+  width: 100%;
+  background: var(--white);
+}
+
+footer .bottom-details .bottom_text {
+  max-width: 1250px;
+  margin: auto;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bottom-details .bottom_text span,
+.bottom-details .bottom_text a {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--black);
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+.bottom-details .bottom_text a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.bottom-details .bottom_text a {
+  margin-right: 10px;
+}
+
+/* footer */

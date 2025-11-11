@@ -108,8 +108,11 @@ $name = $_SESSION["username"];
         .feature-card {
             flex: 1 1 22%;
             background-color: #fff;
-            padding: 25px;
-            border-radius: 30px;
+            padding-left:10px;
+            padding-right:10px;
+            padding-top:15px;
+            padding-bottom: 5px;
+            border-radius: 50px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
             min-width: 230px;
@@ -355,16 +358,16 @@ $name = $_SESSION["username"];
                     <div class="products-cards">
                         <div class="container">
                             <h1
-                                style="font-family: 'Inter', sans-serif; font-weight:bold; color: black; font-size:40px;text-align: left;margin-top:20px; margin-bottom:20px;">
-                                Welcome to the Secured & Trusted QR Code Innovation Center!<br>
+                                style="font-family: cursive; font-weight:bold; color: black; font-size:40px;text-align: center;margin-top:20px; margin-bottom:20px;">
+                                Welcome to the<br>Secure QR Code Generator System<br>
                             </h1>
                             <small
-                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: bold; font-size:16px;display: block; margin-top: 10px; ">
-                                Developed by SQ-TechSolver@2025
+                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: bold; text-align: center; font-size:16px;display: block; margin-top: 10px; ">
+                                Inspired by SQ-TechSolver@2025
                             </small>
                             <small
-                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: normal; font-size:16px;display: block;  margin-bottom:10px;">
-                                These features have been made available for you:
+                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: normal; text-align: center; font-size:16px;display: block;  margin-bottom:10px;">
+                                These features have been made available for you
                             </small>
 
                             <div class="dashboard-wrapper">
@@ -435,7 +438,7 @@ $name = $_SESSION["username"];
                                         </div>
                                         <br>
                                         <div class="form-acc"
-                                            style="display: flex; justify-content: center; align-items: center; margin: 20px;">
+                                            style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px; margin-left: 20px; margin-right: 20px;">
                                             <a href="#generate-section"
                                                 style="color:blue; font-size:13px; font-weight:bold; text-align: center;">
                                                 Click Here For Manage QR Code.

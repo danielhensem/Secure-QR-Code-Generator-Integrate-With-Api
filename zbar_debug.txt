@@ -1,2 +1,2 @@
-Command: "C:\Users\Irfan\Desktop\XAMPP\htdocs\SqTechSolver-Secure_Qr_Code_Generator_System\ZBar\bin\zbarimg.exe" -q --raw "C:\Users\Irfan\Desktop\XAMPP\tmp\php3FB6.tmp"
-Output: http://172.20.10.6:8080/SqTechSolver-Secure_Qr_Code_Generator_System/externalscan.php?token=SQ-TechSolverV1.2558-65906046f2
+Command: "C:\Users\Irfan\Desktop\XAMPP\htdocs\SqTechSolver-Secure_Qr_Code_Generator_System\ZBar\bin\zbarimg.exe" -q --raw "C:\Users\Irfan\Desktop\XAMPP\tmp\phpCA9A.tmp"
+Output: http://172.20.10.6:8080/SqTechSolver-Secure_Qr_Code_Generator_System/externalscan.php?token=SQ-TechSolverV1.2584-294362bbaf

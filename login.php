@@ -2,32 +2,49 @@
 
 <?php
 $error = false;
-if (isset($_REQUEST["loginbtn"])) {
-    $email = $_REQUEST["email"];
-    $pwd = $_REQUEST["pwd"];
+if (isset($_POST["loginbtn"])) {
+    // fetch and trim inputs
+    $email = trim($_POST["email"] ?? '');
+    $pwd   = $_POST["pwd"] ?? '';
 
-    $sq = "select * from users where email='{$email}';";
-    $exc = $con->query($sq);
+    // simple input validation
+    if ($email === '' || $pwd === '') {
+        $error = true;
+    } else {
+        // prepared statement to avoid SQL injection
+        $stmt = $con->prepare('SELECT id, name, password, status FROM users WHERE email = ? LIMIT 1');
+        if ($stmt) {
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
+            $res = $stmt->get_result();
 
-    if (mysqli_num_rows($exc) == 1) {
-        $data = mysqli_fetch_assoc($exc);
-        if ($data['status'] == 0) {
-            if (password_verify($pwd, $data["password"])) {
-                session_start();
-                $_SESSION["login"] = true;
-                $_SESSION["username"] = $data["name"];
-                $_SESSION["id"] = $data["id"];
-                header("location:home.php");
+            if ($res && $res->num_rows === 1) {
+                $data = $res->fetch_assoc();
+
+                // check account status and verify password
+                if ((int)$data['status'] === 0 && password_verify($pwd, $data['password'])) {
+                    session_start();
+                    session_regenerate_id(true);
+                    $_SESSION["login"] = true;
+                    $_SESSION["username"] = $data["name"];
+                    $_SESSION["id"] = (int)$data["id"];
+                    $stmt->close();
+                    header("Location: home.php");
+                    exit;
+                } else {
+                    $error = true;
+                }
             } else {
                 $error = true;
             }
+            $stmt->close();
+        } else {
+            // prepare failed - treat as error (optionally log)
+            $error = true;
         }
-    } else {
-        $error = true;
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 

@@ -10,39 +10,78 @@ if (!isset($_SESSION["login"])) {
 
 $name = $_SESSION["username"];
 
-// Get current user ID
-$getUserQuery = "SELECT id FROM users WHERE name = '$name' LIMIT 1";
-$userResult = mysqli_query($con, $getUserQuery);
-$userRow = mysqli_fetch_assoc($userResult);
-$userId = $userRow['id'];
+// Get current user ID (prefer session id if available, otherwise prepared lookup by name)
+if (isset($_SESSION['id']) && is_numeric($_SESSION['id'])) {
+    $userId = (int) $_SESSION['id'];
+} else {
+    $stmt = $con->prepare("SELECT id FROM users WHERE name = ? LIMIT 1");
+    $stmt->bind_param('s', $name);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($row = $res->fetch_assoc()) {
+        $userId = (int) $row['id'];
+    } else {
+        // cannot determine user id
+        header("Location: login.php");
+        exit();
+    }
+    $stmt->close();
+}
 
-// Handle Accept, Block, Remove
+// Handle Accept, Block, Remove with prepared statements
 if (isset($_GET['action']) && isset($_GET['id'])) {
     $actionId = intval($_GET['id']);
     $action = $_GET['action'];
 
-    // Friend row may store user_id or request_id as current user
-    $friendQuery = "SELECT * FROM friends WHERE 
-        (user_id = '$userId' AND request_id = '$actionId') OR 
-        (user_id = '$actionId' AND request_id = '$userId')
-        LIMIT 1";
-    $friendRow = mysqli_fetch_assoc(mysqli_query($con, $friendQuery));
-    $friendId = $friendRow ? $friendRow['id'] : null;
+    // only allow specific actions
+    $allowed = ['accept', 'block', 'unblocked', 'remove'];
+    if (!in_array($action, $allowed, true)) {
+        header("Location: friends.php");
+        exit();
+    }
+
+    // prepared: find friend row where either direction matches
+    $stmt = $con->prepare("
+        SELECT id, user_id, request_id 
+        FROM friends 
+        WHERE (user_id = ? AND request_id = ?) OR (user_id = ? AND request_id = ?)
+        LIMIT 1
+    ");
+    $stmt->bind_param('iiii', $userId, $actionId, $actionId, $userId);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $friendRow = $res->fetch_assoc();
+    $stmt->close();
+
+    $friendId = $friendRow ? (int) $friendRow['id'] : null;
 
     if ($friendId) {
         if ($action === 'accept') {
-            mysqli_query($con, "UPDATE friends SET status = 1 WHERE id = '$friendId'");
-            $activityNotification = "User Id #" . $userId . "  has accept your friend request";
-            $stmt = $con->prepare("INSERT INTO notification (message,receiver_id,status, timestamp) VALUES (?,?,1, NOW())");
+            $up = $con->prepare("UPDATE friends SET status = 1 WHERE id = ?");
+            $up->bind_param('i', $friendId);
+            $up->execute();
+            $up->close();
+
+            $activityNotification = "User Id #{$userId} has accepted your friend request";
+            $stmt = $con->prepare("INSERT INTO notification (message, receiver_id, status, timestamp) VALUES (?, ?, 1, NOW())");
             $stmt->bind_param("si", $activityNotification, $actionId);
             $stmt->execute();
             $stmt->close();
         } elseif ($action === 'block') {
-            mysqli_query($con, "UPDATE friends SET status = 2 WHERE id = '$friendId'");
+            $up = $con->prepare("UPDATE friends SET status = 2 WHERE id = ?");
+            $up->bind_param('i', $friendId);
+            $up->execute();
+            $up->close();
         } elseif ($action === 'unblocked') {
-            mysqli_query($con, "UPDATE friends SET status = 1 WHERE id = '$friendId'");
+            $up = $con->prepare("UPDATE friends SET status = 1 WHERE id = ?");
+            $up->bind_param('i', $friendId);
+            $up->execute();
+            $up->close();
         } elseif ($action === 'remove') {
-            mysqli_query($con, "DELETE FROM friends WHERE id = '$friendId'");
+            $del = $con->prepare("DELETE FROM friends WHERE id = ?");
+            $del->bind_param('i', $friendId);
+            $del->execute();
+            $del->close();
         }
     }
 
@@ -50,35 +89,51 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     exit();
 }
 
+
+// 
+
+
 // Handle Add Friend by Email
 $addFriendMsg = "";
 if (isset($_POST['add_friend_email'])) {
     $friendEmail = trim($_POST['add_friend_email']);
 
-    if (!empty($friendEmail)) {
-        $findEmail = "SELECT id FROM users WHERE email = '$friendEmail' LIMIT 1";
-        $emailResult = mysqli_query($con, $findEmail);
+    if (!empty($friendEmail) && filter_var($friendEmail, FILTER_VALIDATE_EMAIL)) {
+        // prepared: find user id by email
+        $stmt = $con->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
+        $stmt->bind_param('s', $friendEmail);
+        $stmt->execute();
+        $res = $stmt->get_result();
 
-        if (mysqli_num_rows($emailResult) > 0) {
-            $friendData = mysqli_fetch_assoc($emailResult);
-            $requestId = $friendData['id'];
+        if ($res && $res->num_rows > 0) {
+            $friendData = $res->fetch_assoc();
+            $requestId = (int) $friendData['id'];
 
             if ($requestId == $userId) {
                 $addFriendMsg = "You cannot add yourself.";
             } else {
-                $checkFriend = "SELECT * FROM friends WHERE 
-                    (user_id = '$userId' AND request_id = '$requestId') OR
-                    (user_id = '$requestId' AND request_id = '$userId')";
-                $exists = mysqli_query($con, $checkFriend);
+                // prepared: check existing relationship
+                $stmt = $con->prepare("
+                    SELECT COUNT(*) AS cnt FROM friends 
+                    WHERE (user_id = ? AND request_id = ?) OR (user_id = ? AND request_id = ?)
+                ");
+                $stmt->bind_param('iiii', $userId, $requestId, $requestId, $userId);
+                $stmt->execute();
+                $r2 = $stmt->get_result();
+                $existsRow = $r2->fetch_assoc();
+                $stmt->close();
 
-                if (mysqli_num_rows($exists) == 0) {
+                if ((int) $existsRow['cnt'] === 0) {
                     $timestamp = date("Y-m-d H:i:s");
-                    $insertFriend = "INSERT INTO friends (user_id, request_id, status, timestamp)
-                                     VALUES ('$userId', '$requestId', 0, '$timestamp')";
-                    mysqli_query($con, $insertFriend);
+                    $stmt = $con->prepare("INSERT INTO friends (user_id, request_id, status, timestamp) VALUES (?, ?, 0, ?)");
+                    $stmt->bind_param('iis', $userId, $requestId, $timestamp);
+                    $stmt->execute();
+                    $stmt->close();
+
                     $addFriendMsg = "Friend request sent!";
-                    $activityNotification = "Let's be friend from #" . $userId;
-                    $stmt = $con->prepare("INSERT INTO notification (message,receiver_id,status, timestamp) VALUES (?,?,1, NOW())");
+
+                    $activityNotification = "Let's be friend from #{$userId}";
+                    $stmt = $con->prepare("INSERT INTO notification (message, receiver_id, status, timestamp) VALUES (?, ?, 1, NOW())");
                     $stmt->bind_param("si", $activityNotification, $requestId);
                     $stmt->execute();
                     $stmt->close();
@@ -89,8 +144,11 @@ if (isset($_POST['add_friend_email'])) {
         } else {
             $addFriendMsg = "Email not found in users.";
         }
+    } else {
+        $addFriendMsg = "Please provide a valid email address.";
     }
 }
+
 ?>
 <!-- HTML section remains unchanged -->
 <!DOCTYPE html>
@@ -302,51 +360,52 @@ if (isset($_POST['add_friend_email'])) {
                     </div>
 
                     <?php
-                    $friendQuery = "
-                        SELECT 
-                            f.id AS friend_row_id,
-                            f.user_id,
-                            f.request_id,
-                            f.status,
-                            f.timestamp,
-                            IF(f.user_id = '$userId', f.request_id, f.user_id) AS other_user_id,
-                            u.name AS friend_name,
-                            u.email AS friend_email
-                        FROM friends f
-                        JOIN users u ON u.id = IF(f.user_id = '$userId', f.request_id, f.user_id)
-                        WHERE f.user_id = '$userId' OR f.request_id = '$userId'
-                        ORDER BY f.timestamp DESC
-                    ";
+                    $listStmt = $con->prepare("
+    SELECT 
+        f.id AS friend_row_id,
+        f.user_id,
+        f.request_id,
+        f.status,
+        f.timestamp,
+        IF(f.user_id = ?, f.request_id, f.user_id) AS other_user_id,
+        u.name AS friend_name,
+        u.email AS friend_email
+    FROM friends f
+    JOIN users u ON u.id = IF(f.user_id = ?, f.request_id, f.user_id)
+    WHERE f.user_id = ? OR f.request_id = ?
+    ORDER BY f.timestamp DESC
+");
+                    $listStmt->bind_param('iiii', $userId, $userId, $userId, $userId);
+                    $listStmt->execute();
+                    $result = $listStmt->get_result();
 
-                    $result = mysqli_query($con, $friendQuery);
-
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $friendId = $row['other_user_id'];
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $friendId = (int) $row['other_user_id'];
                             $friendName = htmlspecialchars($row['friend_name']);
                             $friendEmail = htmlspecialchars($row['friend_email']);
-                            $status = $row['status'];
-                            $isSender = ($row['user_id'] == $userId);
+                            $status = (int) $row['status'];
+                            $isSender = ((int) $row['user_id'] === $userId);
 
                             echo '<div class="friend-card">';
-                            echo '<div class="friend-name"><i class="fa-solid fa-user" style=margin-right:8px;></i> ' . $friendName . ' </div>';
+                            echo '<div class="friend-name"><i class="fa-solid fa-user" style="margin-right:8px;"></i> ' . $friendName . ' </div>';
                             echo '<div class="friend-actions">';
 
                             if ($status == 0) {
                                 if ($isSender) {
                                     echo '<span class="status-text" style="color:#888;">Pending Request</span>';
-                                    echo '<a href="?action=remove&id=' . $friendId . '"><button class="remove-btn">Remove</button></a>';
+                                    echo '<a href="?action=remove&amp;id=' . $friendId . '"><button class="remove-btn">Remove</button></a>';
                                 } else {
-                                    echo '<a href="?action=accept&id=' . $friendId . '"><button class="accept-btn">Accept</button></a>';
-                                    echo '<a href="?action=remove&id=' . $friendId . '"><button class="remove-btn">Remove</button></a>';
+                                    echo '<a href="?action=accept&amp;id=' . $friendId . '"><button class="accept-btn">Accept</button></a>';
+                                    echo '<a href="?action=remove&amp;id=' . $friendId . '"><button class="remove-btn">Remove</button></a>';
                                 }
                             } elseif ($status == 1) {
                                 echo '<span class="status-text">My Friend</span>';
-                                echo '<a href="?action=block&id=' . $friendId . '"><button class="block-btn">Block</button></a>';
-                                echo '<a href="?action=remove&id=' . $friendId . '"><button class="remove-btn">Remove</button></a>';
+                                echo '<a href="?action=block&amp;id=' . $friendId . '"><button class="block-btn">Block</button></a>';
+                                echo '<a href="?action=remove&amp;id=' . $friendId . '"><button class="remove-btn">Remove</button></a>';
                             } elseif ($status == 2) {
                                 echo '<span class="blocked-text">Blocked</span>';
-                                echo '<a href="?action=unblocked&id=' . $friendId . '"><button class="remove-btn">Unblocked</button></a>';
+                                echo '<a href="?action=unblocked&amp;id=' . $friendId . '"><button class="remove-btn">Unblocked</button></a>';
                             }
 
                             echo '</div>';
@@ -355,6 +414,9 @@ if (isset($_POST['add_friend_email'])) {
                     } else {
                         echo "<p style='text-align:center; color:#666;'>You have no friend activity yet.</p>";
                     }
+
+                    $listStmt->close();
+
                     ?>
 
                     <div class="footer-note">&copy; 2025 SQ‑Tech Solver. All rights reserved.</div>
@@ -362,7 +424,7 @@ if (isset($_POST['add_friend_email'])) {
             </div>
         </section>
     </div>
-        <!-- javascript sw -->
+    <!-- javascript sw -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>

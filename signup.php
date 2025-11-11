@@ -193,7 +193,7 @@ if (isset($_POST["signsubmit"])) {
                                     placeholder="Enter code from email" style="flex:1;border-radius:30px;padding:10px;"
                                     required>
                                 <button type="button" id="requestCodeBtn"
-                                    style="padding:10px 14px;border-radius:20px;cursor:pointer;">
+                                    style="padding: 2px 10px;border-radius:20px;cursor:pointer;">
                                     Request Code
                                 </button>
                             </div>

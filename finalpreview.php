@@ -5,21 +5,41 @@ if (isset($_SESSION["login"])) {
 }
 ?>
 <?php
-$cid = "";
-if (isset($_REQUEST['category'])) {
-    $cid = $_REQUEST['category'];
-    $getcat = "SELECT * FROM `product-catagory` where cid={$cid};";
-    $catdata = $con->query($getcat);
-    $fdata = mysqli_fetch_assoc($catdata);
-    $cname = $fdata["cname"];
+$cid = null;
+$cname = '';
+
+// Prefer explicit input source (GET). Validate as integer and use prepared statements.
+if (isset($_GET['category'])) {
+    $cid = filter_var($_GET['category'], FILTER_VALIDATE_INT);
+    if ($cid !== false && $cid !== null) {
+        $stmt = $con->prepare("SELECT cname FROM `product-catagory` WHERE cid = ? LIMIT 1");
+        $stmt->bind_param('i', $cid);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($row = $res->fetch_assoc()) {
+            $cname = $row['cname'];
+        }
+        $stmt->close();
+    }
 }
-if (isset($_REQUEST['subcategory'])) {
-    $cid = $_REQUEST['subcategory'];
-    $getcat = "SELECT * FROM `sub-catagory` where subid={$cid};";
-    $catdata = $con->query($getcat);
-    $fdata = mysqli_fetch_assoc($catdata);
-    $cname = $fdata["subname"];
+
+// If category not found/empty, check subcategory safely
+if (empty($cname) && isset($_GET['subcategory'])) {
+    $subid = filter_var($_GET['subcategory'], FILTER_VALIDATE_INT);
+    if ($subid !== false && $subid !== null) {
+        $stmt = $con->prepare("SELECT subname FROM `sub-catagory` WHERE subid = ? LIMIT 1");
+        $stmt->bind_param('i', $subid);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($row = $res->fetch_assoc()) {
+            $cname = $row['subname'];
+        }
+        $stmt->close();
+    }
 }
+
+// Optional: ensure $cname is safe for output where used
+$cname = $cname !== '' ? $cname : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">

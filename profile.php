@@ -29,55 +29,126 @@ $user_id = $_SESSION['id'];
 $message = "";
 $error = false;
 
-// Fetch user data
-$q1 = "SELECT * FROM `users` WHERE id='$user_id'";
-$result = mysqli_query($con, $q1);
-if (!$result || mysqli_num_rows($result) == 0) {
+// // Fetch user data
+// $q1 = "SELECT * FROM `users` WHERE id='$user_id'";
+// $result = mysqli_query($con, $q1);
+// if (!$result || mysqli_num_rows($result) == 0) {
+//     echo "User not found!";
+//     exit();
+// }
+// $user = mysqli_fetch_assoc($result);
+
+// Fetch user data (use prepared statement)
+$stmt = $con->prepare("SELECT * FROM `users` WHERE id = ? LIMIT 1");
+$stmt->bind_param('i', $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if (!$result || $result->num_rows == 0) {
     echo "User not found!";
+    $stmt->close();
     exit();
 }
-$user = mysqli_fetch_assoc($result);
+$user = $result->fetch_assoc();
+$stmt->close();
+
+// Handle profile update (only name + password)
+// if (isset($_POST["updateProfile"])) {
+//     $name = $_POST["name"];
+//     $pwd = $_POST["pwd"];
+//     $confirmPwd = $_POST["confirmpwd"];
+
+//     if ($name == "") {
+//         $message = "Name cannot be empty.";
+//     } elseif ($pwd !== "" && $pwd !== $confirmPwd) {
+//         $message = "Passwords do not match.";
+//     } else {
+//         $updateFields = [];
+//         $updateFields[] = "name='" . mysqli_real_escape_string($con, $name) . "'";
+
+//         // Only update password if provided
+//         if ($pwd !== "") {
+//             $safepwd = password_hash($pwd, PASSWORD_DEFAULT);
+//             $updateFields[] = "password='$safepwd'";
+//         }
+
+//         $updateQuery = "UPDATE `users` SET " . implode(", ", $updateFields) . " WHERE id='$user_id'";
+
+//         if ($con->query($updateQuery) === TRUE) {
+//             $message = "Profile updated successfully!";
+//             // Refresh user data
+//             $q1 = "SELECT * FROM `users` WHERE id='$user_id'";
+//             $result = mysqli_query($con, $q1);
+//             $user = mysqli_fetch_assoc($result);
+//         } else {
+//             $message = "Error updating profile: " . $con->error;
+//         }
+//     }
+// }
 
 // Handle profile update (only name + password)
 if (isset($_POST["updateProfile"])) {
-    $name = $_POST["name"];
-    $pwd = $_POST["pwd"];
-    $confirmPwd = $_POST["confirmpwd"];
+    $name = trim($_POST["name"] ?? '');
+    $pwd = $_POST["pwd"] ?? '';
+    $confirmPwd = $_POST["confirmpwd"] ?? '';
 
-    if ($name == "") {
+    if ($name === "") {
         $message = "Name cannot be empty.";
     } elseif ($pwd !== "" && $pwd !== $confirmPwd) {
         $message = "Passwords do not match.";
     } else {
-        $updateFields = [];
-        $updateFields[] = "name='" . mysqli_real_escape_string($con, $name) . "'";
-
-        // Only update password if provided
         if ($pwd !== "") {
+            // update name and password
             $safepwd = password_hash($pwd, PASSWORD_DEFAULT);
-            $updateFields[] = "password='$safepwd'";
+            $stmt = $con->prepare("UPDATE `users` SET name = ?, password = ? WHERE id = ?");
+            $stmt->bind_param('ssi', $name, $safepwd, $user_id);
+        } else {
+            // update name only
+            $stmt = $con->prepare("UPDATE `users` SET name = ? WHERE id = ?");
+            $stmt->bind_param('si', $name, $user_id);
         }
 
-        $updateQuery = "UPDATE `users` SET " . implode(", ", $updateFields) . " WHERE id='$user_id'";
-
-        if ($con->query($updateQuery) === TRUE) {
+        if ($stmt->execute()) {
             $message = "Profile updated successfully!";
-            // Refresh user data
-            $q1 = "SELECT * FROM `users` WHERE id='$user_id'";
-            $result = mysqli_query($con, $q1);
-            $user = mysqli_fetch_assoc($result);
+            $stmt->close();
+            // Refresh user data securely
+            $stmt2 = $con->prepare("SELECT * FROM `users` WHERE id = ? LIMIT 1");
+            $stmt2->bind_param('i', $user_id);
+            $stmt2->execute();
+            $res2 = $stmt2->get_result();
+            $user = $res2->fetch_assoc();
+            $stmt2->close();
         } else {
             $message = "Error updating profile: " . $con->error;
+            $stmt->close();
         }
     }
 }
 
-// Handle account termination
+// Handle account termination (use prepared statements)
 if (isset($_POST["terminateAccount"])) {
-    $con->query("DELETE FROM `accessrecord` WHERE qr_id IN (SELECT id FROM qr_security WHERE user_id='$user_id')");
-    $con->query("DELETE FROM `qr_security` WHERE user_id='$user_id'");
-    $con->query("DELETE FROM `friends` WHERE user_id='$user_id' OR request_id='$user_id'");
-    $con->query("DELETE FROM `users` WHERE id='$user_id'");
+    // delete access records for user's QR codes
+    $stmt = $con->prepare("DELETE FROM `accessrecord` WHERE qr_id IN (SELECT id FROM qr_security WHERE user_id = ?)");
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $stmt->close();
+
+    // delete qr_security rows
+    $stmt = $con->prepare("DELETE FROM `qr_security` WHERE user_id = ?");
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $stmt->close();
+
+    // delete friends rows where user is either side
+    $stmt = $con->prepare("DELETE FROM `friends` WHERE user_id = ? OR request_id = ?");
+    $stmt->bind_param('ii', $user_id, $user_id);
+    $stmt->execute();
+    $stmt->close();
+
+    // delete user
+    $stmt = $con->prepare("DELETE FROM `users` WHERE id = ?");
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $stmt->close();
 
     // Clear session and redirect
     session_destroy();
@@ -219,8 +290,8 @@ if (isset($_POST["terminateAccount"])) {
 
                             <p>Confirm New Password</p>
                             <div class="form-inputs">
-                                <input type="password" id="password" name="confirmpwd" autocomplete="off" style="border-radius:30px;">
-                                <i class="fa fa-eye" id="password_eye"></i>
+                                <input type="password" id="confirmPassword" name="confirmpwd" autocomplete="off" style="border-radius:30px;">
+                                <i class="fa fa-eye" id="confirm_password_eye"></i>
                             </div>
 
                             <div class="submit-button" style="width:100%; max-width:100%;">
@@ -252,6 +323,47 @@ if (isset($_POST["terminateAccount"])) {
                 </div>
 
                 <script>
+                    // const form = document.getElementById('signupForm');
+                    // const shortname = document.getElementById('shortname');
+                    // const password = document.getElementById('password');
+                    // const confirmPassword = document.getElementById('confirmPassword');
+
+                    // // Password strength check function
+                    // function isStrongPassword(pwd) {
+                    //     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(pwd);
+                    // }
+
+                    // // Real-time shortname check (optional alert)
+                    // shortname.addEventListener('input', () => {
+                    //     if (shortname.value.length > 20) {
+                    //         alert("Maximum 20 characters allowed for Short Name.");
+                    //         shortname.value = shortname.value.slice(0, 20);
+                    //     }
+                    // });
+
+                    // // Form validation before submit
+                    // form.addEventListener('submit', (e) => {
+                    //     // === Validate short name ===
+                    //     if (shortname.value.trim().length === 0) {
+                    //         alert("Short name cannot be empty.");
+                    //         e.preventDefault();
+                    //         return;
+                    //     }
+
+                    //     // === Validate password strength ===
+                    //     if (!isStrongPassword(password.value)) {
+                    //         alert("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.");
+                    //         e.preventDefault();
+                    //         return;
+                    //     }
+
+                    //     // // === Validate confirm password ===
+                    //     // if (password.value !== confirmPassword.value) {
+                    //     //     alert("Passwords do not match. Please re-enter.");
+                    //     //     e.preventDefault();
+                    //     //     return;
+                    //     // }
+                    // });
                     const form = document.getElementById('signupForm');
                     const shortname = document.getElementById('shortname');
                     const password = document.getElementById('password');
@@ -279,19 +391,23 @@ if (isset($_POST["terminateAccount"])) {
                             return;
                         }
 
-                        // === Validate password strength ===
-                        if (!isStrongPassword(password.value)) {
-                            alert("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.");
-                            e.preventDefault();
-                            return;
-                        }
+                        // If password is provided, validate strength and matching confirm
+                        const pwdVal = (password && password.value || '').trim();
+                        const confVal = (confirmPassword && confirmPassword.value || '').trim();
 
-                        // // === Validate confirm password ===
-                        // if (password.value !== confirmPassword.value) {
-                        //     alert("Passwords do not match. Please re-enter.");
-                        //     e.preventDefault();
-                        //     return;
-                        // }
+                        if (pwdVal !== '') {
+                            if (!isStrongPassword(pwdVal)) {
+                                alert("Password must be at least 8 characters and include uppercase, lowercase, number, and special character.");
+                                e.preventDefault();
+                                return;
+                            }
+                            if (pwdVal !== confVal) {
+                                alert("Passwords do not match. Please re-enter.");
+                                e.preventDefault();
+                                return;
+                            }
+                        }
+                        // if pwdVal is empty -> no password checks, proceed to update name only
                     });
                 </script>
             

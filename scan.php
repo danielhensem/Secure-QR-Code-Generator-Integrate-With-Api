@@ -778,11 +778,21 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
             $qrImageTag = "";
 
             if (!empty($_SESSION['qr_uploaded_base64']) && !empty($_SESSION['qr_uploaded_mime'])) {
-                $mime = $_SESSION['qr_uploaded_mime'];
-                $base64 = $_SESSION['qr_uploaded_base64'];
-                $qrImageTag = "<img style='margin-top:20px; max-width:300px;' src='data:$mime;base64,$base64'>";
-                echo "<div style='margin-top:10px; font-weight:bold; text-align:left;'>QR Code Id : {$_SESSION['qr_id']}</div>";
-                echo "<div style='text-align:left; font-weight:bold;'>Filename : {$_SESSION['qr_filename']}</div>";
+                // $mime = $_SESSION['qr_uploaded_mime'];
+                // $base64 = $_SESSION['qr_uploaded_base64'];
+                // $qrImageTag = "<img style='margin-top:20px; max-width:300px;' src='data:$mime;base64,$base64'>";
+                // echo "<div style='margin-top:10px; font-weight:bold; text-align:left;'>QR Code Id : {$_SESSION['qr_id']}</div>";
+                // echo "<div style='text-align:left; font-weight:bold;'>Filename : {$_SESSION['qr_filename']}</div>";
+                // echo $qrImageTag;
+                //...
+                // Escape values to prevent XSS. base64 payload is not escaped (binary), but mime and displayed strings are.
+                $mime = htmlspecialchars($_SESSION['qr_uploaded_mime'] ?? 'application/octet-stream', ENT_QUOTES, 'UTF-8');
+                $base64 = $_SESSION['qr_uploaded_base64'] ?? '';
+                $qrIdOut = htmlspecialchars((string)($_SESSION['qr_id'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $qrFilenameOut = htmlspecialchars((string)($_SESSION['qr_filename'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $qrImageTag = "<img style='margin-top:20px; max-width:300px;' src='data:" . $mime . ";base64," . $base64 . "' alt='QR Code Image' />";
+                echo "<div style='margin-top:10px; font-weight:bold; text-align:left;'>QR Code Id : {$qrIdOut}</div>";
+                echo "<div style='text-align:left; font-weight:bold;'>Filename : {$qrFilenameOut}</div>";
                 echo $qrImageTag;
                 // Enable OTP button again if present
                 echo "<script>if (document.getElementById('sendOtpBtn')) document.getElementById('sendOtpBtn').disabled = false;</script>";

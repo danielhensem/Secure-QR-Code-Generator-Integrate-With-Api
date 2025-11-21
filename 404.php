@@ -6,7 +6,7 @@ http_response_code(404);
 <head>
   <meta charset="utf-8">
   <title>404 Not Found</title>
-          <link rel="icon" type="image/png" href="img/log.png">
+          <link rel="icon" type="image/png" href="img/log.svg">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     body{font-family:Arial,Helvetica,sans-serif;background:#f9fafb;color:#111;margin:0;display:flex;align-items:center;justify-content:center;height:100vh}

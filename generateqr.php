@@ -14,7 +14,7 @@ $qrPath = 'images/qr1.png';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="design.css">
     <title>SQ-TECH SOLVER Secure QR Code Generator</title>
-        <link rel="icon" type="image/png" href="img/log.png">
+    <link rel="icon" type="image/png" href="img/log.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Tailwind CDN -->
@@ -45,18 +45,18 @@ $qrPath = 'images/qr1.png';
 
 
             <!-- Left Column: QR design + save + password -->
-            <div class="left-col" style="background: linear-gradient(135deg, #8ee3ef, #ffd4bf);">
-                <h2>Custom QR Code Design</h2>
-                <p style="color: gray;">Customize your QR code with colors and a logo before securing it.</p>
+            <div class="left-col"
+                style=" border:1px solid black; background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);">
+                <strong>Custom QR Code Design (Optional)</strong>
+                <p style="color: gray;">Customize your QR code with different colors before securing it.</p>
                 <hr>
                 <div class="qr-design-tool">
                     <div class="qr-controls">
-                        <p style="color: black;">Alert: The foreground must be darker than the background to easily scan
-                            reading.</p>
-                        <p style="color:red;"> Avoid: <br>
-                            - Light-colored QR dots on dark background (e.g., yellow on black).<br>
-                            - Bright gradients that reduce contrast.<br>
-                            - Transparent or textured backgrounds that hide the code edges.</p><br>
+                        <p style="color: black;">Alert: The front color of the QR code should be darker than the
+                            background so it can be scanned quickly.</p>
+                        <p style="color:red;">Avoid:<br> - Light-colored dots on a dark background (for example, yellow
+                            dots on black).<br> - Bright color blends that make the code hard to see.<br>
+                            - See-through or busy backgrounds that hide the edges of the QR code.</p>
                         <label for="fgColor">1.Foreground Color:</label>
                         <input type="color" id="fgColor" value="#000000">
 
@@ -67,7 +67,7 @@ $qrPath = 'images/qr1.png';
                     <input type="file" id="logoUpload" accept="image/*"> -->
 
                         <!-- Save Design Button -->
-                        
+
                         <p style="color: gray;">Click Save to keep your QR code changes.</p>
                         <button id="saveDesign" type="button" class="btn-submit"
                             style="display:flex ; border-radius:20px; align-items:center; justify-content:center; width:30%; height:30px;margin-bottom:15px;">
@@ -79,15 +79,29 @@ $qrPath = 'images/qr1.png';
                     <!-- Password Form -->
                     <form id="qrForm" action="finalreview.php" method="POST">
                         <div class="form-group">
-                            
-                            <strong for="password">3. Password</strong><br>
+                            <label for="header_text" style="font-weight:bold;">3. Header (Optional)</label><br>
+                            <input type="text" id="header_text" name="header_text"
+                                placeholder="Enter header text (optional)"><br>
+                            <label for="description" style="font-weight: bold;">4. Description (Optional)</label><br>
+                            <textarea id="description" name="description" rows="4" maxlength="800"
+                                    placeholder="Add a short description or notes related to this QR code" style="width:100%;padding:8px;border-radius:6px;margin-top:6px;"></textarea>
+
+                            <strong for="password">5. Password</strong><br>
                             <p style="color: red;">
-                            Password is optional. However, if you choose to enter one, it must follow the password rules
-                            (minimum 8 characters, include uppercase letter, number, and special character).
-                            Please ensure your QR design is saved before proceeding.
-                        </p><br>
+                                Password is optional. But if you decide to create one, it must follow the rules: at
+                                least 8 characters long and include an uppercase letter, a number, and a special
+                                character.
+                                Please make sure your QR design is saved before you continue.
+                            </p><br>
                             <input type="password" id="password" name="password"
-                                placeholder="Enter password (optional)">
+                                placeholder="Enter password (optional)"><br>
+                            <!-- <label for="header_text" style="font-weight:bold;">4. Header (optional)</label><br>
+                            <input type="text" id="header_text" name="header_text"
+                                placeholder="Enter header text (optional)"><br>
+                            <label for="description" style="font-weight: bold;">5. Description (optional)</label><br>
+                            <textarea id="description" name="description" rows="4" maxlength="800"
+                                    placeholder="Add a short description or notes related to this QR code" style="width:100%;padding:8px;border-radius:6px;margin-top:6px;"></textarea> -->
+
                         </div>
 
                         <button type="submit"
@@ -96,7 +110,7 @@ $qrPath = 'images/qr1.png';
                             Secure QR
                         </button>
                         <br>
-                        
+
                     </form>
 
                     <script>
@@ -129,6 +143,19 @@ $qrPath = 'images/qr1.png';
                                     return;
                                 }
                             }
+
+                            const header = document.getElementById("header_text").value.trim();
+                            const desc = document.getElementById("description").value.trim();
+                            if (header.length > 120) {
+                                alert("Header is too long (max 120 chars).");
+                                event.preventDefault();
+                                return;
+                            }
+                            if (desc.length > 800) {
+                                alert("Description is too long (max 800 chars).");
+                                event.preventDefault();
+                                return;
+                            }
                         });
                     </script>
 
@@ -137,10 +164,11 @@ $qrPath = 'images/qr1.png';
 
             <!-- Right Column: Live QR preview -->
             <div class="right-col"
-                style="background: linear-gradient(135deg, #8ee3ef, #ffd4bf); justify-content:center; align-items: center;">
-                <h2>Live QR Preview</h2>
+                style="border:1px solid black; background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%); justify-content:center; align-items: center;">
+                <strong>Live QR Preview</strong>
+                <br><br><br>
                 <div class="qr-preview-container"
-                    style=" disply:flex;top:20px; align-items:center; justify-content: center;">
+                    style=" display:flex;top:20px; align-items:center; justify-content: center;">
                     <canvas id="qrCanvas" display="flex" width="420" height="420" align-items="center"
                         justify-content="center"></canvas>
                 </div>

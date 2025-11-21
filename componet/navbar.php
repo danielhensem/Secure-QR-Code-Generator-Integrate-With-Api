@@ -87,7 +87,7 @@ if (isset($_POST['load_notifications'])) {
 
         .logo-text {
             font-weight: bold;
-            font-size: 30px;
+            font-size: 20px;
             line-height: 1;
         }
 
@@ -107,7 +107,7 @@ if (isset($_POST['load_notifications'])) {
             <div class="navbar-left">
                 <h1 class="websitelogo">
                     <a href="index.php" class="logo-link" title="SQ-Tech Solver">
-                        <img src="img/log.png" alt="SQ-Tech Solver" class="logo-img" />
+                        <img src="img/log.svg" alt="SQ-Tech Solver" class="logo-img" />
                         <span class="logo-text">SQ-Tech Solver</span>
                     </a>
                 </h1>
@@ -418,5 +418,6 @@ if (isset($_POST['load_notifications'])) {
                 </ul>
             </div>
         </div>
+        
     </section>
 </nav>

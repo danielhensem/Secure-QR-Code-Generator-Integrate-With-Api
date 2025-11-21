@@ -10,6 +10,8 @@ $userId = $_SESSION['id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
+    $headerText = isset($_POST['header_text']) ? trim($_POST['header_text']) : null;
+    $description = isset($_POST['description']) ? trim($_POST['description']) : null;
     $useOtp = isset($_POST['otp']) ? 1 : 0;
     $email = isset($_POST['otp_email']) ? trim($_POST['otp_email']) : null;
 
@@ -64,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $qrId = $row['id'];
                 $desc = "Authorized";
 
-                // Update qr_secondlayer with scan_status based on password entry
-                $updateStmt = $con->prepare("UPDATE qr_secondlayer SET id = ?, id_description = ?, scan_status = ? WHERE token = ?");
-                $updateStmt->bind_param("isis", $qrId, $desc, $scanStatus, $token);
+                // Update qr_secondlayer with scan_status, header_text, and description
+                $updateStmt = $con->prepare("UPDATE qr_secondlayer SET id = ?, id_description = ?, scan_status = ?, header_text = ?, description = ? WHERE token = ?");
+                $updateStmt->bind_param("isisss", $qrId, $desc, $scanStatus, $headerText, $description, $token);
                 $updateStmt->execute();
                 $updateStmt->close();
 
@@ -114,41 +116,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
         <!DOCTYPE html>
         <html lang="en">
+
         <head>
-        <meta charset="UTF-8">
-        <title>Redirecting...</title>
-        <link rel="icon" type="image/png" href="img/log.png">
-        <style>
-            body {
-                margin: 0;
-                background: #6da9c0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                overflow: hidden;
-            }
-            .transition-message {
-                font-family: Arial, sans-serif;
-                font-size: 26px;
-                color: white;
-                opacity: 0;
-                transform: translateY(20px);
-                animation: fadeSlide 1.2s forwards;
-            }
-            @keyframes fadeSlide {
-                0% { opacity: 0; transform: translateY(20px); }
-                100% { opacity: 1; transform: translateY(0); }
-            }
-            .fade-out {
-                animation: fadeOut 1s forwards;
-            }
-            @keyframes fadeOut {
-                0% { opacity: 1; }
-                100% { opacity: 0; }
-            }
-        </style>
+            <meta charset="UTF-8">
+            <title>Redirecting...</title>
+            <link rel="icon" type="image/png" href="img/log.svg">
+            <style>
+                body {
+                    margin: 0;
+                    background: #000000ff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    overflow: hidden;
+                }
+
+                .transition-message {
+                    font-family: Arial, sans-serif;
+                    font-size: 26px;
+                    color: white;
+                    opacity: 0;
+                    transform: translateY(20px);
+                    animation: fadeSlide 1.2s forwards;
+                }
+
+                @keyframes fadeSlide {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .fade-out {
+                    animation: fadeOut 1s forwards;
+                }
+
+                @keyframes fadeOut {
+                    0% {
+                        opacity: 1;
+                    }
+
+                    100% {
+                        opacity: 0;
+                    }
+                }
+            </style>
         </head>
+
         <body>
             <div class="transition-message" id="msg">Preparing your preview...</div>
             <script>
@@ -160,6 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }, 3000);
             </script>
         </body>
+
         </html>
         <?php
         exit();

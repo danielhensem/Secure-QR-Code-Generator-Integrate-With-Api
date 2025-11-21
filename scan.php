@@ -558,38 +558,39 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
 <!-- HTML Part -->
 <!DOCTYPE html>
 <html lang="en">
-<input type="hidden" id="qr_token" style="display:none;"value="<?= htmlspecialchars($_SESSION['qr_token'] ?? '') ?>">
+<input type="hidden" id="qr_token" style="display:none;" value="<?= htmlspecialchars($_SESSION['qr_token'] ?? '') ?>">
 <script>
-(function(){
-  function addFavicon(){
-    var href = 'img/log.png';
-    // remove any existing icon links to avoid duplicates
-    var existing = document.querySelectorAll('link[rel~="icon"], link[rel="shortcut icon"]');
-    existing.forEach(function(el){ el.parentNode.removeChild(el); });
-    var link = document.createElement('link');
-    link.rel = 'icon';
-    link.type = 'image/png';
-    link.href = href;
-    // append to head (wait if head isn't parsed yet)
-    if (document.head) {
-      document.head.appendChild(link);
-    } else {
-      var h = document.getElementsByTagName('head')[0] || document.createElement('head');
-      h.appendChild(link);
-      if (!document.head) document.documentElement.insertBefore(h, document.documentElement.firstChild);
-    }
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', addFavicon);
-  } else addFavicon();
-})();
+    (function () {
+        function addFavicon() {
+            var href = 'img/log.svg';
+            // remove any existing icon links to avoid duplicates
+            var existing = document.querySelectorAll('link[rel~="icon"], link[rel="shortcut icon"]');
+            existing.forEach(function (el) { el.parentNode.removeChild(el); });
+            var link = document.createElement('link');
+            link.rel = 'icon';
+            link.type = 'image/png';
+            link.href = href;
+            // append to head (wait if head isn't parsed yet)
+            if (document.head) {
+                document.head.appendChild(link);
+            } else {
+                var h = document.getElementsByTagName('head')[0] || document.createElement('head');
+                h.appendChild(link);
+                if (!document.head) document.documentElement.insertBefore(h, document.documentElement.firstChild);
+            }
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', addFavicon);
+        } else addFavicon();
+    })();
 </script>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-    <link rel="icon" type="image/png" href="img/log.png">
+    <link rel="icon" type="image/png" href="img/log.svg">
     <!-- External Styles -->
     <link rel="stylesheet" href="style-index.css">
     <link rel="stylesheet" href="style-res.css">
@@ -617,7 +618,8 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
 
         .animated-bg {
             min-height: 100vh;
-            background: linear-gradient(135deg, #d7e8f7, #ffe5d9);
+            background: #424141ff;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             background-size: 1000% 1000%;
             animation: bgSlide 15s ease infinite;
             position: relative;
@@ -662,50 +664,58 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                 opacity: 0;
             }
         }
+
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #f0f2f5;
             padding: 0;
             font-size: 15px;
         }
-.container {
-    max-width: 1000px;
-    min-width: 300px;
-    margin: 40px auto;
-    background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
-    border-radius: 40px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-wrap: wrap; /* ✅ allow wrapping */
-    overflow: hidden;
-}
 
-/* Default layout: 50% width each */
-.left,
-.right {
-    width: 50%;
-    padding: 30px;
-    box-sizing: border-box; /* ✅ ensures padding doesn't break layout */
-}
+        .container {
+            max-width: 1000px;
+            min-width: 300px;
+            margin: 40px auto;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
+            border-radius: 40px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            /* ✅ allow wrapping */
+            overflow: hidden;
+            border: 1px solid black;
+        }
 
-.left {
-    background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
-    text-align: center;
-}
+        /* Default layout: 50% width each */
+        .left,
+        .right {
+            width: 50%;
+            padding: 30px;
+            box-sizing: border-box;
+            /* ✅ ensures padding doesn't break layout */
+        }
 
-.right {
-    background: white;
-    border-radius: 40px;
-}
+        .left {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
 
-/* ✅ Responsive behavior: Stack on smaller screens */
-@media (max-width: 768px) {
-    .left,
-    .right {
-        width: 100%;
-        margin: 10px 20px; /* Stack on top of each other */
-    }
-}
+            text-align: center;
+        }
+
+        .right {
+            background: transparent;
+            border-radius: 40px;
+        }
+
+        /* ✅ Responsive behavior: Stack on smaller screens */
+        @media (max-width: 768px) {
+
+            .left,
+            .right {
+                width: 100%;
+                margin: 10px 20px;
+                /* Stack on top of each other */
+            }
+        }
 
         input,
         textarea,
@@ -744,7 +754,7 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
         }
     </style>
 </head>
-    
+
 <body class="animated-bg">
     <?php include("componet/navbar.php"); ?>
     <h1 class="case-title-h1" style="margin-left: 10px; margin-right: 10px;">QR Scan & Access</h1>
@@ -771,7 +781,8 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                         <h3>Or</h3> -->
             <form method="post" enctype="multipart/form-data">
                 <input type="file" name="qr_upload" style="border-radius: 40px;" required>
-                <button type="submit" style="border-radius: 40px; color:white; font-weight: bold;">Upload & Decode</button>
+                <button type="submit" style="border-radius: 40px; color:white; font-weight: bold;">Upload &
+                    Decode</button>
             </form>
 
             <?php
@@ -788,8 +799,8 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                 // Escape values to prevent XSS. base64 payload is not escaped (binary), but mime and displayed strings are.
                 $mime = htmlspecialchars($_SESSION['qr_uploaded_mime'] ?? 'application/octet-stream', ENT_QUOTES, 'UTF-8');
                 $base64 = $_SESSION['qr_uploaded_base64'] ?? '';
-                $qrIdOut = htmlspecialchars((string)($_SESSION['qr_id'] ?? ''), ENT_QUOTES, 'UTF-8');
-                $qrFilenameOut = htmlspecialchars((string)($_SESSION['qr_filename'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $qrIdOut = htmlspecialchars((string) ($_SESSION['qr_id'] ?? ''), ENT_QUOTES, 'UTF-8');
+                $qrFilenameOut = htmlspecialchars((string) ($_SESSION['qr_filename'] ?? ''), ENT_QUOTES, 'UTF-8');
                 $qrImageTag = "<img style='margin-top:20px; max-width:300px;' src='data:" . $mime . ";base64," . $base64 . "' alt='QR Code Image' />";
                 echo "<div style='margin-top:10px; font-weight:bold; text-align:left;'>QR Code Id : {$qrIdOut}</div>";
                 echo "<div style='text-align:left; font-weight:bold;'>Filename : {$qrFilenameOut}</div>";
@@ -812,14 +823,16 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
             <?php if ($showQrContent): ?>
                 <label>QR Content:</label>
                 <textarea readonly><?= htmlspecialchars($qrContent) ?></textarea>
-                <button style="border-radius: 40px; color:white; font-weight: bold;" type="button" onclick="window.location.href='scan.php?reset=true'">Reset</button>
+                <button style="border-radius: 40px; color:white; font-weight: bold;" type="button"
+                    onclick="window.location.href='scan.php?reset=true'">Reset</button>
 
             <?php elseif ($qr && $qrSecond): ?>
 
                 <?php if ((int) $qrSecond['scan_status'] === 0): ?>
                     <!-- Open QR: No password/OTP needed -->
                     <form method="POST" id="accessForm">
-                        <button type="submit" name="submit_access" style="border-radius: 40px; color:white; font-weight: bold;">Access QR</button>
+                        <button type="submit" name="submit_access"
+                            style="border-radius: 40px; color:white; font-weight: bold;">Access QR</button>
                     </form>
                     <button type="button" onclick="window.location.href='scan.php?reset=true'"
                         style="border-radius: 40px; color:white; font-weight: bold;">Reset</button>
@@ -829,7 +842,8 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                     <form method="POST" id="accessForm">
                         <input type="email" name="otp_email" id="otp_email" placeholder="Enter your email"
                             style="border-radius: 40px;">
-                        <button type="button" id="sendOtpBtn" style="border-radius: 40px; color:white; font-weight: bold;">Send OTP</button>
+                        <button type="button" id="sendOtpBtn" style="border-radius: 40px; color:white; font-weight: bold;">Send
+                            OTP</button>
                         <br><br>
 
                         <input type="text" name="otp" id="otp_input" placeholder="Enter OTP" style="border-radius: 40px;">
@@ -838,20 +852,31 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                         <br><br>
                         <input type="password" name="password" placeholder="Enter Password (optional)"
                             style="border-radius: 40px;">
-                        <button type="submit" name="submit_access" style="border-radius: 40px; color:white; font-weight: bold;">Access</button>
+                        <button type="submit" name="submit_access"
+                            style="border-radius: 40px; color:white; font-weight: bold;">Access</button>
                     </form>
 
-                    <button type="button" onclick="window.location.href='scan.php?reset=true'" style=" border-radius: 40px; color:white; font-weight: bold;">Reset</button>
+                    <button type="button" onclick="window.location.href='scan.php?reset=true'"
+                        style=" border-radius: 40px; color:white; font-weight: bold;">Reset</button>
                 <?php endif; ?>
 
             <?php else: ?>
-                <p style="white-space:normal; word-break: break-word;">Please upload and scan a QR code to begin.<br><br>
-                <strong>Additional Information :</strong><br><br>
-                1. Users can directly access content if the QR Code is not generated with password.<br>
-                2. Users need to enter password or request one time passcode (otp) for the QR Code which is generated with password.<br>
-                3. Users must send the email to owner of the QR Code for requesting the verification. Then, user can request for OTP if owner has verified them. But, if
-                owner has shares the password to them, it is the owner's and receiver's responsibilities.<br></p>
-                
+                <p style="white-space:normal; word-break: break-word;"> Please upload and scan a QR code to begin.<br><br>
+
+                    <strong>Additional Information:</strong><br><br>
+
+                    1. If the QR code was created without a password, users can open the content immediately.<br>
+
+                    2. If the QR code was created with a password, users must enter the password or request a one-time
+                    passcode (OTP).<br>
+
+                    3. To request verification, users must share their email to the QR code owner. After the owner verifies
+                    them, the user can request an OTP.
+                    If the owner chooses to share the password directly, it becomes the responsibility of both the owner and
+                    the receiver.<br>
+
+                </p>
+
             <?php endif; ?>
         </div>
 
@@ -865,6 +890,7 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>
 </body>
+
 </html>
 <!-- <script>
 
@@ -1003,6 +1029,3 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
         window.history.replaceState(null, null, window.location.href);
     }
 </script> -->
-
-
-

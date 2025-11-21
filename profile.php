@@ -249,9 +249,14 @@ if (isset($_POST["terminateAccount"])) {
         <div class="container" style="width: 1000;">
             <div class="form">
                 <div class="left-side" style="width: 300px;">
-                    <div class="content" style="width: 250px;">
-                        <h1 style="font-size:17px; font-weight: bold;">SQ-TECH SOLVER</h1><br>
-                        <h5>Bring Quality Over Standard</h5>
+                    <div class="content" style="width: 250px; ">
+                        <div style="display:flex; justify-content: center; align-items: center;">
+                        <img src="img/log.svg" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img"
+                            style="width: 100px; height: 100px; text-align: center; justify-content: center; align-items: center;">
+                        </div>
+                            <br><br>
+                        <h1 style="font-size:17px; font-weight: bold; color:black;">SQ-TECH SOLVER</h1><br>
+                        <h5 style="color:black;">Bring Quality Over Standard</h5>
                     </div>
                 </div>
                 <div class="right-side" style="width : 600px;">
@@ -264,12 +269,12 @@ if (isset($_POST["terminateAccount"])) {
 
                             <p>Short name *</p>
                             <div class="form-inputs">
-                                <input type="text" id="shortname" maxlength="20" name="name" value="<?= htmlspecialchars($user['name']) ?>"
-                                    style="border-radius:30px;" required>
+                                <input type="text" id="shortname" maxlength="20" name="name"
+                                    value="<?= htmlspecialchars($user['name']) ?>" style="border-radius:30px;" required>
                                 <i class="fa fa-user"></i>
                             </div>
 
-                            <p>Email (cannot change)</p>
+                            <p>Email (Cannot change)</p>
                             <div class="form-inputs">
                                 <input type="email" value="<?= htmlspecialchars($user['email']) ?>"
                                     style="border-radius:30px;" disabled>
@@ -282,20 +287,23 @@ if (isset($_POST["terminateAccount"])) {
                             <i class="fa fa-lock"></i> 
                         </div> -->
 
-                            <p>New Password (leave blank if not changing)</p>
+                            <p>New Password (Leave blank if not changing)</p>
                             <div class="form-inputs">
-                                <input type="password" id="password" name="pwd" autocomplete="off" style="border-radius:30px;">
+                                <input type="password" id="password" name="pwd" autocomplete="off"
+                                    style="border-radius:30px;">
                                 <i class="fa fa-eye" id="password_eye"></i>
                             </div>
 
                             <p>Confirm New Password</p>
                             <div class="form-inputs">
-                                <input type="password" id="confirmPassword" name="confirmpwd" autocomplete="off" style="border-radius:30px;">
+                                <input type="password" id="confirmPassword" name="confirmpwd" autocomplete="off"
+                                    style="border-radius:30px;">
                                 <i class="fa fa-eye" id="confirm_password_eye"></i>
                             </div>
 
                             <div class="submit-button" style="width:100%; max-width:100%;">
-                                <button type="submit" name="updateProfile" style="border-radius:30px;">Update Profile</button>
+                                <button type="submit" name="updateProfile" style="border-radius:30px;">Update
+                                    Profile</button>
                             </div>
 
                             <hr>
@@ -308,7 +316,9 @@ if (isset($_POST["terminateAccount"])) {
 
                     <form method="post" onsubmit="return confirmTermination();">
                         <div class="submit-button" style="width:100%; max-width:100%; ">
-                            <button type="submit" name="terminateAccount" class="btn btn-danger" style="border-radius:30px; justify-content: center; align-items: center; background-color: red;">Delete Account</button>
+                            <button type="submit" name="terminateAccount" class="btn btn-danger"
+                                style="border-radius:30px; justify-content: center; align-items: center; background-color: red;">Delete
+                                Account</button>
                         </div>
                     </form>
                     <div class="form-acc" style="display: flex; justify-content: center; align-items: center;">
@@ -410,7 +420,7 @@ if (isset($_POST["terminateAccount"])) {
                         // if pwdVal is empty -> no password checks, proceed to update name only
                     });
                 </script>
-            
+
             </div>
         </div>
     </div>

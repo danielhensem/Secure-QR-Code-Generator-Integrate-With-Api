@@ -159,7 +159,7 @@ if (isset($_POST['add_friend_email'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-    <link rel="icon" type="image/png" href="img/log.png">
+    <link rel="icon" type="image/png" href="img/log.svg">
     <link rel="stylesheet" href="style-index.css">
     <link rel="stylesheet" href="style-res.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -186,7 +186,8 @@ if (isset($_POST['add_friend_email'])) {
 
         .animated-bg {
             min-height: 100vh;
-            background: linear-gradient(135deg, #d7e8f7, #ffe5d9);
+            background: #424141ff;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             background-size: 1000% 1000%;
             animation: bgSlide 15s ease infinite;
             position: relative;
@@ -256,12 +257,13 @@ if (isset($_POST['add_friend_email'])) {
             border: 1px solid #ccc;
             border-radius: 40px;
             padding: 15px;
-            background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0px 30px 80px rgba(0, 0, 0, 0.4);
+            border: 1px solid black;
         }
 
         .friend-name {
@@ -350,7 +352,7 @@ if (isset($_POST['add_friend_email'])) {
 
                     <div class="add-friend-form">
                         <form method="POST" action="friends.php">
-                            <input type="email" name="add_friend_email" placeholder="Enter friend's email"
+                            <input type="email" name="add_friend_email" placeholder="Enter email for request to be friend with them."
                                 style="width:300px; text-align: left; font-size: 13px;" required>
                             <button type="submit" style="font-size: 13px;">Add</button>
                         </form>
@@ -358,7 +360,12 @@ if (isset($_POST['add_friend_email'])) {
                             <div class="add-friend-message"><?= htmlspecialchars($addFriendMsg) ?></div>
                         <?php endif; ?>
                     </div>
-
+                    <div style="padding:5px; margin-left:10px; margin-right:10px;"> <small
+                            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top:20px; font-size:16px; color:black; white-space:normal; word-break:break-word; text-align:justify;">
+                            Feel free to send friend requests to anyone you know through email. You can enjoy the best features of this system
+                            with your friends. You can also share your QR code with your friends within the system.
+                        </small> </div>
+                    <br>
                     <?php
                     $listStmt = $con->prepare("
     SELECT 

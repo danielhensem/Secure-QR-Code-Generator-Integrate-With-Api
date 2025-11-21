@@ -49,8 +49,8 @@ $cname = $cname !== '' ? $cname : null;
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- links -->
-         <title>SQ-TECH SOLVER Secure QR Code Generator</title>
-        <link rel="icon" type="image/png" href="img/log.png">
+    <title>SQ-TECH SOLVER Secure QR Code Generator</title>
+    <link rel="icon" type="image/png" href="img/log.svg">
     <link rel="stylesheet" href="style-index.css">
     <link rel="stylesheet" href="style-res.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -70,7 +70,7 @@ $cname = $cname !== '' ? $cname : null;
     <link
         href="https://fonts.googleapis.com/css2?family=Acme&family=Barlow:wght@500&family=Quicksand:wght@500&family=Raleway:wght@300&family=Ubuntu:wght@700&display=swap"
         rel="stylesheet">
-      <!-- Tailwind CDN -->
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Custom Animated Background -->
@@ -92,7 +92,8 @@ $cname = $cname !== '' ? $cname : null;
 
         .animated-bg {
             min-height: 100vh;
-            background: linear-gradient(135deg, #d7e8f7, #ffe5d9);
+            background: #424141ff;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             background-size: 1000% 1000%;
             animation: bgSlide 15s ease infinite;
             position: relative;
@@ -137,10 +138,10 @@ $cname = $cname !== '' ? $cname : null;
                 opacity: 0;
             }
         }
-    <!-- fonts -->
-    <title>SQ-TECH SOLVER Secure QR Code Generator</title>
 
-         /* Step Indicator */
+        < !-- fonts --><title>SQ-TECH SOLVER Secure QR Code Generator</title>
+
+        /* Step Indicator */
         .step-wrapper {
             display: flex;
             justify-content: center;
@@ -168,7 +169,7 @@ $cname = $cname !== '' ? $cname : null;
         .arrow {
             color: #000000ff;
         }
-        </style>
+    </style>
 </head>
 
 <body class="animated-bg">
@@ -195,16 +196,16 @@ $cname = $cname !== '' ? $cname : null;
                 <div class="hading" style="margin-top: 50px;">
                     <h1>Final Preview</h1>
                     <div class="step-wrapper">
-                    <div class="step">Upload</div>
-                    <div class="arrow">→</div>
-                    <div class="step">Generate</div>
-                    <div class="arrow">→</div>
-                    <div class="step">Design</div>
-                    <div class="arrow">→</div>
-                    <div class="step">Securing</div>
-                    <div class="arrow">→</div>
-                    <div class="step active">Complete</div>
-                </div>
+                        <div class="step">Upload</div>
+                        <div class="arrow">→</div>
+                        <div class="step">Generate</div>
+                        <div class="arrow">→</div>
+                        <div class="step">Design</div>
+                        <div class="arrow">→</div>
+                        <div class="step">Securing</div>
+                        <div class="arrow">→</div>
+                        <div class="step active">Complete</div>
+                    </div>
                 </div>
 
 
@@ -216,12 +217,12 @@ $cname = $cname !== '' ? $cname : null;
 
         <section style="; padding: 60px 20px;">
             <div class="bigcontainer"
-                style="max-width: 600px; margin: auto; background: linear-gradient(135deg, #8ee3ef, #ffd4bf); border-radius: 40px; padding: 40px 20px; box-shadow: 0 70px 110px rgba(2, 0, 134, 0.2); text-align: center;">
-
+                style="max-width: 600px; margin: auto;             background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);border-radius: 40px; padding: 40px 20px; box-shadow: 0 70px 110px rgba(2, 0, 134, 0.2); text-align: center;">
+                
                 <!-- QR Code Preview -->
                 <!-- <h2 style="color:white; margin-bottom: 20px;">Final QR Code Preview</h2> -->
                 <div
-                    style="width: 500px; height: 500px; margin: 0 auto 30px auto; border: 5px dashed #006e37ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+                    style="width: 500px; height: 500px; margin: 0 auto 30px auto; border: 5px dashed #000000ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
                     <?php
                     if (isset($_SESSION['secured_qr_filename'])) {
                         $qrFilename = $_SESSION['secured_qr_filename'];
@@ -249,11 +250,14 @@ $cname = $cname !== '' ? $cname : null;
                     ?>
 
                 </div>
-                    <!-- Spinner Overlay -->
-                <div id="spinnerOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background-color:white;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:9999;">
+                <!-- Spinner Overlay -->
+                <div id="spinnerOverlay"
+                    style="position:fixed;top:0;left:0;width:100%;height:100%;background-color:white;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:9999;">
                     <div style="text-align:center; margin-bottom: 20px;">
                         <div id="rotatingEmoji" style="font-size:80px; user-select:none;">🔲</div>
-                        <div id="statusText" style="font-size:22px; color:#333; font-family:Arial,sans-serif; margin-top: 15px;">Finishing up...</div>
+                        <div id="statusText"
+                            style="font-size:22px; color:#333; font-family:Arial,sans-serif; margin-top: 15px;">
+                            Finishing up...</div>
                     </div>
                 </div>
 
@@ -275,49 +279,49 @@ $cname = $cname !== '' ? $cname : null;
 
 
 
-                    <script>
-document.getElementById("finishBtn").addEventListener("click", function () {
-    var overlay = document.getElementById("spinnerOverlay");
-    overlay.style.display = "flex";
+    <script>
+        document.getElementById("finishBtn").addEventListener("click", function () {
+            var overlay = document.getElementById("spinnerOverlay");
+            overlay.style.display = "flex";
 
-    var statusEl = document.getElementById("statusText");
-    var emoji = document.getElementById("rotatingEmoji");
+            var statusEl = document.getElementById("statusText");
+            var emoji = document.getElementById("rotatingEmoji");
 
-    var percent = 0;
-    var rotation = 0;
+            var percent = 0;
+            var rotation = 0;
 
-    // Rotate emoji continuously (~60fps)
-    var rotateInterval = setInterval(function () {
-        rotation = (rotation + 6) % 360;
-        emoji.style.transform = "rotate(" + rotation + "deg)";
-    }, 16);
+            // Rotate emoji continuously (~60fps)
+            var rotateInterval = setInterval(function () {
+                rotation = (rotation + 6) % 360;
+                emoji.style.transform = "rotate(" + rotation + "deg)";
+            }, 16);
 
-    // Update status messages quickly
-    var statusIntervals = [
-        { max: 25, text: "Saving your QR Code..." },
-        { max: 75, text: "Finalizing..." },
-        { max: 100, text: "Redirecting to homepage..." }
-    ];
+            // Update status messages quickly
+            var statusIntervals = [
+                { max: 25, text: "Saving your QR Code..." },
+                { max: 75, text: "Finalizing..." },
+                { max: 100, text: "Redirecting to homepage..." }
+            ];
 
-    var percentInterval = setInterval(function () {
-        percent++;
-        for (var i = 0; i < statusIntervals.length; i++) {
-            if (percent <= statusIntervals[i].max) {
-                statusEl.innerHTML = statusIntervals[i].text;
-                break;
-            }
-        }
+            var percentInterval = setInterval(function () {
+                percent++;
+                for (var i = 0; i < statusIntervals.length; i++) {
+                    if (percent <= statusIntervals[i].max) {
+                        statusEl.innerHTML = statusIntervals[i].text;
+                        break;
+                    }
+                }
 
-        if (percent >= 100) {
-            clearInterval(percentInterval);
-            clearInterval(rotateInterval);
-            setTimeout(function () {
-                window.location.href = "home.php";
-            }, 100);
-        }
-    }, 20); // 1.5s total
-});
-</script>
+                if (percent >= 100) {
+                    clearInterval(percentInterval);
+                    clearInterval(rotateInterval);
+                    setTimeout(function () {
+                        window.location.href = "home.php";
+                    }, 100);
+                }
+            }, 20); // 1.5s total
+        });
+    </script>
 
 
 

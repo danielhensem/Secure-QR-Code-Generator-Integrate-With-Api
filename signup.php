@@ -110,7 +110,7 @@ if (isset($_POST["signsubmit"])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-    <link rel="icon" type="image/png" href="img/log.png">
+    <link rel="icon" type="image/png" href="img/log.svg">
 </head>
 
 <body>
@@ -156,8 +156,11 @@ if (isset($_POST["signsubmit"])) {
             <div class="form">
                 <div class="left-side" style="width: 300px;">
                     <div class="content" style="width: 250px;">
-                        <h1>SQ-TECH SOLVER</h1>
-                        <h5>Bring Quality Over Standard</h5>
+                        <img src="img/log.svg" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img"
+                            style="width: 100px; height: 100px;">
+                            <br><br>
+                        <h1 style="color:black;">SQ-TECH SOLVER</h1>
+                        <h5 style="color:black;">Bring Quality Over Standard</h5>
                         <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna aliqua.</p>  -->
                         <!-- <img src="img/loginbg.png" width="300"> -->
@@ -175,14 +178,14 @@ if (isset($_POST["signsubmit"])) {
 
                             <p>Short name *</p>
                             <div class="form-inputs">
-                                <input type="text" id="shortname" name="shortname" maxlength="20" required
+                                <input type="text" id="shortname" placeholder="Short name" name="shortname" maxlength="20" required
                                     style="border-radius:30px;">
                                 <i class="fa fa-user"></i>
                             </div>
 
                             <p>Email *</p>
                             <div class="form-inputs">
-                                <input type="email" id="email" name="email" autocomplete="off" required
+                                <input type="email" id="email" name="email" placeholder="Email" autocomplete="off" required
                                     style="border-radius:30px;">
                                 <i class="fa fa-envelope"></i>
                             </div>
@@ -202,14 +205,14 @@ if (isset($_POST["signsubmit"])) {
 
                             <p>Password *</p>
                             <div class="form-inputs">
-                                <input type="password" id="password" name="pwd" autocomplete="off" required
+                                <input type="password" id="password" name="pwd" placeholder="Password" autocomplete="off" required
                                     style="border-radius:30px;">
                                 <i class="fa fa-eye" id="password_eye"></i>
                             </div>
 
                             <p>Confirm Password *</p>
                             <div class="form-inputs">
-                                <input type="password" id="confirmPassword" name="confirmpwd" autocomplete="off"
+                                <input type="password" id="confirmPassword" name="confirmpwd" placeholder="Password" autocomplete="off"
                                     required style="border-radius:30px;">
                                 <i class="fa fa-eye" id="confirm_password_eye"></i>
                             </div>

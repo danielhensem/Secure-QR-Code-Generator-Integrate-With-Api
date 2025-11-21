@@ -31,7 +31,7 @@ $userId = $userRow['id'];
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-        <link rel="icon" type="image/png" href="img/log.png">
+    <link rel="icon" type="image/png" href="img/log.svg">
     <link rel="stylesheet" href="style-index.css">
     <link rel="stylesheet" href="style-res.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -58,7 +58,9 @@ $userId = $userRow['id'];
 
         .animated-bg {
             min-height: 100vh;
-            background: linear-gradient(135deg, #d7e8f7, #ffe5d9);
+            background: #424141ff;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
+
             background-size: 1000% 1000%;
             animation: bgSlide 15s ease infinite;
             position: relative;
@@ -108,12 +110,13 @@ $userId = $userRow['id'];
             border: 1px solid #ccc;
             border-radius: 40px;
             padding: 15px;
-            background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
-            box-shadow: 0px 4px 8px rgba(0, 183, 255, 0.4);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border:1px solid black;
         }
 
         .activity-message {
@@ -184,55 +187,55 @@ $userId = $userRow['id'];
         </section>
     </div>
 
-   <script>
-    let offset = 0;
-    let limit = 7;
-    let currentFilter = "7";
-    let allLoaded = false;
+    <script>
+        let offset = 0;
+        let limit = 7;
+        let currentFilter = "7";
+        let allLoaded = false;
 
-    function loadActivities(reset = false) {
-        if (reset) {
-            // Reset everything
-            offset = 0;
-            allLoaded = false;
-            document.getElementById('activityList').innerHTML = "";
-            document.getElementById('loadMoreBtn').style.display = "inline-block"; // show again
+        function loadActivities(reset = false) {
+            if (reset) {
+                // Reset everything
+                offset = 0;
+                allLoaded = false;
+                document.getElementById('activityList').innerHTML = "";
+                document.getElementById('loadMoreBtn').style.display = "inline-block"; // show again
+            }
+
+            if (allLoaded) return;
+
+            // Add timestamp to prevent cached responses
+            fetch(`load_activity.php?offset=${offset}&limit=${limit}&filter=${currentFilter}&_=${Date.now()}`)
+                .then(res => res.text())
+                .then(data => {
+                    // If no data returned, hide Load More
+                    if (data.trim() === "" || data.includes("No activity")) {
+                        document.getElementById('loadMoreBtn').style.display = "none";
+                        allLoaded = true;
+                    } else {
+                        document.getElementById('activityList').insertAdjacentHTML('beforeend', data);
+                        offset += limit;
+                    }
+                })
+                .catch(err => console.error("Error loading activities:", err));
         }
 
-        if (allLoaded) return;
+        // Handle button click
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            loadActivities();
+        });
 
-        // Add timestamp to prevent cached responses
-        fetch(`load_activity.php?offset=${offset}&limit=${limit}&filter=${currentFilter}&_=${Date.now()}`)
-            .then(res => res.text())
-            .then(data => {
-                // If no data returned, hide Load More
-                if (data.trim() === "" || data.includes("No activity")) {
-                    document.getElementById('loadMoreBtn').style.display = "none";
-                    allLoaded = true;
-                } else {
-                    document.getElementById('activityList').insertAdjacentHTML('beforeend', data);
-                    offset += limit;
-                }
-            })
-            .catch(err => console.error("Error loading activities:", err));
-    }
+        // Handle filter change
+        document.getElementById('filterRange').addEventListener('change', function () {
+            currentFilter = this.value;
+            loadActivities(true); // full reset + new data
+        });
 
-    // Handle button click
-    document.getElementById('loadMoreBtn').addEventListener('click', () => {
+        // Initial load
         loadActivities();
-    });
+    </script>
 
-    // Handle filter change
-    document.getElementById('filterRange').addEventListener('change', function () {
-        currentFilter = this.value;
-        loadActivities(true); // full reset + new data
-    });
-
-    // Initial load
-    loadActivities();
-</script>
-
-        <!-- javascript sw -->
+    <!-- javascript sw -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>

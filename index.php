@@ -465,7 +465,7 @@ if (isset($_SESSION["login"])) {
     <header class="main-header">
         <div class="container">
             <a href="#" class="logo">
-                <img src="img/log.png" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img">
+                <img src="img/log.svg" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img">
                 <span class="logo-text">SQ-Tech Solver</span>
             </a>
             <nav class="main-nav">

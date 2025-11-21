@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-            <link rel="icon" type="image/png" href="img/log.png">
+    <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
+    <link rel="icon" type="image/png" href="img/log.svg">
     <link rel="stylesheet" href="style-index.css">
     <link rel="stylesheet" href="style-res.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -79,7 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .animated-bg {
             min-height: 100vh;
-            background: linear-gradient(135deg, #d7e8f7, #ffe5d9);
+            background: #424141ff;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             background-size: 1000% 1000%;
             animation: bgSlide 15s ease infinite;
             position: relative;
@@ -126,9 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
 
-        <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-        
-        body {
+        <title>SQ-TECH SOLVER - Secure QR Code Generator</title>body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f4f4;
             margin: 0;
@@ -138,10 +137,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .main-container {
             max-width: 1000px;
             margin: 40px auto;
-            background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             border-radius: 40px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
             padding: 30px;
+            border:1px solid black;
         }
 
         .row {
@@ -154,8 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flex: 1;
             padding: 20px;
             border-radius: 30px;
-            background-color: #f1f5f9;
+            background-color: #b4b4b4ff;
             box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+            border:1px solid black;
 
         }
 
@@ -164,6 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: white;
             border-top: 1px solid #ddd;
             border-radius: 30px;
+            border:1px solid black;
         }
 
         textarea,
@@ -177,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         button {
-            background-color: #2563eb;
+            background-color: #0c0c0cff;
             color: white;
             border: none;
             cursor: pointer;
@@ -205,12 +207,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="row">
             <div class="card-box">
                 <h3 style="margin: 20px;">System Developer Comment</h3>
-                <p style="margin: 20px;">This secure QR Code Generator system provide highest security and reliable qr code generator to you.<br>This platform
-                will assure your confidentiality while giving you the best and comfortable platform. Lastly, enjoy the features. 😊</p>
+                <p style="margin: 20px;"> This secure QR Code Generator system provides the highest level of security
+                    and reliability for generating QR codes.<br> Our platform ensures your confidentiality while
+                    offering the best and most user-friendly experience. Lastly, enjoy the features! 😊 </p>
             </div>
             <div class="card-box">
                 <h3 style="margin: 20px;">Developer Details</h3>
-                <p style="margin: 20px;">Developed by Daniel Haikal<br>Email: danielhkl118@gmail.com<br>Version: 1.0.0</p>
+                <p style="margin: 20px;">Developed by Daniel Haikal<br>Email: danielhkl118@gmail.com<br>Version: 1.0.0
+                </p>
             </div>
         </div>
         <div class="feedback-section">
@@ -222,21 +226,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <form method="post">
                 <textarea name="feedback_text" placeholder="Enter your feedback here..." rows="8"
-                    style=" align-items:center; justify-content:center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:15px;"
+                    style=" align-items:center; justify-content:center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:15px; border:1px solid black;padding:10px; border-radius: 20px;"
                     required></textarea>
                 <br>
                 <br>
                 <dev style=" display:flex;justify-content: center; align-items: center;">
-                <button type="submit" name="submit_feedback"
-                    style="margin-right:20px; background:blue; color: white; font-weight: bold;border-radius:40px; width:200px; align-items:center; justify-content:center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:16px;">Submit</button>
-                <button type="submit" name="clear_feedback"
-                    style="background:blue; color: white; font-weight: bold;border-radius:40px; width:200px; align-items:center; justify-content:center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:16px;">Clear</button>
+                    <button type="submit" name="submit_feedback"
+                        style="margin-right:20px; background:black; color: white; font-weight: bold;border-radius:40px; width:300px; align-items:center; justify-content:center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:16px;">Submit</button>
+                    <button type="submit" name="clear_feedback"
+                        style="background:black; color: white; font-weight: bold;border-radius:40px; width:300px; align-items:center; justify-content:center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:16px;">Clear</button>
                 </dev>
             </form>
         </div>
     </div>
     <div class="footer-note">&copy; 2025 SQ‑Tech Solver. All rights reserved.</div>
-        <!-- javascript sw -->
+    <!-- javascript sw -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>

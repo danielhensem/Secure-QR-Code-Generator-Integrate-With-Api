@@ -71,6 +71,8 @@ $query = "SELECT
             qs.otp_enabled, 
             qs.created_at, 
             qs.qr_image,
+            qsl.header_text,
+            qsl.description,
             qsl.file_type
           FROM qr_security qs
           LEFT JOIN qr_secondlayer qsl ON qs.id = qsl.id
@@ -103,6 +105,8 @@ while ($row = mysqli_fetch_assoc($result)) {
         'otp_enabled' => $row['otp_enabled'],
         'created_at' => $row['created_at'],
         'qr_type' => $row['file_type'] ?? 'N/A',
+        'header_text' => $row['header_text'] ?? 'No Header',
+        'description' => $row['description'] ?? 'No Description',
         'qr_image_base64' => $qrBase64
     ];
 
@@ -112,6 +116,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo "    <td style='font-size: 13px;padding: 12px 15px;'>{$data['created_at']}</td>";
     echo "    <td style='font-size: 13px;padding: 12px 15px; white-space: normal; word-break: break-word; max-width: 200px;'>{$data['qr_filename']}</td>";
     echo "    <td style='font-size: 13px;padding: 12px 15px; text-align:center;'>{$data['id']}</td>";
+    echo "    <td style='font-size: 13px;padding: 12px 15px; text-align:center;'>{$data['header_text']}</td>";
     echo "    <td style='font-size: 13px;padding: 12px 15px; text-align:center;'>{$data['qr_type']}</td>"; // ✅ New QR Type column
     echo "    <td style='padding: 12px 15px;'>";
 

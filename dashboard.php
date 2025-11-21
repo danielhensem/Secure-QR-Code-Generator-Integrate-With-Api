@@ -25,7 +25,7 @@ $name = $_SESSION["username"];
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-        <link rel="icon" type="image/png" href="img/log.png">
+    <link rel="icon" type="image/png" href="img/log.svg">
     <link rel="stylesheet" href="style-index.css">
     <link rel="stylesheet" href="style-res.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -53,7 +53,8 @@ $name = $_SESSION["username"];
 
         .animated-bg {
             min-height: 100vh;
-            background: linear-gradient(135deg, #d7e8f7, #ffe5d9);
+            background: #424141ff;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             background-size: 1000% 1000%;
             animation: bgSlide 15s ease infinite;
             position: relative;
@@ -213,7 +214,8 @@ $name = $_SESSION["username"];
         }
 
         .case-card {
-            background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
+             background: #424141ff;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             border-radius: 40px;
             box-shadow: 0 70px 100px rgba(0, 0, 0, 0.08);
             padding: 18px;
@@ -226,6 +228,7 @@ $name = $_SESSION["username"];
             text-align: center;
             transition: all 0.3s ease;
             min-height: 260px;
+            border:1px solid black;
         }
 
         .case-card:hover {
@@ -236,7 +239,7 @@ $name = $_SESSION["username"];
         .case-icon {
             width: 70px;
             height: 70px;
-            background: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);
+            background: black;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -303,6 +306,7 @@ $name = $_SESSION["username"];
             flex-wrap: wrap;
             gap: 20px;
             position: relative;
+            border: 1px solid black;
         }
 
         .slider-arrow {
@@ -393,10 +397,10 @@ $name = $_SESSION["username"];
 
     <h2 class="case-title" style="margin-left:10px; margin-right:10px;">QR Code Scam, Fraud & Tampering Cases</h2>
 
-    <div style=" padding:10px; margin-left:10px;  margin-right: 10px;">
+    <div style=" padding:10px; margin-left:30px;  margin-right: 10px;">
         <small
-            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal; margin-top:20px; font-size: 16px; color:black; white-space: normal; word-break: break-word; justify-content: left; align-items: left; text-align: justify;">Stay
-            Smart. Scan Safe.
+            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  margin-top:20px; font-size: 16px; color:black; white-space: normal; word-break: break-word; justify-content: left; align-items: left; text-align: justify;">
+            <strong>Stay Smart. Scan Safe.</strong>
             QR codes make life easier from payments to event check-ins but they can also be a hacker’s hidden doorway.
             In recent years, cybercriminals have turned simple QR scans into powerful tools for data theft, phishing,
             and financial fraud. Many victims never realized they were scanning fake codes until their money or personal
@@ -439,7 +443,7 @@ $name = $_SESSION["username"];
 
     <!-- ==== Scam Cases Grid ==== -->
     <section class="case-section">
-        <div style="margin-left:10px;  margin-right: 10px; margin-bottom:35px;">
+        <div style="margin-left:30px;  margin-right: 10px; margin-bottom:35px;">
             <small
                 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal; margin-top:20px; font-size: 16px; color:black; white-space: normal; word-break: break-word; align-items: left; text-align: justify;">Stay
                 aware about Real Scams. Real Lessons.

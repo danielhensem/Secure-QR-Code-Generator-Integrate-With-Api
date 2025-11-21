@@ -5,7 +5,7 @@ $error = false;
 if (isset($_POST["loginbtn"])) {
     // fetch and trim inputs
     $email = trim($_POST["email"] ?? '');
-    $pwd   = $_POST["pwd"] ?? '';
+    $pwd = $_POST["pwd"] ?? '';
 
     // simple input validation
     if ($email === '' || $pwd === '') {
@@ -22,12 +22,12 @@ if (isset($_POST["loginbtn"])) {
                 $data = $res->fetch_assoc();
 
                 // check account status and verify password
-                if ((int)$data['status'] === 0 && password_verify($pwd, $data['password'])) {
+                if ((int) $data['status'] === 0 && password_verify($pwd, $data['password'])) {
                     session_start();
                     session_regenerate_id(true);
                     $_SESSION["login"] = true;
                     $_SESSION["username"] = $data["name"];
-                    $_SESSION["id"] = (int)$data["id"];
+                    $_SESSION["id"] = (int) $data["id"];
                     $stmt->close();
                     header("Location: home.php");
                     exit;
@@ -53,13 +53,13 @@ if (isset($_POST["loginbtn"])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-    <link rel="icon" type="image/png" href="img/log.png">
+    <link rel="icon" type="image/png" href="img/log.svg">
     <link rel="stylesheet" href="loginsignup.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-    <title>EZSOP - login</title>
+
 </head>
 
 <body>
@@ -105,8 +105,11 @@ if (isset($_POST["loginbtn"])) {
             <div class="form">
                 <div class="left-side" style="width: 300px;">
                     <div class="content" style="width: 250px;">
-                        <h1>SQ-TECH SOLVER</h1>
-                        <h5>Welcome Back! </h5>
+                        <img src="img/log.svg" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img"
+                            style="width: 100px; height: 100px;">
+                            <br><br>
+                        <h1 style="color:black;">SQ-TECH SOLVER</h1>
+                        <h5 style="color:black;">Welcome Back! </h5>
                         <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna aliqua.</p>  -->
                         <!-- <img src="img/loginbg.png" width="300"> -->
@@ -120,7 +123,7 @@ if (isset($_POST["loginbtn"])) {
                             </div> -->
                             <p>Email *</p>
                             <div class="form-inputs">
-                                <input type="email" autocomplete='chrome-off' name="email" style="border-radius:30px;"
+                                <input type="email" placeholder="Email" autocomplete='chrome-off' name="email" style="border-radius:30px;"
                                     required>
                                 <i class="fa fa-envelope"></i>
                             </div>

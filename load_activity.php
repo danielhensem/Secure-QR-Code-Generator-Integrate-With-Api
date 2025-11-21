@@ -46,7 +46,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $time = date("d M Y, h:i A", strtotime($row['timestamp']));
     echo "<div class='activity-card'>
             <div class='activity-message'>
-                <i class='fa-solid fa-bell' style='margin-right:8px; color:#007bff;'></i>
+                <i class='fa-solid fa-tasks' style='margin-right:8px; color:#007bff;'></i>
                 $message
             </div>
             <div class='activity-time'>$time</div>

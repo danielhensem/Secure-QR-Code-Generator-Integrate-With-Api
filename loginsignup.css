@@ -5,10 +5,12 @@
     margin: 0;
     font-family: 'Poppins', sans-serif
 }
-.alertbox{
+
+.alertbox {
     position: absolute;
     width: 100%;
 }
+
 .section {
     height: 100vh;
     display: flex;
@@ -24,7 +26,7 @@
     position: relative;
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    border-radius:40px;
+    border-radius: 40px;
 }
 
 .section .container .form {
@@ -37,7 +39,8 @@
 
 .section .container .left-side {
     width: 30%;
-    background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
+    background: #424141ff;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
     height: 100%
 }
 
@@ -122,10 +125,10 @@
 .section .container .right-side .forms {
     padding-right: 20px;
     width: 100%;
-    height:100%;
+    height: 100%;
 }
 
-.section .container .right-side .forms .forms-heading{
+.section .container .right-side .forms .forms-heading {
     text-align: center;
     padding: 20px;
     margin: 20px 0;
@@ -149,9 +152,9 @@
 .section .container .right-side .forms input[type="submit"] {
     display: flex;
     width: 100%;
-    height : 30px;
+    height: 30px;
     background-color: #190379;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     border-radius: 2px;
     color: #fff;
@@ -180,7 +183,8 @@
     height: 60%;
     border: none;
     border-radius: 30px;
-    background-color: #007bff; /* or whatever */
+    background-color: #007bff;
+    /* or whatever */
     color: white;
     font-size: 15px;
     cursor: pointer;
@@ -191,7 +195,7 @@
 
 
 .section .container .right-side .forms input:focus {
-    border: 2px solid #000 ;
+    border: 2px solid #000;
 }
 
 .strength-list {
@@ -210,14 +214,14 @@
     /* position: absolute; */
     size: 20px;
     top: 14px;
-    left : 2px;
+    left: 2px;
     right: 2px;
     color: #dbdada;
     z-index: 1000
 }
 
 
-.form-acc{
+.form-acc {
     margin: 7px 4px;
     letter-spacing: .5px;
     font-size: 13px;
@@ -225,7 +229,8 @@
     position: center;
     text-align: center;
 }
-.form-acc a{
+
+.form-acc a {
     text-decoration: none;
     color: blue;
     margin: 0 3px;

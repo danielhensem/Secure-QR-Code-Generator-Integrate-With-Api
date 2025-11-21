@@ -48,34 +48,14 @@ $name = $_SESSION["username"];
 
         .animated-bg {
             min-height: 100vh;
-            background: linear-gradient(135deg, #d7e8f7, #ffe5d9);
+            background: #424141ff;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);
             background-size: 1000% 1000%;
-            animation: bgSlide 15s ease infinite;
+            animation: bgSlide 20s ease infinite;
             position: relative;
             overflow-x: hidden;
             /* allow vertical scroll but hide horizontal overflow */
         }
-
-        /* Make the floating layer cover the entire page */
-        /* .floating-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Allow user to interact with page behind */
-        /* z-index: 1; Above background, below content if needed */
-        /* overflow: hidden; */
-        /* } */
-
-        /* Animate icons */
-        /* .floating-icon {
-  position: absolute;
-  font-size: 30px;
-  opacity: 0.5;
-  color: white;
-  animation: floatUp 20s linear infinite;
-} */
 
         /* Keyframes for floating */
         @keyframes floatUp {
@@ -96,6 +76,7 @@ $name = $_SESSION["username"];
 
         .dashboard-wrapper {
             padding: 30px;
+            margin-bottom: 50px;
         }
 
         .card-grid {
@@ -108,9 +89,10 @@ $name = $_SESSION["username"];
         .feature-card {
             flex: 1 1 22%;
             background-color: #fff;
-            padding-left:10px;
-            padding-right:10px;
-            padding-top:15px;
+            border: 1px solid #000000ff;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 15px;
             padding-bottom: 5px;
             border-radius: 50px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -183,8 +165,8 @@ $name = $_SESSION["username"];
             min-width: 300px;
             /* Minimum width before wrapping */
             max-width: 100%;
-            background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
-            border: 1px solid #e5e7eb;
+            background: white;
+            border: 1px solid #000000ff;
             border-radius: 30px;
             box-shadow: 0 60px 100px rgba(4, 0, 255, 0.05);
             padding: 20px;
@@ -240,7 +222,6 @@ $name = $_SESSION["username"];
             overflow-x: auto;
             width: 100%;
             margin-bottom: 60px;
-            border-radius: 20px;
             box-shadow: 0 40px 40px rgba(12, 32, 206, 0.1);
         }
 
@@ -261,7 +242,7 @@ $name = $_SESSION["username"];
 
         table#qrTable thead {
             position: sticky;
-            background: linear-gradient(135deg, #8ee3ef, #ffd4bf);
+            background: gray;
             display: table;
             width: 100%;
             table-layout: fixed;
@@ -279,7 +260,8 @@ $name = $_SESSION["username"];
         #qrTableScroll tbody {
 
             display: table;
-            background-color: lightcyan;
+            background-color: white;
+            border: 1px solid #000000ff;
             width: 100%;
             table-layout: fixed;
         }
@@ -330,7 +312,7 @@ $name = $_SESSION["username"];
         rel="stylesheet"> -->
     <!-- fonts -->
     <title>SQ-TECH SOLVER - Secure QR Code Generator</title>
-        <link rel="icon" type="image/png" href="img/log.png">
+    <link rel="icon" type="image/png" href="img/log.svg">
 </head>
 
 <body class="animated-bg">
@@ -357,16 +339,23 @@ $name = $_SESSION["username"];
                 <div class="cat-products">
                     <div class="products-cards">
                         <div class="container">
-                            <h1
-                                style="font-family: cursive; font-weight:bold; color: black; font-size:40px;text-align: center;margin-top:20px; margin-bottom:20px;">
-                                Welcome to the<br>Secure QR Code Generator System<br>
-                            </h1>
+                            <div
+                                style="display: flex; align-items: center; justify-content: space-between; margin: 10px;">
+                                <h1
+                                    style="font-family: 'Trebuchet MS', sans-serif; font-weight: bold; color: black; font-size: 28px; margin: 0;">
+                                    Welcome <strong><?php echo htmlspecialchars($name); ?></strong> to the<br>
+                                    Secure And Reliable QR Code Generator System
+                                </h1>
+                                <img src="img/pic2.svg" alt="Logo"
+                                    style=" width:120px;height: 120px; margin-top:20px; margin-left: 20px; margin-right: 20px;">
+                            </div>
+
                             <small
-                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: bold; text-align: center; font-size:16px;display: block; margin-top: 10px; ">
+                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: bold; text-align: left; font-size:16px;display: block; margin-top: 10px; margin-left: 10px;">
                                 Inspired by SQ-TechSolver@2025
                             </small>
                             <small
-                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: normal; text-align: center; font-size:16px;display: block;  margin-bottom:10px;">
+                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: normal; text-align: left; font-size:16px;display: block;  margin-bottom:10px; margin-left: 10px;">
                                 These features have been made available for you
                             </small>
 
@@ -385,7 +374,8 @@ $name = $_SESSION["username"];
                                         <div class="form-acc"
                                             style="display: flex; justify-content: center; align-items: center; margin: 20px;">
                                             <a href="products.php"
-                                                style="color:blue; font-size:13px; font-weight:bold; text-align: center;">Click Here
+                                                style="color:blue; font-size:13px; font-weight:bold; text-align: center;">Click
+                                                Here
                                                 For Generate Secure QR Code.</a>
                                         </div>
                                     </div>
@@ -402,7 +392,8 @@ $name = $_SESSION["username"];
                                         <div class="form-acc"
                                             style="display: flex; justify-content: center; align-items: center; margin-left:20px; margin-right:20px; margin-bottom: 23px;">
                                             <a href="scan.php"
-                                                style="color:blue; font-size:13px; font-weight:bold; text-align: center;">Click Here
+                                                style="color:blue; font-size:13px; font-weight:bold; text-align: center;">Click
+                                                Here
                                                 For Scan QR Code.</a>
                                         </div>
                                     </div>
@@ -418,7 +409,7 @@ $name = $_SESSION["username"];
                                         </div>
                                         <br>
                                         <div class="form-acc"
-                                            style="display: flex; justify-content: center; align-items: center; margin: 20px;">
+                                            style="display: flex; justify-content: center; align-items: center; margin-left:20px; margin-right:20px; margin-bottom: 23px;">
                                             <a href="#generate-section"
                                                 style="color:blue; font-size:13px; font-weight:bold; text-align: center;">
                                                 Click Here For Share QR Code.
@@ -448,7 +439,6 @@ $name = $_SESSION["username"];
 
                                 </div>
                             </div>
-                            <hr style="border: none; height: 2px; background-color: #858484ff; margin-top: 40px; margin-bottom: 40px; border-radius: 5px;">
 
                             <h2 style="text-align:left; font-family: 'Segoe UI', sans-serif;  font-size: 1.75rem;
                             font-weight: 600;margin-bottom: 20px;">
@@ -456,13 +446,21 @@ $name = $_SESSION["username"];
                             </h2>
 
 
+                            <strong
+                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold; font-size:16px; display:block; margin-top:10px; margin-bottom:10px; white-space:normal; word-break:break-word;">
+                                Your trusted platform for generating secure and reliable QR codes.
+                                Experience a seamless and organized QR code management system designed to give users
+                                confidence and convenience.
+                                We don't just generate — we educate. Learn how to protect yourself from QR code fraud
+                                and stay ahead with smart, secure scanning.
+                            </strong>
+
                             <small
-                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: normal; font-size:16px;display: block; margin-top: 10px; margin-bottom:80px;">
-                                Your trusted platform for generating secure and reliable QR codes. <br>
-                                Experience a seamless, systematic QR code management solution designed to attract users
-                                with confidence and convenience. <br>
-                                We don't just generate, we educate. Learn how to protect yourself from QR code fraud and
-                                stay ahead with smart, secure scanning.
+                                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal; font-size:16px; display:block; text-align:left; margin-right:10px; margin-bottom:30px; white-space:normal; word-break:break-word;">
+                                See how many QR codes you’ve created, shared, and received, as well as how many people
+                                scan your QR codes each day.
+                                Every line and curve on the chart tells the story of how actively you’re connecting
+                                through this QR Code System.
                             </small>
 
                             <div class="row features-inner">
@@ -780,7 +778,7 @@ $name = $_SESSION["username"];
                             style="display:none; position:fixed; z-index:1000; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); overflow-y: auto;">
 
                             <div
-                                style=" background: linear-gradient(135deg, #8ee3ef, #ffd4bf); width:90%; max-width:800px; max-height:fit-content; overflow-y:auto; margin:5% auto; padding:20px; border-radius:50px; position:relative; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+                                style="border: 3px solid black; background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%); width:90%; max-width:800px; max-height:fit-content; overflow-y:auto; margin:5% auto; padding:20px; border-radius:50px; position:relative; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
 
                                 <span id="closeModal"
                                     style="position:absolute; top:10px; right:20px; cursor:pointer; font-size:24px;">&times;</span>
@@ -796,7 +794,7 @@ $name = $_SESSION["username"];
                         <div id="analyzeModal"
                             style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;">
                             <div class="chart-container"
-                                style="background: linear-gradient(135deg, #8ee3ef, #ffd4bf); padding:20px; border-radius:30px; max-width:800px; width:90%; max-height:90vh; overflow-y:auto;">
+                                style="border: 3px solid black;background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%); padding:20px; border-radius:30px; max-width:800px; width:90%; max-height:90vh; overflow-y:auto;">
                                 <h2 style="text-align:center; font-size:17px; font-weight: bold;">QR Code Access
                                     Analysis</h2>
 
@@ -826,14 +824,7 @@ $name = $_SESSION["username"];
                             </div>
                         </div>
                         <div id="generate-section"></div>
-                        <small
-                            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-weight: normal; font-size:16px;display: block; text-align: left; margin-left: 10px; margin-right:10px; margin-bottom:10px; white-space: normal; word-break: break-word;">
-                            See how many QR codes you’ve created, shared, and received and how many people have scans
-                            your QR codes every day.
-                            Every line and curve on the chart tells your story of how actively you’re connecting through
-                            this QR Code System.
-                        </small>
-                        
+
 
 
                         <!-- Load Chart.js -->
@@ -843,18 +834,18 @@ $name = $_SESSION["username"];
 
                         <!-- QR Stats Table -->
                         <!-- QR Stats Table -->
-             
+
                         <div class="qr-stats-table"
                             style="width: 100%; margin-left: auto; margin-right: auto; font-family: 'Quicksand', sans-serif;">
 
                             <div class="analytics-dashboard">
-                                <h2 style="text-align:left; font-family: 'Segoe UI', sans-serif;margin-bottom: 20px;">
+                                <h2 style="text-align:left; font-family: 'Segoe UI', sans-serif;margin-bottom: 20px; ">
                                     Manage QR Code<br>
                                 </h2>
                                 <small
                                     style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal; text-align:left; font-size: 16px;">You
                                     can manage your QR code here. You are allowed to view, scan, download,
-                                    share, analyze and delete your qr code.</small>
+                                    share, analyze and delete your qr code. Password and QR Code's content are not allowed to edit for security purpose.</small>
                             </div>
 
                             <!-- Search Filter -->
@@ -873,6 +864,7 @@ $name = $_SESSION["username"];
                                             <th>Date</th>
                                             <th>QR Filename</th>
                                             <th>QR Code Id</th>
+                                            <th>References</th>
                                             <th>QR Code Type</th>
                                             <th>Actions</th>
                                         </tr>
@@ -950,14 +942,15 @@ $name = $_SESSION["username"];
 
                                                         <!-- Left Column -->
                                                         <div style="flex: 1; min-width: 250px;">
+                                                            <p style="font-size:16px; font-weight:bold;"><strong></strong> ${data.header_text}</p><br>
                                                             <p style="font-size:14px;"><strong>ID:</strong> ${data.id}</p>
                                                             <p style="font-size:14px;"><strong>QR Filename:</strong> ${data.qr_filename}</p>
                                                             <p style="font-size:14px;"><strong>Created At:</strong> ${data.created_at}</p>
+                                                            <p style="font-size:14px;"><strong>Description:</strong> ${data.description}</p>
                                                             <br>
-                                                            <p style="color:red; font-size:14px;"><strong>Enter email for verification process. Verification is compulsory for allowing user to scan and access qr code through one time passcode (otp). It not reuirement for user who access the Qr code through shared password.</strong></p><br>
-                                                            <div>
+                                                           <p style="color:black; font-size:14px;"> <strong> Enter email for the verification process. Verification is required to allow users to scan and access the QR code using a one-time passcode (OTP). This is not required for users who access the QR code using shared password or with no password required. </strong> </p><br>  <div>
                                                                 <input type="email" id="emailField" placeholder="Enter email..." 
-                                                                    style="padding: 6px; width: 100%; border-radius:30px;" />
+                                                                    style="padding: 6px; width: 100%; border: 1px solid black; border-radius:30px;" />
                                                                 <button id="emailSendBtn" title="Send to Email"
                                                                     style="padding: 6px 10px; margin-top: 10px; background-color: #6c5ce7; color: white; border: none; border-radius:30px; cursor: pointer;">
                                                                     Verify Email
@@ -1451,7 +1444,6 @@ $name = $_SESSION["username"];
                                     overflow-x: auto;
                                     width: 100%;
                                     margin-bottom: 60px;
-                                    border-radius: 20px;
                                     box-shadow: 0 40px 40px rgba(114, 7, 7, 0.1);
                                 }
 

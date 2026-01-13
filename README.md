@@ -1,3 +1,11 @@
+## PART 1
+
+[![Demo Video](assets/demo-thumb.png)](https://youtu.be/mbXsyDUpzS0?si=-bibRvyAk0XH96aU)
+
+## PART 2
+
+[![Demo Video](assets/demo-thumb.png)](https://youtu.be/AAsuHRUb18s?si=7Is9ONg6LtX0AhR5)
+
 # SQ-Tech Solver: Secure QR Code Generator System
 
 ## 📋 Table of Contents

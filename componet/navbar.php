@@ -5,6 +5,8 @@ if (isset($_SESSION["login"])) {
     $name = $_SESSION["username"];
 }
 
+$current_page = basename($_SERVER['PHP_SELF']);
+
 $notif_count = 0;
 
 if (isset($_SESSION['id']) && is_numeric($_SESSION['id'])) {
@@ -89,11 +91,12 @@ if (isset($_POST['load_notifications'])) {
             font-weight: bold;
             font-size: 20px;
             line-height: 1;
+            color: WHITE;
         }
 
         @media (max-width: 600px) {
             .logo-text {
-                display: none;
+                font-size: 15px;
             }
 
             .logo-img {
@@ -102,12 +105,19 @@ if (isset($_POST['load_notifications'])) {
             }
         }
     </style>
+     <div class="notification-wrapper">
+            <div id="notificationModal" class="notification-modal">
+                <div class="notification-content" id="notificationList">
+                    <!-- Notifications will be loaded here -->
+                </div>
+            </div>
+        </div>
     <section class="full-navbar">
         <div class="navbar">
             <div class="navbar-left">
                 <h1 class="websitelogo">
                     <a href="index.php" class="logo-link" title="SQ-Tech Solver">
-                        <img src="img/log.svg" alt="SQ-Tech Solver" class="logo-img" />
+                        <img src="img/log.svg" alt="SQ-Tech Solver" class="logo-img" style="width: 55px; height: auto;">
                         <span class="logo-text">SQ-Tech Solver</span>
                     </a>
                 </h1>
@@ -122,7 +132,7 @@ if (isset($_POST['load_notifications'])) {
                             ?>
                             <li class="nav-link nav-loggd">
                                 <a href="profile.php">
-                                    <i class="far fa-user"></i>
+                                    <i class="far fa-user" style="color:white;"></i>
                                     <span class="nav-link-text"><?php echo $name ?></span>
                                 </a>
 
@@ -134,7 +144,7 @@ if (isset($_POST['load_notifications'])) {
                             echo '  
                                 <li class="nav-link">
                                     <a href="login.php">
-                                        <i class="far fa-user"></i>
+                                        <i class="far fa-user" style="color:white;"></i>
                                             <span class="nav-link-text">Log In</span> 
                                     </a>
                                 </li> ';
@@ -143,7 +153,7 @@ if (isset($_POST['load_notifications'])) {
                         echo '  
                                 <li class="nav-link">
                                     <a href="login.php">
-                                        <i class="far fa-user"></i>
+                                        <i class="far fa-user" style="color:white;"></i>
                                             <span class="nav-link-text">Log In</span> 
                                     </a>
                                 </li> ';
@@ -154,50 +164,10 @@ if (isset($_POST['load_notifications'])) {
 
                     <li class="nav-link">
                         <a href="#" id="notificationBtn">
-                            <i class="far fa-bell"></i>
+                            <i class="far fa-bell" style="color:white;"></i>
                             <span class="nav-link-text">Notification(<?= $notif_count ?>)</span>
                         </a>
                     </li>
-
-                    <!-- ✅ Notification Modal -->
-                    <div id="notificationModal" class="notification-modal">
-                        <div class="notification-content" id="notificationList">
-                            <!-- Notifications will be loaded here -->
-                        </div>
-                    </div>
-
-                    <!-- ✅ Styles -->
-                    <style>
-                        .notification-modal {
-                            display: none;
-                            position: absolute;
-                            top: 70px;
-                            /* Adjust according to your navbar height */
-                            right: 20px;
-                            width: 300px;
-                            background: white;
-                            border: 1px solid #ddd;
-                            border-radius: 8px;
-                            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-                            z-index: 9999;
-                        }
-
-                        .notification-content {
-                            max-height: 300px;
-                            overflow-y: auto;
-                            padding: 10px;
-                        }
-
-                        .notification-item {
-                            padding: 8px;
-                            border-bottom: 1px solid #eee;
-                            font-size: 14px;
-                        }
-
-                        .notification-item:last-child {
-                            border-bottom: none;
-                        }
-                    </style>
                     <!-- ✅ Script -->
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>
@@ -272,6 +242,8 @@ if (isset($_POST['load_notifications'])) {
                 </ul>
             </div>
         </div>
+        <!-- ✅ Notification Modal -->
+       
         <div class="res-nav">
 
             <ul class="nav-links-menu">
@@ -281,7 +253,7 @@ if (isset($_POST['load_notifications'])) {
                     ?>
                     <li class="nav-link-menu">
                         <a href="profile.php">
-                            <i class="far fa-user"></i>
+                            <i class="far fa-user" style="color:white;"></i>
                             <span class="nav-link-text"><?php echo $name; ?></span>
                         </a>
 
@@ -291,7 +263,7 @@ if (isset($_POST['load_notifications'])) {
                     echo
                         ' <li class="nav-link-menu">
                                     <a href="login.php">
-                                        <i class="far fa-user"></i>
+                                        <i class="far fa-user" style="color:white;"></i>
                                         <span class="nav-link-text">Log In</span>
                                     </a>
                                 </li>';
@@ -301,7 +273,7 @@ if (isset($_POST['load_notifications'])) {
                 ?>
                 <li class="nav-link-menu">
                     <a href="#" id="notificationBtn">
-                        <i class="far fa-bell"></i>
+                        <i class="far fa-bell" style="color:white;"></i>
                         <span class="nav-link-text">Notification(<?= $notif_count ?>)</span>
                     </a>
 
@@ -309,7 +281,7 @@ if (isset($_POST['load_notifications'])) {
             </ul>
             <div class="sub-nav">
                 <ul class="sub-nav-links" justifycontent="center">
-                    <li class="sub-nav-link">
+                    <li class="sub-nav-link <?php echo ($current_page == 'home.php') ? 'active' : ''; ?>">
                         <a href="home.php">
                             <p>Home</p>
                         </a>
@@ -322,7 +294,7 @@ if (isset($_POST['load_notifications'])) {
                         // If cname is 'scan', redirect to generateqr.php instead
                         if (strtolower($row["cname"]) == 'scan') {
                             ?>
-                            <li class="sub-nav-link">
+                            <li class="sub-nav-link <?php echo ($current_page == 'scan.php') ? 'active' : ''; ?>">
                                 <a href="scan.php">
                                     <p><?php echo $row["cname"]; ?></p>
                                 </a>
@@ -331,9 +303,9 @@ if (isset($_POST['load_notifications'])) {
                             continue; // Skip the rest of the loop
                         }
 
-                        if (strtolower($row["cname"]) == 'dashboard') {
+                        if (strtolower($row["cname"]) == 'educate') {
                             ?>
-                            <li class="sub-nav-link">
+                            <li class="sub-nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
                                 <a href="dashboard.php">
                                     <p><?php echo $row["cname"]; ?></p>
                                 </a>
@@ -344,7 +316,7 @@ if (isset($_POST['load_notifications'])) {
 
                         if (strtolower($row["cname"]) == 'friend') {
                             ?>
-                            <li class="sub-nav-link">
+                            <li class="sub-nav-link <?php echo ($current_page == 'friends.php') ? 'active' : ''; ?>">
                                 <a href="friends.php">
                                     <p><?php echo $row["cname"]; ?></p>
                                 </a>
@@ -355,7 +327,7 @@ if (isset($_POST['load_notifications'])) {
 
                         if (strtolower($row["cname"]) == 'activity') {
                             ?>
-                            <li class="sub-nav-link">
+                            <li class="sub-nav-link <?php echo ($current_page == 'activity.php') ? 'active' : ''; ?>">
                                 <a href="activity.php">
                                     <p><?php echo $row["cname"]; ?></p>
                                 </a>
@@ -366,7 +338,7 @@ if (isset($_POST['load_notifications'])) {
 
                         if (strtolower($row["cname"]) == 'feedback') {
                             ?>
-                            <li class="sub-nav-link">
+                            <li class="sub-nav-link <?php echo ($current_page == 'feedback.php') ? 'active' : ''; ?>">
                                 <a href="feedback.php">
                                     <p><?php echo $row["cname"]; ?></p>
                                 </a>
@@ -398,7 +370,7 @@ if (isset($_POST['load_notifications'])) {
                             <?php
                         } else {
                             ?>
-                            <li class="sub-nav-link">
+                            <li class="sub-nav-link <?php echo ($current_page == 'products.php') ? 'active' : ''; ?>">
                                 <a href="products.php?category=<?php echo $row['cid'] ?>">
                                     <p><?php echo $row["cname"]; ?></p>
                                 </a>
@@ -418,6 +390,6 @@ if (isset($_POST['load_notifications'])) {
                 </ul>
             </div>
         </div>
-        
+
     </section>
 </nav>

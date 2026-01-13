@@ -19,6 +19,8 @@ if (isset($_SESSION["login"])) {
     <link rel="icon" type="image/png" href="img/log.png">
     <link rel="stylesheet" href="footer.css">
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="hero-canvas.css">
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
@@ -101,7 +103,7 @@ if (isset($_SESSION["login"])) {
         /* --- Global Styles & Variables --- */
         :root {
             --primary-color: #007bff;
-            --secondary-color: #0a2540;
+            --secondary-color: white;
             --background-color: #f8f9fa;
             --text-color: #333;
             --light-text-color: #fff;
@@ -161,16 +163,51 @@ if (isset($_SESSION["login"])) {
 
         /* --- Header / Navigation Bar --- */
         .main-header {
-            background-color: var(--card-bg);
-            padding: 15px 0;
+            display: flex;
+            border-radius: 50px;
+              background: rgba(255, 255, 255, 0.12);
+
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+   border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+            padding: 5px 20px;
+            justify-content: center;
             position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
+            align-items: center;
+            text-align: center;
+            width: 90%;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            /* width: 100%; */
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
+
         }
+
+        /* .main-header {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  border-radius: 50px;
+  background-color: var(--card-bg);
+  padding: 5px 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+} */
+
 
         .main-header .container {
             display: flex;
@@ -191,7 +228,7 @@ if (isset($_SESSION["login"])) {
         }
 
         .main-nav a {
-            color: var(--secondary-color);
+            color: white;
             text-decoration: none;
             margin-left: 25px;
             font-weight: 700;
@@ -452,6 +489,10 @@ if (isset($_SESSION["login"])) {
             }
 
             .logo-img {
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
                 width: 30px;
                 height: 30px;
             }
@@ -465,8 +506,10 @@ if (isset($_SESSION["login"])) {
     <header class="main-header">
         <div class="container">
             <a href="#" class="logo">
-                <img src="img/log.svg" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img">
-                <span class="logo-text">SQ-Tech Solver</span>
+                <img src="img/log.svg" alt="SQ-Tech Solver" class="logo-img" style="width: 55px; height: auto;">
+                <span class="logo-text"
+                    style="font-size: 20px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">SQ-Tech
+                    Solver</span>
             </a>
             <nav class="main-nav">
                 <a href="#products">Our Product</a>
@@ -484,94 +527,125 @@ if (isset($_SESSION["login"])) {
 
     <main>
 
-        <section class="hero-section">
-            <div class="hero-text">
-                <span>SQ-TECH SOLVER</span>
-                <h1>Secure QR Code Generator System</h1>
-                <p>Your trusted partner for creating safe and reliable QR codes on online platform.</p>
-                <a href="login.php" class="btn">Get Started</a>
-            </div>
-            <div class="swiper hero-swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="img/img1.jpg" alt="Tech Background 1" /></div>
-                    <div class="swiper-slide"><img src="img/img2.jpg" alt="Tech Background 2" /></div>
-                    <div class="swiper-slide"><img src="img/img3.jpg" alt="Tech Background 3" /></div>
-                    <!-- <div class="swiper-slide"><img src="img/slider1.svg" alt="Tech Background 4" /></div>
-                    <div class="swiper-slide"><img src="img/slider5.svg" alt="Tech Background 4" /></div> -->
+        <div id="app">
+            <canvas id="canvas"></canvas>
+
+            <section class="hero-section">
+                <div class="hero-text" style="text-align: center;">
+                    <span>SQ-TECH SOLVER</span>
+                    <h1>Secure QR Code Generator System</h1>
+                    <p>Your trusted partner for creating safe and reliable QR codes on online platform.</p>
+                    <a href="login.php" class="btn" style="text-align:center;align-items:center;justify-content:center;">Get Started</a>
                 </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </section>
+            </section>
+        </div>
+
 
         <section id="products" class="container">
             <div class="section-header">
-                <h1>Our Product</h1>
+                <h1 style="color: white;">Our Product</h1>
 
             </div>
             <div class="product-grid">
-                <div class="product-card">
+                <div class="product-card" style="background: rgba(255, 255, 255, 0.12);backdrop-filter: blur(22px) saturate(140%);-webkit-backdrop-filter: blur(22px) saturate(140%); margin:20px;border:1px solid; border-radius:40px;  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;">
                     <div class="card-img">
                         <img src="img/abas.svg" alt="Generate QR Code">
                     </div>
                     <div class="card-text">
-                        <h3>Generate Secure QR Code</h3>
-                        <small>Enjoy highest protection of qr code content in this system integrated with strong
+                        <h3 style="color: white;">Generate Secure QR Code</h3>
+                        <small style="color: white;">Enjoy highest protection of qr code content in this system integrated with strong
                             encryption algorithm and industry logic.</small>
                     </div>
                 </div>
-                <div class="product-card">
+                <div class="product-card" style="background: rgba(255, 255, 255, 0.12);backdrop-filter: blur(22px) saturate(140%);-webkit-backdrop-filter: blur(22px) saturate(140%); margin:20px;border:1px solid; border-radius:40px;  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;">
                     <div class="card-img">
                         <img src="img/abas2.svg" alt="Scan QR Code">
                     </div>
                     <div class="card-text">
-                        <h3>Scan and Verify QR Code</h3>
-                        <small>Enjoy scanning QR Code which has been assured with content verification process through
+                        <h3 style="color: white;">Scan and Verify QR Code</h3>
+                        <small style="color: white;">Enjoy scanning QR Code which has been assured with content verification process through
                             malware scanner API. </small>
 
                     </div>
                 </div>
-                <div class="product-card">
+                <div class="product-card" style="background: rgba(255, 255, 255, 0.12);backdrop-filter: blur(22px) saturate(140%);-webkit-backdrop-filter: blur(22px) saturate(140%); margin:20px;border:1px solid; border-radius:40px;  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;">
                     <div class="card-img">
                         <img src="img/abas3.svg" alt="Share QR Code">
                     </div>
                     <div class="card-text">
-                        <h3>Share With Friends Secretly, or Public</h3>
-                        <small>Enjoy sharing QR Code with your friend within the system or sharing through email.
+                        <h3 style="color: white;">Share With Friends Secretly, or Public</h3>
+                        <small style="color: white;">Enjoy sharing QR Code with your friend within the system or sharing through email.
                         </small>
                     </div>
                 </div>
 
-                <div class="product-card">
+                <div class="product-card" style="background: rgba(255, 255, 255, 0.12);backdrop-filter: blur(22px) saturate(140%);-webkit-backdrop-filter: blur(22px) saturate(140%); margin:20px;border:1px solid; border-radius:40px;  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;">
                     <div class="card-img">
                         <img src="img/4.svg" alt="Share QR Code">
                     </div>
                     <div class="card-text">
-                        <h3>Manage QR Code Systematically</h3>
-                        <small>Enjoy managing your ow secure qr code with multiple features includes view, download,
+                        <h3 style="color: white;">Manage QR Code Systematically</h3>
+                        <small style="color: white;">Enjoy managing your own secure qr code with multiple features includes view, download,
                             share and others.
                         </small>
                     </div>
                 </div>
 
-                <div class="product-card">
+                <div class="product-card" style="background: rgba(255, 255, 255, 0.12);backdrop-filter: blur(22px) saturate(140%);-webkit-backdrop-filter: blur(22px) saturate(140%); margin:20px;border:1px solid; border-radius:40px;  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;">
                     <div class="card-img">
                         <img src="img/5.svg" alt="Share QR Code">
                     </div>
                     <div class="card-text">
-                        <h3>Analyze the trends in real time and make better desicion</h3>
-                        <small>Enjoy analyzing how many people has scanned your qr code and change your desicion
+                        <h3 style="color: white;">Analyze the trends in real time and make better desicion</h3>
+                        <small style="color: white;">Enjoy analyzing how many people has scanned your qr code and change your desicion
                             following the trends.
                         </small>
                     </div>
                 </div>
 
-                <div class="product-card">
+                <div class="product-card" style="background: rgba(255, 255, 255, 0.12);backdrop-filter: blur(22px) saturate(140%);-webkit-backdrop-filter: blur(22px) saturate(140%); margin:20px;border:1px solid; border-radius:40px;  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;">
                     <div class="card-img">
                         <img src="img/6.svg" alt="Share QR Code">
                     </div>
-                    <div class="card-text">
-                        <h3>Educate yourself with knowledge and awareness</h3>
-                        <small>Enjoy watching the video and article related to qr code fraud cases which can help you to
+                    <div class="card-text" >
+                        <h3 style="color: white;">Educate yourself with knowledge and awareness</h3>
+                        <small style="color: white;">Enjoy watching the video and article related to qr code fraud cases which can help you to
                             identify which one is scam or truth.
                         </small>
                     </div>
@@ -579,34 +653,39 @@ if (isset($_SESSION["login"])) {
             </div>
         </section>
 
-        <section id="why-us" style="background-color: var(--card-bg);">
+        <section id="why-us" style="background: rgba(255, 255, 255, 0.12);backdrop-filter: blur(22px) saturate(140%);-webkit-backdrop-filter: blur(22px) saturate(140%); margin:20px;border:1px solid; border-radius:40px;  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;">
             <div class="container">
                 <div class="content-split">
                     <div class="text-content">
-                        <h2>Why you need our system for your QR Code?</h2>
-                        <p style="text-align:justify;">Your data deserves more than just a QR code, it deserves true
+                        <h2 style="color: white;">Why you need our system for your QR Code?</h2>
+                        <p style="color: white; text-align:justify;">Your data deserves more than just a QR code, it deserves true
                             protection.
                             Our Secure QR Code Generator isn’t just another QR creator, it’s a security fortress built
                             with next-generation encryption and malware scanning to keep your information safe at every
                             step.<br><br>
                             💡 Here’s what makes us different:<br>
-                            Built-in Malware Scan (OPSWAT Metadefender API): Every upload whether text, image, or
-                            PDF is automatically scanned for hidden threats before your QR is created.
-                            Double-Layer Encryption: Your content is locked using ChaCha20-Poly1305 encryption with
-                            unique keys, salts, and nonces giving each QR its own digital fingerprint.
-                            Smart Tri-Layer Verification: Before anyone accesses your QR, the system double-checks
-                            its authenticity using password or OTP verification ensuring only the right person can
-                            unlock the content.
-                            Secure Sharing: Share safely with verified friends or send through email with full access
-                            control no more public leaks or unauthorized access.
-                            Your privacy, safety, and control are our top priorities. When it comes to sensitive data,
-                            trust the system built for security not shortcuts.
+                            Every file you upload is automatically scanned for hidden threats using the OPSWAT
+                            Metadefender malware engine,
+                            ensuring your content is safe before generating a QR code. Your data is protected with
+                            advanced ChaCha20-Poly1305
+                            encryption, giving each QR its own unique security. Before anyone can view your QR content,
+                            the system verifies
+                            their identity through a password or OTP for strong access control. You can also share
+                            securely with trusted
+                            contacts or send through email with customizable permissions. Your privacy and security are
+                            always our top priority.
                         </p>
-                        <p><strong>✨ Choose Us for Uncompromising Security, Because every scan should be
+                        <p><strong style="color: white;">✨ Choose Us for Uncompromising Security, Because every scan should be
                                 trusted.</strong></p>
                     </div>
-                    <div class="image-content" style="border-radius:30px;">
-                        <img src="img/abas8.svg" alt="Cybersecurity Shield" style="border-radius:30px;">
+                    <div class="image-content" style="display: flex; border-radius:30px;  width:100%; height:auto;">
+                        <img src="img/abas8.svg" alt="Cybersecurity Shield" style="border-radius:30px; ">
                     </div>
                 </div>
             </div>
@@ -614,7 +693,7 @@ if (isset($_SESSION["login"])) {
 
         <section id="reviews" class="container">
             <div class="section-header">
-                <h1>Customer Reviews</h1>
+                <h1 style="color: white;">Customer Reviews</h1>
             </div>
 
             <div class="review-wrapper">
@@ -831,7 +910,13 @@ if (isset($_SESSION["login"])) {
 
         </section>
 
-        <section id="about" style="background-color: var(--card-bg);">
+        <section id="about" style="background: rgba(255, 255, 255, 0.12);backdrop-filter: blur(22px) saturate(140%);-webkit-backdrop-filter: blur(22px) saturate(140%); margin:20px;border:1px solid; border-radius:40px;  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+
+  transition: backdrop-filter 0.3s ease, box-shadow 0.3s ease;">
             <div class="container">
                 <div class="content-split">
                     <div class="image-content">
@@ -840,21 +925,22 @@ if (isset($_SESSION["login"])) {
                     <div class="text-content">
                         <h2>About Us</h2>
 
-                        <p style="text-align:justify;">SQ Tech Solver is dedicated to creating secure and innovative
+                        <p style="text-align:justify;color:white;">SQ Tech Solver is dedicated to creating secure and innovative
                             digital solutions that make
                             technology safer and more reliable for everyone. Specializing in web development and
                             cybersecurity, our team focuses on delivering real protection through intelligent design.
                             One of our key achievements is the Secure QR Code Generator System, a platform that supports
                             text, PDF, and image inputs while maintaining the highest level of data protection. The
                             system
-                            uses advanced encryption, input validation, hashing, and digital signatures to ensure data
-                            integrity. It also integrates with a malware scanner API (OPSWAT Metadefender) to verify
+                            uses advanced encryption, input validation and hashing to ensure data
+                            integrity. It also integrates with a malware scanner API to verify
                             that
                             all content is safe before generating each QR code. This process provides users with a
                             reliable
                             and secure experience for document sharing, authentication, and online payments.
-                            Founded by Daniel Haikal, a final year Computer Science student with Honours majoring in
-                            Cybersecurity, SQ Tech Solver was built on passion and a strong belief in secure digital
+                            Founded by Daniel Haikal, a final year Computer Science student with Honors majoring in
+                            Cybersecurity branding with name SQ Tech Solver, it was built on passion and a strong belief
+                            in secure digital
                             innovation. Daniel is deeply committed to developing one of the most secure QR code
                             generators
                             and strives to build a safer digital environment where users can share information with
@@ -888,6 +974,8 @@ if (isset($_SESSION["login"])) {
             },
         });
     </script>
+    <script type="module" src="hero-canvas.js"></script>
+
 </body>
 
 </html>

@@ -25,26 +25,27 @@ $rawData = file_get_contents("php://input");
 $data = json_decode($rawData, true);
 
 // ✅ Validate input
-if (!isset($data['email'], $data['qr_id'])) {
-    echo json_encode(["error" => "Invalid email or QR ID."]);
+if (!isset($data['email'], $data['qr_id'], $data['access_type'])) {
+    echo json_encode(["error" => "Invalid email, QR ID, or access type."]);
     exit;
 }
 
 $email = filter_var($data['email'], FILTER_VALIDATE_EMAIL);
 $qr_id = intval($data['qr_id']);
+$access_type = intval($data['access_type']);
 
-if (!$email || !$qr_id) {
-    echo json_encode(["error" => "Invalid email or QR ID."]);
+if (!$email || !$qr_id || !$access_type) {
+    echo json_encode(["error" => "Invalid email, QR ID, or access type."]);
     exit;
 }
 
 // ✅ Insert into DB
-$stmt = $con->prepare("INSERT INTO code (email, qr_code_id, status) VALUES (?, ?, 1)");
+$stmt = $con->prepare("INSERT INTO code (email, qr_code_id, status, accesstype) VALUES (?, ?, 1, ?)");
 if (!$stmt) {
     echo json_encode(["error" => "Database prepare failed: " . $con->error]);
     exit;
 }
-$stmt->bind_param("si", $email, $qr_id);
+$stmt->bind_param("sii", $email, $qr_id, $access_type);
 $stmt->execute();
 $stmt->close();
 

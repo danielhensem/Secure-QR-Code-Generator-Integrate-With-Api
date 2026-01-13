@@ -1,3 +1,22 @@
+<style>
+.qr-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Hover for desktop only */
+@media (hover: hover) {
+    .qr-row:hover {
+        background-color:#011f72ff;
+    }
+}
+
+/* Persistent selected state */
+.qr-row.selected {
+    background-color: #011f72ff;
+}
+</style>
+
 <?php
 session_start();
 include 'componet/conn.php';
@@ -113,61 +132,10 @@ while ($row = mysqli_fetch_assoc($result)) {
     $details = htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8');
 
 
-    echo "<tr style='border-bottom: 1px solid #ffffffff; text-align: center;'>";
-    echo "    <td style='font-size: 13px; width: 150px; text-align:center; padding: 12px 15px;'>{$data['created_at']}</td>";
-    // echo "    <td style='font-size: 13px;  padding: 12px 15px; white-space: normal; word-break: break-word; max-width: 200px;'>{$data['qr_filename']}</td>";
-    echo "    <td style='font-size: 13px; width: 100px; padding: 12px 5px; text-align:center;'>{$data['id']}</td>";
-    echo "    <td style='font-size: 13px; padding: 12px 15px; text-align:center;'>{$data['header_text']}</td>";
-    echo "    <td style='padding: 12px 15px;'>";
-    /* Share Within System Button */
-    echo "      
-                <button class='share-system-btn'
-                data-details='" . json_encode($data) . "' 
-                style='padding: 4px 4px; background-color: #ffffffff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 2px; font-size: 12px;'
-                title='Share within system'>
-                <i class='fas fa-share-alt' style='color:blue'></i>
-            </button>";
-
-
-    /* Share via Email Button */
-    echo "        <button class='share-email-btn'
-                data-details='" . json_encode($data) . "' 
-                style='padding: 4px 4px; background-color: #ffffffff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 2px; font-size: 12px;'
-                title='Share via email'>
-                <i class='fas fa-envelope' style='color:#D14836'></i>
-            </button>";
-
-    // View Button
-    echo "        <button class='view-btn' data-details='" . json_encode($data) . "' 
-                style='padding: 4px 4px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 2px; font-size: 12px;'
-                title='View Details'>
-                <i class='fas fa-eye'></i>
-            </button>";
-
-    // Analyze Button
-    echo "        <button class='analyze-btn' data-id='{$data['id']}' 
-                style='padding: 4px 4px; background-color: #e67e22; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 2px; font-size: 12px;'
-                title='Analyze QR Code'>
-                <i class='fas fa-chart-line'></i>
-            </button>";
-
-    // Download Button
-    echo "        <button class='download-btn' 
-                data-filename='{$data['qr_filename']}'
-                data-image='data:image/jpeg;base64,{$data['qr_image_base64']}'
-                style='padding: 4px 4px; background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 2px; font-size: 12px;'
-                title='Download QR Code'>
-                <i class='fas fa-download'></i>
-            </button>";
-
-    // Delete Button
-    echo "        <button class='delete-btn' data-id='{$data['id']}' 
-                style='padding: 4px 4px; background-color: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;'
-                title='Delete QR Code'>
-                <i class='fas fa-trash'></i>
-            </button>";
-
-    echo "    </td>";
+    echo "<tr style='border-bottom: 1px solid #000000ff;'>";
+    echo "<tr class='qr-row'  data-details='{$details}' style='cursor:pointer;'>";
+    echo "  <td style='text-align:left; width:70px; '>{$data['id']}</td>";
+    echo "  <td>{$data['header_text']}</td>";
     echo "</tr>";
-}
 
+}

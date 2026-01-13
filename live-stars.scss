@@ -1,0 +1,122 @@
+@use "sass:math";
+@use "sass:list";
+
+// =====================
+// Variables
+// =====================
+$n-small: 700;
+$n-medium: 200;
+$n-big: 100;
+$max-pos: 2000;
+
+// =====================
+// Functions
+// =====================
+// Generate multiple stars for box-shadow
+@function multiple-box-shadow($count, $max: $max-pos) {
+  $shadows: ();
+  @for $i from 1 through $count {
+    $x: math.random() * $max * 1px;
+    $y: math.random() * $max * 1px;
+    $shadows: list.append($shadows, $x $y #FFF, comma);
+  }
+  @return $shadows;
+}
+
+// =====================
+// Star shadows
+// =====================
+$shadows-small: multiple-box-shadow($n-small);
+$shadows-medium: multiple-box-shadow($n-medium);
+$shadows-big: multiple-box-shadow($n-big);
+
+// =====================
+// Body and html
+// =====================
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-y: auto;   // allow vertical scroll
+  overflow-x: hidden; // prevent horizontal scroll
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+  font-family: 'Lato', sans-serif;
+  color: #fff;
+  position: relative;
+}
+
+// =====================
+// Star layers
+// =====================
+#stars, #stars2, #stars3 {
+  position: fixed;  // stays behind content
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  background: transparent;
+  z-index: 0;
+}
+
+#stars {
+  box-shadow: $shadows-small;
+  animation: animStar 50s linear infinite;
+  &:after {
+    content: "";
+    position: absolute;
+    top: #{$max-pos}px;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: $shadows-small;
+  }
+}
+
+#stars2 {
+  width: 2px;
+  height: 2px;
+  box-shadow: $shadows-medium;
+  animation: animStar 100s linear infinite;
+  &:after {
+    content: "";
+    position: absolute;
+    top: #{$max-pos}px;
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: $shadows-medium;
+  }
+}
+
+#stars3 {
+  width: 3px;
+  height: 3px;
+  box-shadow: $shadows-big;
+  animation: animStar 150s linear infinite;
+  &:after {
+    content: "";
+    position: absolute;
+    top: #{$max-pos}px;
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    box-shadow: $shadows-big;
+  }
+}
+
+// =====================
+// Star animation
+// =====================
+@keyframes animStar {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-#{$max-pos}px); }
+}
+
+// =====================
+// Content wrapper
+// =====================
+.main-body {
+  position: relative;
+  z-index: 1; // above stars
+  min-height: 100vh;
+  padding: 30px;
+}

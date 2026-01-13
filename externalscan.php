@@ -123,7 +123,7 @@ if ($qrToken && !$accessError) {
     if ($res->num_rows) {
         $qrSecond = $res->fetch_assoc();
         $fid = $qrSecond['id'];
-        $_SESSION['scan_status'] = (int)$qrSecond['scan_status'];
+        $_SESSION['scan_status'] = (int) $qrSecond['scan_status'];
 
 
         $stmt2 = $con->prepare("SELECT * FROM qr_security WHERE id = ?");
@@ -172,7 +172,7 @@ if (isset($_POST['submit_access'], $_SESSION['qr_token'])) {
     if ($rs->num_rows) {
         $qrSecond = $rs->fetch_assoc();
         $qid = $qrSecond['id'];
-        $scanStatus = (int)$qrSecond['scan_status']; // NEW: check scan_status
+        $scanStatus = (int) $qrSecond['scan_status']; // NEW: check scan_status
 
         $stmt2 = $con->prepare("SELECT * FROM qr_security WHERE id = ?");
         $stmt2->bind_param("i", $qid);
@@ -185,7 +185,7 @@ if (isset($_POST['submit_access'], $_SESSION['qr_token'])) {
             // 🔹 Case 1: scan_status = 0 → open QR, auto-grant access
             if ($scanStatus === 0) {
                 $passwordOk = true;
-            } 
+            }
             // 🔹 Case 2: scan_status = 1 → require OTP or password
             else {
                 // OTP validation
@@ -223,11 +223,20 @@ if (isset($_POST['submit_access'], $_SESSION['qr_token'])) {
                 $nonceC = base64_decode($qrSecond['nonce']);
                 $nonceK = base64_decode($qrSecond['nonce_key']);
                 $ts = $qrSecond['time'];
-                $stmtUid = $con->prepare("SELECT user_id FROM qr_security WHERE id = ?");
-                $stmtUid->bind_param("i", $qid);
-                $stmtUid->execute();
-                $ru = $stmtUid->get_result()->fetch_assoc();
-                $uid = $ru['user_id'];
+                $stmtUserId = $con->prepare("
+    SELECT user_id, accesspermission
+    FROM qr_security
+    WHERE id = ?
+");
+                $stmtUserId->bind_param("i", $qid);
+                $stmtUserId->execute();
+
+                $resUserId = $stmtUserId->get_result();
+                if ($userRow = $resUserId->fetch_assoc()) {
+                    $uid = (int) $userRow['user_id'];
+                    $_SESSION['accessindex'] = (int) $userRow['accesspermission'];
+                }
+
                 $stmtU = $con->prepare("SELECT email, phrase FROM users WHERE id = ?");
                 $stmtU->bind_param("i", $uid);
                 $stmtU->execute();
@@ -257,6 +266,29 @@ if (isset($_POST['submit_access'], $_SESSION['qr_token'])) {
                 // Get user IP address
                 $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
 
+                $userEmail = strtolower(trim($userEmail));
+                $qrId = (int) $_SESSION['qr_id'];
+
+                $stmt = $con->prepare("
+    DELETE FROM code
+    WHERE email = ?
+      AND qr_code_id = ?
+      AND accesstype = 1
+    LIMIT 1
+");
+
+                $stmt->bind_param("si", $userEmail, $qrId);
+                $stmt->execute();
+
+                if ($stmt->affected_rows > 0) {
+                    error_log("One-time access consumed successfully");
+                } else {
+                    error_log("No one-time access row to delete");
+                }
+
+                $stmt->close();
+
+
                 // Get qr_id from session or fetched row
                 $qr_id = $_SESSION['qr_id'] ?? ($row['id'] ?? null);
 
@@ -269,48 +301,107 @@ if (isset($_POST['submit_access'], $_SESSION['qr_token'])) {
                         mysqli_stmt_close($stmtLog);
                     }
                 }
-
-                // --- Content Handling ---
+                $accessIndex = $_SESSION['accessindex'] ?? 1; // default safest
+// --- Content Handling ---
                 $ft = $qrSecond['file_type'] ?? '';
                 $fn = $qrSecond['file_name'] ?? 'file';
-                if ($ft === 'pdf') {
-                    header('Content-Type: application/pdf');
-                    header('Content-Disposition: inline; filename="' . $fn . '"');
-                    echo $content;
-                    exit;
+
+                /* =====================================================
+                   ACCESS LEVEL 1 : VIEW ONLY
+                   ===================================================== */
+                if ($accessIndex === 1) {
+
+                    /* ===== PDF : VIEW ONLY ===== */
+                    if ($ft === 'pdf') {
+                        header('Content-Type: application/pdf');
+                        header('Content-Disposition: inline; filename="' . $fn . '"');
+                        echo $content;
+                        exit;
+                    }
+
+                    /* ===== IMAGE : VIEW ONLY ===== */
+                    if ($ft === 'image') {
+
+                        $rawContent = $content;
+                        $decoded = base64_decode($content, true);
+                        if ($decoded !== false && strlen($decoded) > 0) {
+                            $rawContent = $decoded;
+                        }
+
+                        $finfo = new finfo(FILEINFO_MIME_TYPE);
+                        $mime = $finfo->buffer($rawContent) ?: "image/png";
+
+                        if (ob_get_level()) {
+                            ob_end_clean();
+                        }
+
+                        header("Content-Type: $mime");
+                        header("Content-Disposition: inline");
+                        header("Content-Length: " . strlen($rawContent));
+                        echo $rawContent;
+                        exit;
+                    }
+
+                    /* ===== URL : PROXY / HIDDEN ===== */
+                    if (filter_var($content, FILTER_VALIDATE_URL)) {
+                        $_SESSION['proxy_url'] = $content;
+                        header("Location: qr_url_viewer.php");
+                        exit;
+                    }
                 }
-                if ($ft === 'image') {
-    $rawContent = $content;
 
-    // Try decoding safely (check if it's base64)
-    $decoded = base64_decode($content, true);
-    if ($decoded !== false && strlen($decoded) > 0) {
-        $rawContent = $decoded; // It was valid base64
-    }
 
-    // Detect MIME type
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $mime = $finfo->buffer($rawContent) ?: "image/png";
+                /* =====================================================
+                   ACCESS LEVEL 2 : VIEW + DOWNLOAD + EDIT
+                   ===================================================== */
+                if ($accessIndex === 2) {
 
-    // Clean output buffer
-    if (ob_get_level()) {
-        ob_end_clean();
-    }
+                    /* ===== PDF : DOWNLOAD ALLOWED ===== */
+                    if ($ft === 'pdf') {
+                        header('Content-Type: application/pdf');
+                        header('Content-Disposition: attachment; filename="' . $fn . '"');
+                        echo $content;
+                        exit;
+                    }
 
-    // Send headers + image
-    header("Content-Type: $mime");
-    header("Content-Length: " . strlen($rawContent));
-    echo $rawContent;
-    exit;
-}
+                    /* ===== IMAGE : DOWNLOAD ALLOWED ===== */
+                    if ($ft === 'image') {
 
-                if (filter_var($content, FILTER_VALIDATE_URL)) {
-                    header("Location: $content");
-                    exit;
+                        $rawContent = $content;
+                        $decoded = base64_decode($content, true);
+                        if ($decoded !== false && strlen($decoded) > 0) {
+                            $rawContent = $decoded;
+                        }
+
+                        $finfo = new finfo(FILEINFO_MIME_TYPE);
+                        $mime = $finfo->buffer($rawContent) ?: "image/png";
+
+                        if (ob_get_level()) {
+                            ob_end_clean();
+                        }
+
+                        header("Content-Type: $mime");
+                        header('Content-Disposition: attachment; filename="' . $fn . '"');
+                        header("Content-Length: " . strlen($rawContent));
+                        echo $rawContent;
+                        exit;
+                    }
+
+                    /* ===== URL : DIRECT ACCESS ===== */
+                    if (filter_var($content, FILTER_VALIDATE_URL)) {
+                        header("Location: $content");
+                        exit;
+                    }
                 }
+
+
+                /* =====================================================
+                   FALLBACK (TEXT / OTHER CONTENT)
+                   ===================================================== */
                 $qrContent = $content;
                 $showQrContent = true;
                 unset($_SESSION['otp_code'], $_SESSION['otp_created_at']);
+
 
 
             }
@@ -335,7 +426,7 @@ if (isset($_POST['submit_access'], $_SESSION['qr_token'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent-color:linear-gradient(135deg, #d7e8f7, #ffe5d9);
+            --accent-color: linear-gradient(135deg, #d7e8f7, #ffe5d9);
             /* A vibrant mint/teal for accents */
             --background-start: #1f2027;
             /* Dark slate */
@@ -584,64 +675,64 @@ if (isset($_POST['submit_access'], $_SESSION['qr_token'])) {
         <?php endif; ?>
 
         <?php if ($showQrContent): ?>
-    <div class="form-group">
-        <label for="decryptedContent">Decrypted Content</label>
-        <textarea id="decryptedContent" readonly><?= htmlspecialchars($qrContent) ?></textarea>
-    </div>
-    <button onclick="location.href='externalscan.php'">Scan Another QR</button>
-
-<?php elseif ($qr): ?>
-<?php if (isset($_SESSION['scan_status']) && $_SESSION['scan_status'] == 0): ?>
-    <!-- ✅ Direct access, only show Unlock button -->
-    <form method="post" id="accessForm">
-        <input type="hidden" name="qr_token" id="qr_token" value="<?= htmlspecialchars($qrToken) ?>">
-
-        <button type="submit" name="submit_access">Unlock Content</button>
-    </form>
-
-<?php elseif (isset($_SESSION['scan_status']) && $_SESSION['scan_status'] == 1): ?>
-    <!-- 🔑 Password / OTP required -->
-    <form method="post" id="accessForm">
-        <input type="hidden" name="qr_token" id="qr_token" value="<?= htmlspecialchars($qrToken) ?>">
-
-
-        <div class="form-group">
-            <label for="otp_email">1. Enter Email to Receive OTP</label>
-            <div class="otp-group">
-                <input type="email" name="otp_email" id="otp_email" placeholder="your.email@example.com">
-                <button type="button" id="sendOtpBtn">Send</button>
+            <div class="form-group">
+                <label for="decryptedContent">Decrypted Content</label>
+                <textarea id="decryptedContent" readonly><?= htmlspecialchars($qrContent) ?></textarea>
             </div>
-            <div class="otp-timer" id="otp-timer"></div>
-        </div>
+            <button onclick="location.href='externalscan.php'">Scan Another QR</button>
 
-        <div class="form-group">
-            <label for="otp_input">2. Enter OTP</label>
-            <input type="text" name="otp" id="otp_input" placeholder="6-digit code">
-        </div>
+        <?php elseif ($qr): ?>
+            <?php if (isset($_SESSION['scan_status']) && $_SESSION['scan_status'] == 0): ?>
+                <!-- ✅ Direct access, only show Unlock button -->
+                <form method="post" id="accessForm">
+                    <input type="hidden" name="qr_token" id="qr_token" value="<?= htmlspecialchars($qrToken) ?>">
 
-        <div class="divider">OR</div>
+                    <button type="submit" name="submit_access">Unlock Content</button>
+                </form>
 
-        <div class="form-group">
-            <label for="password_input">Enter Password</label>
-            <input type="password" name="password" id="password_input" placeholder="••••••••">
-        </div>
+            <?php elseif (isset($_SESSION['scan_status']) && $_SESSION['scan_status'] == 1): ?>
+                <!-- 🔑 Password / OTP required -->
+                <form method="post" id="accessForm">
+                    <input type="hidden" name="qr_token" id="qr_token" value="<?= htmlspecialchars($qrToken) ?>">
 
-        <button type="submit" name="submit_access">Unlock Content</button>
-    </form>
 
-<?php else: ?>
-    <!-- 🚫 Invalid or missing scan_status -->
-    <div class="alert alert-warning text-center mt-3">
-        Scan status not available. Please try scanning again.
+                    <div class="form-group">
+                        <label for="otp_email">1. Enter Email to Receive OTP</label>
+                        <div class="otp-group">
+                            <input type="email" name="otp_email" id="otp_email" placeholder="your.email@example.com">
+                            <button type="button" id="sendOtpBtn">Send</button>
+                        </div>
+                        <div class="otp-timer" id="otp-timer"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="otp_input">2. Enter OTP</label>
+                        <input type="text" name="otp" id="otp_input" placeholder="6-digit code">
+                    </div>
+
+                    <div class="divider">OR</div>
+
+                    <div class="form-group">
+                        <label for="password_input">Enter Password</label>
+                        <input type="password" name="password" id="password_input" placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" name="submit_access">Unlock Content</button>
+                </form>
+
+            <?php else: ?>
+                <!-- 🚫 Invalid or missing scan_status -->
+                <div class="alert alert-warning text-center mt-3">
+                    Scan status not available. Please try scanning again.
+                </div>
+            <?php endif; ?>
+
+
+        <?php else: ?>
+            <p>No valid QR code found. Please return to the scanner and try again.</p>
+            <button onclick="location.href='externalscan.php'">Back to Scanner</button>
+        <?php endif; ?>
     </div>
-<?php endif; ?>
-
-
-<?php else: ?>
-    <p>No valid QR code found. Please return to the scanner and try again.</p>
-    <button onclick="location.href='externalscan.php'">Back to Scanner</button>
-<?php endif; ?>
-</div>
 
     <script>
         // --- Your existing JavaScript logic remains the same ---

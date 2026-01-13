@@ -244,22 +244,22 @@ if (isset($_POST["terminateAccount"])) {
     </script>
 </head>
 
-<body class="animated-bg">
+<body >
     <div class="section">
-        <div class="container" style="width: 1000;">
+        <div class="container" style="width: 1000; ">
             <div class="form">
                 <div class="left-side" style="width: 300px;">
                     <div class="content" style="width: 250px; ">
                         <div style="display:flex; justify-content: center; align-items: center;">
-                        <img src="img/log.svg" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img"
-                            style="width: 100px; height: 100px; text-align: center; justify-content: center; align-items: center;">
+                            <img src="img/log.svg" alt="SQ-Tech Solver" class="logo-img"
+                                style="width: 100px; height: auto;">
                         </div>
-                            <br><br>
-                        <h1 style="font-size:17px; font-weight: bold; color:black;">SQ-TECH SOLVER</h1><br>
+                        <br><br>
+                        <h1 style="font-size: 25px;font-weight: bold; color:black;">SQ-TECH SOLVER</h1><br>
                         <h5 style="color:black;">Bring Quality Over Standard</h5>
                     </div>
                 </div>
-                <div class="right-side" style="width : 600px;">
+                <div class="right-side" style="width : 700px; margin-left: 15px;">
                     <form id="signupForm" action="profile.php" method="post">
                         <div class="forms">
                             <h1 class="forms-heading">My Profile</h1>
@@ -287,18 +287,26 @@ if (isset($_POST["terminateAccount"])) {
                             <i class="fa fa-lock"></i> 
                         </div> -->
 
-                            <p>New Password (Leave blank if not changing)</p>
+                            <p style="margin: 0 0 4px 0;">New Password (Leave blank if not changing)</p>
                             <div class="form-inputs">
                                 <input type="password" id="password" name="pwd" autocomplete="off"
-                                    style="border-radius:30px;">
+                                    style="border-radius: 30px; margin: 0; ">
                                 <i class="fa fa-eye" id="password_eye"></i>
+                                <span style="font-size: 10px; color: red; display: block; margin: 2px 0 0 0;">
+                                    Password must contain uppercase, lowercase, number, special symbol, and be at least
+                                    8 characters.
+                                </span>
                             </div>
 
-                            <p>Confirm New Password</p>
+                            <p style="margin: 0 0 4px 0;">Confirm New Password</p>
                             <div class="form-inputs">
                                 <input type="password" id="confirmPassword" name="confirmpwd" autocomplete="off"
-                                    style="border-radius:30px;">
+                                    style="border-radius: 30px; margin: 0; ">
                                 <i class="fa fa-eye" id="confirm_password_eye"></i>
+                                <span style="font-size: 10px; color: red; display: block; margin: 2px 0 0 0;">
+                                    Password must contain uppercase, lowercase, number, special symbol, and be at least
+                                    8 characters.
+                                </span>
                             </div>
 
                             <div class="submit-button" style="width:100%; max-width:100%;">

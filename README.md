@@ -1,6 +1,7 @@
 ## PART 1
 
-[![Demo Video](assets/demo-thumb.png)](https://youtu.be/mbXsyDUpzS0?si=-bibRvyAk0XH96aU)
+[![Watch on YouTube](https://img.youtube.com/vi/AAsuHRUb18s/0.jpg)](https://youtu.be/AAsuHRUb18s)
+
 
 ## PART 2
 

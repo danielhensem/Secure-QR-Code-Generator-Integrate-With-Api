@@ -79,25 +79,26 @@ $name = $_SESSION["username"];
             margin-bottom: 50px;
         }
 
+        /* ===== CARD GRID ===== */
         .card-grid {
             display: flex;
             flex-wrap: wrap;
+            /* allow wrapping on smaller screens */
             justify-content: space-between;
             gap: 20px;
         }
 
+        /* ===== FEATURE CARD ===== */
         .feature-card {
-            flex: 1 1 22%;
-            background-color: #fff;
-            border: 1px solid #000000ff;
-            padding-left: 10px;
-            padding-right: 10px;
-            padding-top: 15px;
-            padding-bottom: 5px;
+            flex: 1 1 calc(16.66% - 16px);
+            /* 6 cards per row on desktop minus gap */
+            min-width: 150px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid #fff;
+            padding: 15px 10px 5px;
             border-radius: 50px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
-            min-width: 230px;
             transition: transform 0.2s ease-in-out;
         }
 
@@ -119,21 +120,70 @@ $name = $_SESSION["username"];
 
         .feature-description {
             font-size: 14px;
-            color: #555;
-            line-height: 1.5;
+            color: #ccc;
+            line-height: 1.3;
         }
 
-        @media (max-width: 768px) {
+        /* ===== TABLET VIEW (2 rows) ===== */
+        @media (max-width: 900px) {
             .feature-card {
-                flex: 1 1 45%;
+                flex: 1 1 calc(50% - 10px);
+                /* 2 cards per row → total 2 rows for 4–6 cards */
+                min-width: 120px;
+                padding: 10px 5px;
+            }
+
+            .feature-icon {
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+
+            .feature-title {
+                font-size: 16px;
+            }
+
+            .feature-description {
+                font-size: 12px;
             }
         }
 
+        /* ===== PHONE VIEW (2 rows) ===== */
         @media (max-width: 480px) {
             .feature-card {
-                flex: 1 1 100%;
+                flex: 1 1 calc(50% - 10px);
+                /* 2 cards per row on phone */
+                min-width: 100px;
+                padding: 8px 5px;
+                display: flex;
+                /* make card a flex container */
+                flex-direction: column;
+                /* stack items vertically */
+                justify-content: center;
+                /* vertical centering */
+                align-items: center;
+                /* horizontal centering */
+                text-align: center;
+
+                .feature-description {
+                    display: none;
+                    /* hide description on small screens */
+                }
             }
+
+            .feature-icon {
+                margin-top: 15px;
+                font-size: 30px;
+
+            }
+
+            .feature-title {
+                margin: 10px;
+                font-size: 15px;
+            }
+
+
         }
+
 
         /* Main container for all analytics content */
         .analytics-dashboard {
@@ -144,7 +194,7 @@ $name = $_SESSION["username"];
         .analytics-dashboard h2 {
             font-size: 1.75rem;
             font-weight: 600;
-            color: #1f2937;
+            color: white;
             margin-bottom: 25px;
             text-align: center;
         }
@@ -156,6 +206,8 @@ $name = $_SESSION["username"];
             gap: 25px;
             /* Provides space between cards */
             justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
         /* The individual card for each chart */
@@ -173,11 +225,26 @@ $name = $_SESSION["username"];
             display: flex;
             flex-direction: column;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
         }
 
         .chart-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-section {
+            font-family: 'Trebuchet MS', sans-serif;
+            font-weight: bold;
+            color: white;
+            font-size: 28px;
+            margin: 0;
+        }
+
+        @media (max-width: 480px) {
+            .header-section {
+                font-size: 14px;
+            }
         }
 
         /* Header section within each card */
@@ -194,7 +261,7 @@ $name = $_SESSION["username"];
             margin: 0;
             font-size: 1.1rem;
             font-weight: 600;
-            color: #374151;
+            color: white;
         }
 
         /* Style for the filter dropdown */
@@ -202,7 +269,7 @@ $name = $_SESSION["username"];
             padding: 6px 10px;
             border-radius: 8px;
             border: 1px solid #d1d5db;
-            background-color: #f9fafb;
+            background-color: rgba(0, 0, 0, 0.5);
             font-size: 0.875rem;
             cursor: pointer;
         }
@@ -238,6 +305,7 @@ $name = $_SESSION["username"];
             padding: 12px;
             text-align: center;
             justify-content: center;
+            color: black;
         }
 
         table#qrTable thead {
@@ -251,7 +319,7 @@ $name = $_SESSION["username"];
 
         #qrTableScroll {
             display: block;
-            background-color: lightcyan;
+            background-color: rgba(0, 0, 0, 0.3);
             max-height: 330px;
             /* About 8 rows height */
             /* overflow-y: auto; */
@@ -260,7 +328,7 @@ $name = $_SESSION["username"];
         #qrTableScroll tbody {
 
             display: table;
-            background-color: white;
+            background-color: rgba(0, 0, 0, 0.5);
             border: 1px solid #000000ff;
             width: 100%;
             table-layout: fixed;
@@ -290,6 +358,32 @@ $name = $_SESSION["username"];
         html {
             scroll-behavior: smooth;
         }
+
+        /* Small popup style */
+        .qrPopup {
+            position: absolute;
+            /* position near the button */
+            min-width: 250px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid #fff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none;
+            /* hidden by default */
+        }
+
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 
     <!-- links -->
@@ -303,6 +397,8 @@ $name = $_SESSION["username"];
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
+
+
     <!-- links -->
     <!-- fonts -->
     <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -315,11 +411,13 @@ $name = $_SESSION["username"];
     <link rel="icon" type="image/png" href="img/log.svg">
 </head>
 
-<body class="animated-bg">
-
+<body>
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
 
     <?php include("componet/navbar.php"); ?>
-    <div class="main-body">
+    <div class="main-body" style="padding: 0px;">
         <!-- page navigator -->
         <!-- <div class="page-navigator">
             <div class="bigcontainer">
@@ -335,16 +433,16 @@ $name = $_SESSION["username"];
         <!--shopall items -->
 
         <section>
-            <div class="bigcontainer">
+            <div class="bigcontainer" style="margin-top:0px;">
                 <div class="cat-products">
                     <div class="products-cards">
                         <div class="container">
                             <div
                                 style="display: flex; align-items: center; justify-content: space-between; margin: 10px;">
-                                <h1
-                                    style="font-family: 'Trebuchet MS', sans-serif; font-weight: bold; color: black; font-size: 28px; margin: 0;">
+                                <h1 class="header-section"
+                                    style="font-family: 'Trebuchet MS', sans-serif; font-weight: bold; color: white; font-size: 28px; margin: 0px;">
                                     Welcome <strong><?php echo htmlspecialchars($name); ?></strong> to the<br>
-                                    Secure And Reliable QR Code Generator System
+                                    Secure QR Code Generator System
                                 </h1>
                                 <img src="img/pic2.svg" alt="Logo"
                                     style=" width:120px;height: 120px; margin-top:20px; margin-left: 20px; margin-right: 20px;">
@@ -363,7 +461,7 @@ $name = $_SESSION["username"];
                                 <div class="card-grid">
 
                                     <!-- Generate QR Code Card -->
-                                    <div class="feature-card">
+                                    <div class="feature-card" data-href="products.php">
                                         <i class="fas fa-qrcode feature-icon"></i>
                                         <div class="feature-title">Generate QR Code</div>
                                         <div class="feature-description">
@@ -372,7 +470,7 @@ $name = $_SESSION["username"];
                                         </div>
                                         <br>
                                         <div class="form-acc"
-                                            style="display: flex; justify-content: center; align-items: center; margin: 20px;">
+                                            style="display: flex; justify-content: center; align-items: center; margin-left:20px; margin-right:20px; margin-bottom: 23px; ">
                                             <a href="products.php"
                                                 style="color:blue; font-size:13px; font-weight:bold; text-align: center;">Click
                                                 Here
@@ -381,8 +479,8 @@ $name = $_SESSION["username"];
                                     </div>
 
                                     <!-- Scan QR Code Card -->
-                                    <div class="feature-card">
-                                        <i class="fas fa-barcode feature-icon"></i>
+                                    <div class="feature-card" data-href="scan.php">
+                                        <i class="fas fa-camera feature-icon"></i>
                                         <div class="feature-title">Scan QR Code</div>
                                         <div class="feature-description">
                                             Users can scan QR codes and view their content. They can either scan the QR
@@ -399,7 +497,7 @@ $name = $_SESSION["username"];
                                     </div>
 
                                     <!-- Share QR Code Card -->
-                                    <div class="feature-card">
+                                    <div class="feature-card" data-href="#generate-section">
                                         <i class="fas fa-share-alt feature-icon"></i>
                                         <div class="feature-title">Share QR Code</div>
                                         <div class="feature-description">
@@ -409,7 +507,7 @@ $name = $_SESSION["username"];
                                         </div>
                                         <br>
                                         <div class="form-acc"
-                                            style="display: flex; justify-content: center; align-items: center; margin-left:20px; margin-right:20px; margin-bottom: 23px;">
+                                            style="display: flex; justify-content: center; align-items: center; margin-left:20px; margin-right:20px; margin-bottom: 20px;">
                                             <a href="#generate-section"
                                                 style="color:blue; font-size:13px; font-weight:bold; text-align: center;">
                                                 Click Here For Share QR Code.
@@ -419,7 +517,7 @@ $name = $_SESSION["username"];
                                     </div>
 
                                     <!-- Manage & Analyze QR Code Card -->
-                                    <div class="feature-card">
+                                    <div class="feature-card" data-href="#generate-section">
                                         <i class="fas fa-chart-line feature-icon"></i>
                                         <div class="feature-title">Manage & Analyze</div>
                                         <div class="feature-description">
@@ -437,23 +535,53 @@ $name = $_SESSION["username"];
                                         </div>
                                     </div>
 
+                                    <div class="feature-card" data-href="#generate-section">
+                                        <i class="fas fa-eye feature-icon"></i>
+                                        <div class="feature-title">Verify QR Code</div>
+                                        <div class="feature-description">
+                                            Recipients can verify and access QR code content by entering their
+                                            registered email address.
+                                            Only authorized recipients are allowed to proceed.
+                                        </div>
+                                        <br>
+                                        <div class="form-acc"
+                                            style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px; margin-left: 20px; margin-right: 20px;">
+                                            <a href="#generate-section"
+                                                style="color: blue; font-size: 13px; font-weight: bold; text-align: center;">
+                                                Click Here To Verify QR Code
+                                            </a>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
 
+                            <script>
+                                document.querySelectorAll('.feature-card').forEach(card => {
+                                    card.addEventListener('click', () => {
+                                        const link = card.getAttribute('data-href');
+                                        if (link) {
+                                            window.location.href = link;
+                                        }
+                                    });
+                                });
+                            </script>
                             <h2 style="text-align:left; font-family: 'Segoe UI', sans-serif;  font-size: 1.75rem;
                             font-weight: 600;margin-bottom: 20px;">
                                 Analytic Dashboard<br>
                             </h2>
 
 
-                            <strong
+                            <!-- <strong
                                 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold; font-size:16px; display:block; margin-top:10px; margin-bottom:10px; white-space:normal; word-break:break-word;">
                                 Your trusted platform for generating secure and reliable QR codes.
                                 Experience a seamless and organized QR code management system designed to give users
                                 confidence and convenience.
-                                We don't just generate — we educate. Learn how to protect yourself from QR code fraud
+                                We don't just generate but we also educate. Learn how to protect yourself from QR code
+                                fraud
                                 and stay ahead with smart, secure scanning.
-                            </strong>
+                            </strong> -->
 
                             <small
                                 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal; font-size:16px; display:block; text-align:left; margin-right:10px; margin-bottom:30px; white-space:normal; word-break:break-word;">
@@ -568,12 +696,12 @@ $name = $_SESSION["username"];
 
                                 <div class="chart-card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Generated / Shared / Received</h4>
-                                        <select id="accessFilter1" class="chart-filter">
+                                        <h4 class="card-title" style="color: black;">Generated / Shared / Received</h4>
+                                        <!-- <select id="accessFilter1" class="chart-filter">
                                             <option value="all">All Time</option>
                                             <option value="7">Last 7 Days</option>
                                             <option value="30">Last 30 Days</option>
-                                        </select>
+                                        </select> -->
                                     </div>
                                     <div class="chart-body">
                                         <canvas id="barChart"></canvas>
@@ -582,21 +710,22 @@ $name = $_SESSION["username"];
 
                                 <div class="chart-card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Stats Overview (Line)</h4>
-                                        <select id="accessFilter2" class="chart-filter">
+                                        <h4 class="card-title" style="color: black;">Stats Overview (Line)</h4>
+                                        <!-- <select id="accessFilter2" class="chart-filter">
                                             <option value="all">All Time</option>
                                             <option value="7">Last 7 Days</option>
                                             <option value="30">Last 30 Days</option>
-                                        </select>
+                                        </select> -->
                                     </div>
                                     <div class="chart-body">
                                         <canvas id="lineChart"></canvas>
                                     </div>
+
                                 </div>
 
                                 <div class="chart-card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Daily Scans</h4>
+                                        <h4 class="card-title" style="color: black;">Daily Scans</h4>
                                         <select id="accessFilter" class="chart-filter">
                                             <option value="all">All Time</option>
                                             <option value="7">Last 7 Days</option>
@@ -670,7 +799,7 @@ $name = $_SESSION["username"];
                                                 datasets: [{
                                                     label: 'Count',
                                                     data: values,
-                                                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
+                                                    backgroundColor: ['#05b8ffff', '#00054bff'],
                                                     borderRadius: 4,
                                                 }]
                                             },
@@ -701,11 +830,11 @@ $name = $_SESSION["username"];
                                                 datasets: [{
                                                     label: 'Count',
                                                     data: values,
-                                                    borderColor: '#6366f1',
-                                                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                                                    borderColor: '#3955b1ff',
+                                                    backgroundColor: 'rgba(0, 108, 170, 0.1)',
                                                     fill: true,
                                                     tension: 0.3,
-                                                    pointBackgroundColor: '#6366f1'
+                                                    pointBackgroundColor: '#000146ff'
                                                 }]
                                             },
                                             options: commonChartOptions
@@ -732,11 +861,11 @@ $name = $_SESSION["username"];
                                                 datasets: [{
                                                     label: 'Scans',
                                                     data: counts,
-                                                    borderColor: '#ef4444',
-                                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                                    borderColor: '#140069ff',
+                                                    backgroundColor: 'rgba(144, 124, 255, 0.1)',
                                                     fill: true,
                                                     tension: 0.3,
-                                                    pointBackgroundColor: '#ef4444'
+                                                    pointBackgroundColor: '#00aeffff'
                                                 }]
                                             },
                                             options: commonChartOptions
@@ -745,13 +874,13 @@ $name = $_SESSION["username"];
                             }
 
                             // Individual filter handlers
-                            document.getElementById('accessFilter1').addEventListener('change', function () {
-                                loadBarChart(this.value);
-                            });
+                            // document.getElementById('accessFilter1').addEventListener('change', function () {
+                            //     loadBarChart(this.value);
+                            // });
 
-                            document.getElementById('accessFilter2').addEventListener('change', function () {
-                                loadLineChart(this.value);
-                            });
+                            // document.getElementById('accessFilter2').addEventListener('change', function () {
+                            //     loadLineChart(this.value);
+                            // });
 
                             document.getElementById('accessFilter').addEventListener('change', function () {
                                 loadAccessedChart(this.value);
@@ -783,9 +912,10 @@ $name = $_SESSION["username"];
                                 <span id="closeModal"
                                     style="position:absolute; top:10px; right:20px; cursor:pointer; font-size:24px;">&times;</span>
 
-                                <h3 style="text-align:center; font-size: 17px; font-weight: bold;">QR Code Details</h3>
+                                <h3 style="text-align:center; font-size: 17px; color: black; font-weight: bold;">QR Code
+                                    Details</h3>
 
-                                <div id="modalContent" style="margin-top:20px;"></div>
+                                <div id="modalContent" style="color: black; margin-top:20px;"></div>
                             </div>
                         </div>
 
@@ -795,14 +925,15 @@ $name = $_SESSION["username"];
                             style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;">
                             <div class="chart-container"
                                 style="border: 3px solid black;background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%); padding:20px; border-radius:30px; max-width:800px; width:90%; max-height:90vh; overflow-y:auto;">
-                                <h2 style="text-align:center; font-size:17px; font-weight: bold;">QR Code Access
+                                <h2 style="text-align:center;   color: black; font-size:17px; font-weight: bold;">QR
+                                    Code Access
                                     Analysis</h2>
 
                                 <!-- Filter Range -->
-                                <div style="margin-top:10px; text-align:center; font-size:14px;">
+                                <div style="margin-top:10px; text-align:center; font-size:14px;color:black;">
                                     <label for="filterRange">Select Range: </label>
                                     <select id="filterRange"
-                                        style="padding:5px 10px; margin:5px;  font-size:14px; border-radius:20px;">
+                                        style="padding:5px 10px; color: black;margin:5px;  font-size:14px; border-radius:20px;">
                                         <option value="all" selected>All Time</option>
                                         <option value="7">Last 7 Days</option>
                                         <option value="30">Last 30 Days</option>
@@ -812,7 +943,7 @@ $name = $_SESSION["username"];
                                 <!-- Canvas will be added dynamically -->
                                 <canvas id="accessedChart" style="width:100%; height:300px;"></canvas>
 
-                                <div id="insights" style="margin-top:20px; font-size:15px;"></div>
+                                <div id="insights" style="margin-top:20px; color: black;font-size:15px;"></div>
 
                                 <div style="margin-top:20px; text-align:center;">
                                     <button id="downloadReportBtn"
@@ -845,13 +976,14 @@ $name = $_SESSION["username"];
                                 <small
                                     style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal; text-align:left; font-size: 16px;">You
                                     can manage your QR code here. You are allowed to view, scan, download,
-                                    share, analyze and delete your qr code. Password and QR Code's content are not allowed to edit for security purpose.</small>
+                                    share, analyze and delete your qr code. Password and QR Code's content are not
+                                    allowed to edit for security purpose.</small>
                             </div>
 
                             <!-- Search Filter -->
                             <div style="margin-bottom: 10px; text-align: right; border-radius:40px;">
                                 <input type="text" id="qrSearchInput" placeholder="Search table..."
-                                    style="padding: 6px; font-family: 'Quicksand', sans-serif; width: 250px; border-radius:40px;">
+                                    style="padding: 6px; color:black; font-family: 'Quicksand', sans-serif; width: 250px; border-radius:40px;">
                             </div>
 
                             <!-- Styles -->
@@ -861,12 +993,11 @@ $name = $_SESSION["username"];
                                 <table id="qrTable">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>QR Filename</th>
-                                            <th>QR Code Id</th>
+                                            <th style="width: 150px;">Date</th>
+                                            <!-- <th>QR Filename</th> -->
+                                            <th style="width: 100px;">QR Code Id</th>
                                             <th>References</th>
-                                            <th>QR Code Type</th>
-                                            <th>Actions</th>
+                                            <th>Click Here For Actions</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -878,9 +1009,11 @@ $name = $_SESSION["username"];
                                             <!-- Example rows (to be replaced by JS) -->
                                             <tr>
                                                 <td>2025-08-04 00:12:15</td>
-                                                <td>qr_59_1754237535_38f17d03.png</td>
+
                                                 <td>Disabled</td>
                                                 <td>
+                                                    <button class="action-btn btn-share">Share to your friend</button>
+                                                    <button class="action-btn btn-email">Share to email</button>
                                                     <button class="action-btn btn-view">View</button>
                                                     <button class="action-btn btn-delete">Delete</button>
                                                     <button class="action-btn btn-analyze">Analyze</button>
@@ -928,10 +1061,209 @@ $name = $_SESSION["username"];
 
                                         // Event delegation for both View and Delete buttons
                                         tbody.addEventListener('click', function (e) {
+
+                                            const systemBtn = e.target.closest('.share-system-btn');
+                                            const emailBtn = e.target.closest('.share-email-btn');
                                             const viewBtn = e.target.closest('.view-btn');
                                             const analyzeBtn = e.target.closest('.analyze-btn');
                                             const downloadBtn = e.target.closest('.download-btn');
                                             const deleteBtn = e.target.closest('.delete-btn');
+
+                                            
+                                            // Utility function to close popup when clicking outside
+                                            function setupOutsideClick(popup) {
+                                                const handleClickOutside = (e) => {
+                                                    if (!popup.contains(e.target)) {
+                                                        popup.remove();
+                                                        document.removeEventListener('click', handleClickOutside);
+                                                    }
+                                                };
+                                                // Delay adding listener to avoid immediate removal on click
+                                                setTimeout(() => {
+                                                    document.addEventListener('click', handleClickOutside);
+                                                }, 0);
+                                            }
+                                            // ======= View Button for Friends =======
+                                            if (systemBtn) {
+                                                systemBtn.addEventListener('click', (e) => {
+                                                    try {
+                                                        const data = JSON.parse(systemBtn.dataset.details);
+
+                                                        // Remove existing popup
+                                                        let existingPopup = document.querySelector('.qrPopup');
+                                                        if (existingPopup) existingPopup.remove();
+
+                                                        const popup = document.createElement('div');
+                                                        popup.className = 'qrPopup';
+
+                                                        popup.innerHTML = `
+                <label for="friendListDropdown" style="font-weight:bold; color: white;">👥 Share To Your Friends</label>
+                <div style="display:flex; align-items:center; gap:8px;  font-size:14px; color: white;">
+    <span style="font-size:16px; font-weight:bold;">${data.header_text}</span>
+    <span>-</span>
+    <span><strong>ID:</strong> ${data.id}</span>
+</div>
+
+                <div id="friendShareForm" style="margin-top:10px;">
+                    <select id="friendListDropdown" style="padding:6px; width:100%; border:1px solid white; color: white; background-color: rgba(0,0,0,0.5);"></select>
+                    <button id="submitFriendShare"
+                        style="padding:6px 10px; margin-top:8px; background-color:#e17055; color:white; border-radius:30px;width:100%;">
+                        Share
+                    </button>
+                </div>
+            `;
+
+                                                        // Append first to measure
+                                                        document.body.appendChild(popup);
+                                                        popup.style.display = 'block';
+                                                        popup.style.position = 'fixed'; // Use fixed for viewport positioning
+
+                                                        // Position below the button
+                                                        const rect = systemBtn.getBoundingClientRect();
+                                                        const popupWidth = popup.offsetWidth;
+                                                        const popupHeight = popup.offsetHeight;
+
+                                                        popup.style.left = `${rect.left + rect.width / 2 - popupWidth / 2}px`;
+                                                        popup.style.top = `${rect.bottom + 5}px`;
+
+                                                        // Load friends list
+                                                        fetch('get_friends_list.php')
+                                                            .then(res => res.json())
+                                                            .then(friends => {
+                                                                const dropdown = popup.querySelector('#friendListDropdown');
+                                                                dropdown.innerHTML = '';
+                                                                if (friends.length === 0) {
+                                                                    dropdown.innerHTML = '<option disabled>No friends found</option>';
+                                                                } else {
+                                                                    friends.forEach(friend => {
+                                                                        const option = document.createElement('option');
+                                                                        option.value = friend.id;
+                                                                        option.textContent = friend.email;
+                                                                        dropdown.appendChild(option);
+                                                                    });
+                                                                }
+                                                            });
+
+                                                        // Share QR
+                                                        popup.querySelector('#submitFriendShare').onclick = () => {
+                                                            const friendId = popup.querySelector('#friendListDropdown').value;
+                                                            if (!friendId) {
+                                                                alert("Please select a friend.");
+                                                                return;
+                                                            }
+
+                                                            fetch('share_qr_friends.php', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({ friend_id: friendId, qr_id: data.id })
+                                                            })
+                                                                .then(res => res.json())
+                                                                .then(response => {
+                                                                    alert(response.message || "QR Code shared successfully.");
+                                                                    popup.remove();
+                                                                })
+                                                                .catch(err => {
+                                                                    console.error('QR share failed:', err);
+                                                                    alert("Failed to share QR code.");
+                                                                });
+                                                        };
+
+                                                        // Close when clicking outside
+                                                        setupOutsideClick(popup);
+
+                                                    } catch (err) {
+                                                        console.error("Failed to parse QR data:", err);
+                                                    }
+                                                });
+                                            }
+                                            // ======= View Button for Email =======
+                                            if (emailBtn) {
+                                                emailBtn.addEventListener('click', (e) => {
+                                                    try {
+                                                        const data = JSON.parse(emailBtn.dataset.details);
+
+                                                        // Remove existing popup
+                                                        let existingPopup = document.querySelector('.qrPopup');
+                                                        if (existingPopup) existingPopup.remove();
+
+                                                        const popup = document.createElement('div');
+                                                        popup.className = 'qrPopup';
+
+                                                        popup.innerHTML = `
+                <p style="color: white;">Enter your friend’s email to send the QR code:</p>
+<div style="display:flex; align-items:center; gap:8px; font-size:14px; color: white;">
+    <span style="font-size:16px; font-weight:bold;">${data.header_text}</span>
+    <span>-</span>
+    <span><strong>ID:</strong> ${data.id}</span>
+</div>
+
+                <input type="email" id="autoEmailInput" placeholder="Enter recipient email"
+                    style="padding:6px; width:100%; border:1px solid white; color: white; background-color: rgba(0,0,0,0.5);" />
+                <button id="sendEmailBtn"
+                    style="padding:6px 12px; margin-top:8px; background-color:#00b894; color:white; border:none; border-radius:30px; width:100%;">
+                    Send QR Code
+                </button>
+                <div id="emailLoading" style="display:none; margin-top:10px; color: white;">
+                    Sending QR code...
+                </div>
+            `;
+
+                                                        // Append first to measure size
+                                                        document.body.appendChild(popup);
+                                                        popup.style.display = 'block';
+                                                        popup.style.position = 'fixed'; // Use fixed for viewport positioning
+
+                                                        // Position below the button
+                                                        const rect = emailBtn.getBoundingClientRect();
+                                                        const popupWidth = popup.offsetWidth;
+                                                        const popupHeight = popup.offsetHeight;
+
+                                                        popup.style.left = `${rect.left + rect.width / 2 - popupWidth / 2}px`;
+                                                        popup.style.top = `${rect.bottom + 5}px`;
+
+                                                        // Send QR code function
+                                                        const emailInput = popup.querySelector('#autoEmailInput');
+                                                        const sendBtn = popup.querySelector('#sendEmailBtn');
+                                                        const loadingDiv = popup.querySelector('#emailLoading');
+
+                                                        const sendQRCode = () => {
+                                                            const recipientEmail = emailInput.value.trim();
+                                                            if (!recipientEmail) {
+                                                                alert("Please enter a valid email address.");
+                                                                return;
+                                                            }
+                                                            loadingDiv.style.display = 'block';
+
+                                                            fetch('share_qr_email.php', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({ email: recipientEmail, qr_id: data.id })
+                                                            })
+                                                                .then(res => res.json())
+                                                                .then(response => {
+                                                                    alert(response.message || `QR Code sent to ${recipientEmail}.`);
+                                                                    popup.remove();
+                                                                })
+                                                                .catch(err => {
+                                                                    console.error('Email transfer failed:', err);
+                                                                    alert("Failed to send QR code.");
+                                                                })
+                                                                .finally(() => {
+                                                                    loadingDiv.style.display = 'none';
+                                                                });
+                                                        };
+
+                                                        sendBtn.addEventListener('click', sendQRCode);
+                                                        emailInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendQRCode(); });
+
+                                                        // Close when clicking outside
+                                                        setupOutsideClick(popup);
+
+                                                    } catch (err) {
+                                                        console.error("Failed to parse QR data:", err);
+                                                    }
+                                                });
+                                            }
 
                                             // ======= View Button =======
                                             if (viewBtn) {
@@ -948,47 +1280,46 @@ $name = $_SESSION["username"];
                                                             <p style="font-size:14px;"><strong>Created At:</strong> ${data.created_at}</p>
                                                             <p style="font-size:14px;"><strong>Description:</strong> ${data.description}</p>
                                                             <br>
-                                                           <p style="color:black; font-size:14px;"> <strong> Enter email for the verification process. Verification is required to allow users to scan and access the QR code using a one-time passcode (OTP). This is not required for users who access the QR code using shared password or with no password required. </strong> </p><br>  <div>
-                                                                <input type="email" id="emailField" placeholder="Enter email..." 
+                                                           <p style="color:black; font-size:14px;"> <strong>To protect your QR code, recipients must be verified by you before requesting a one-time passcode (OTP). Only verified users will be able to unlock your QR content.</strong> </p><br>  <div>
+                                                                <input type="email" id="emailField" placeholder="Enter email for verification" 
                                                                     style="padding: 6px; width: 100%; border: 1px solid black; border-radius:30px;" />
+                                                                <br><br>
+                                                                <div style="color: black; font-size: 14px;">
+                                                                    <strong>Verification Type (Required):</strong><br>
+                                                                    <label>
+                                                                        <input type="radio" name="accessType" value="1" required> One-time only
+                                                                    </label><br>
+                                                                    <label>
+                                                                        <input type="radio" name="accessType" value="2" required> Life-Time access
+                                                                    </label>
+                                                                </div>
                                                                 <button id="emailSendBtn" title="Send to Email"
-                                                                    style="padding: 6px 10px; margin-top: 10px; background-color: #6c5ce7; color: white; border: none; border-radius:30px; cursor: pointer;">
+                                                                    style="padding: 4px 8px; margin-top: 10px; background-color: #6c5ce7; color: white; font-size:14px;border: none; border-radius:20px; cursor: pointer;">
                                                                     Verify Email
                                                                 </button>
+                                                                <div id="emailVerifySpinner" style="
+                                                                        display:none;
+                                                                        margin-top:10px;
+                                                                        text-align:left;
+                                                                    ">
+                                                                        <div style="
+                                                                            width:20px;
+                                                                            height:20px;
+                                                                            border:4px solid #dfe6e9;
+                                                                            border-top:4px solid #6c5ce7;
+                                                                            border-radius:50%;
+                                                                            animation: spin 1s linear infinite;
+                                                                            
+                                                                        "></div>
+                                                                        
+                                                                    </div>
+                                                                
+
                                                             </div>
                                                             <br>
-                                                            <p style="color:Blue; font-size:14px;"><strong>User can choose and click button to send Qr Code to specific email or share the qr code through system.</strong></p>
                                                             
-                                                            <div style="margin-top: 20px;">
-                                                                <button id="transferEmailBtn"
-                                                                    style="padding: 6px 12px; background-color: #0984e3; color: white; border: none; border-radius:30px; width: 100%;">
-                                                                    📧 Share To Email
-                                                                </button>
 
-                                                                <div id="emailTransferForm" style="display:none; margin-top:10px;">
-                                                                    <input type="email" id="transferEmailInput" placeholder="Enter recipient email" 
-                                                                        style="padding:6px; width:100%; border-radius:30px;" />
-                                                                    <button id="submitEmailTransfer"
-                                                                        style="padding:6px 10px; margin-top: 8px; background-color:#00b894; color:white; border:none; border-radius:30px; ">
-                                                                        Send
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-                                                            <div style="margin-top: 20px;">
-                                                                <button id="shareWithinAccountBtn"
-                                                                    style="padding: 6px 12px; background-color: #fdcb6e; color: white; border: none; border-radius:30px; width: 100%;">
-                                                                    👥 Share To Your Friends
-                                                                </button>
-
-                                                                <div id="friendShareForm" style="display:none; margin-top: 10px;">
-                                                                    <select id="friendListDropdown" style="padding:6px; width:100%;"></select>
-                                                                    <button id="submitFriendShare"
-                                                                        style="padding:6px 10px; margin-top: 8px; background-color:#e17055; color:white; border:none; border-radius:30px;width: auto;">
-                                                                        Share
-                                                                    </button>
-                                                                </div>
-                                                            </div>
+                                                           
                                                         </div>
 
                                                         <!-- Right Column -->
@@ -1008,17 +1339,80 @@ $name = $_SESSION["username"];
                                                                 src="data:image/jpeg;base64,${data.qr_image_base64}"
                                                                 alt="QR Code"
                                                                 style="width: 250px; height: 250px; border: 1px solid #ccc; border-radius:30px; margin-bottom: 20px;">
-                                                            
-                                                            <button id="downloadBtn"
-                                                                style="padding: 6px 12px; background-color: #27ae60; color: white; border: none; border-radius: 30px; cursor: pointer; margin-bottom: 10px;">
-                                                                Download QR Code
-                                                            </button>
+                                                                                                                                
+                                                                    <div style="display: flex; gap: 5px; align-items: center;">
+                                                                        <button id="downloadBtn"
+                                                                            style="padding: 4px 8px; background-color: #27ae60; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px;">
+                                                                            Download
+                                                                        </button>
 
-                                                            <button id="scanBtn"
-                                                                style="padding: 6px 12px; background-color:#dee200a8; color: white; border: none; border-radius: 30px; cursor: pointer;">
-                                                                Scan QR Code
-                                                            </button>
+                                                                        <button id="scanBtn"
+                                                                            style="padding: 4px 8px; background-color: #4f5002a8; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px;">
+                                                                            Scan
+                                                                        </button>
+                                                                    </div>
+
                                                         </div>
+                                                        
+                                                        <!-- ================= Activity Table Section ================= -->
+
+                                                        <div style="width:100%; margin-top:30px;">
+
+    <!-- Last Updated -->
+    <p style="text-align:center; font-size:16px; font-weight:bold; color:black;">📋 Access Activity Log</p>
+    <div id="lastUpdated"
+        style="
+            color:black;
+            font-size:14px;
+            text-align:center;
+            margin:10px 0;
+            font-weight:bold;
+            width:100%;
+        ">
+        Last updated: --
+    </div>
+
+    <!-- Table Container -->
+    <div style="
+        max-height:400px;
+        overflow-y:auto;
+        padding:12px;
+        margin:0 10px 15px 10px;
+        box-shadow:0 4px 8px rgba(255,255,255,0.2);
+        width:calc(100% - 20px);
+    ">
+
+        <table style="width:100%; text-align:left; font-size:15px; border-collapse:collapse;">
+            <thead>
+                <tr style="
+                    background:linear-gradient(90deg,#4b6cb7,#182848);
+                    color:white;
+                    position:sticky;
+                    top:0;
+                    z-index:1;
+                ">
+                    <th style="text-align:center; padding:10px;">Timestamp</th>
+                    <th style="text-align:center; padding:10px;">Email</th>
+                    <th style="text-align:center; padding:10px;">Type Access</th>
+                    <th style="text-align:center; padding:10px;">QR ID</th>
+                    <th style="text-align:center; padding:10px;">Access ID</th>
+                </tr>
+            </thead>
+            <tbody id="activityBody">
+                <!-- Data loads here -->
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<!-- Refresh Button -->
+<div style="text-align: center; margin-top: 10px;">
+    <button id="refreshActivityBtn" style="padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 14px;">
+        Refresh Activity
+    </button>
+</div>
+
 
                                                     </div>
                                                     `;
@@ -1047,6 +1441,32 @@ $name = $_SESSION["username"];
                                                                 document.body.removeChild(link);
                                                             });
                                                         }
+
+                                                        function loadActivity(qrId) {
+                                                            const xhr = new XMLHttpRequest();
+                                                            xhr.open("POST", "get_activity.php", true);
+                                                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                                                            xhr.onreadystatechange = function () {
+                                                                if (xhr.readyState === 4 && xhr.status === 200) {
+                                                                    const newData = xhr.responseText;
+                                                                    const body = document.getElementById("activityBody");
+                                                                    const updated = document.getElementById("lastUpdated");
+
+                                                                    if (body && updated && newData !== body.innerHTML) {
+                                                                        body.innerHTML = newData;
+                                                                        updated.innerText = "Last updated: " + new Date().toLocaleString();
+                                                                    }
+                                                                }
+                                                            };
+
+                                                            xhr.send("qr_id=" + encodeURIComponent(qrId));
+                                                        }
+
+                                                        // Load immediately, then every 5 seconds
+                                                        loadActivity(data.id);
+                                                        // setInterval(() => loadActivity(data.id), 5000);
+
 
                                                         if (scanBtn && img) {
                                                             // Scan button
@@ -1080,116 +1500,61 @@ $name = $_SESSION["username"];
                                                                     });
                                                             });
                                                         }
-                                                        // Transfer through Email
-                                                        document.getElementById('transferEmailBtn').onclick = () => {
-                                                            document.getElementById('emailTransferForm').style.display = 'block';
-                                                        };
 
-                                                        document.getElementById('submitEmailTransfer').onclick = () => {
-                                                            const recipientEmail = document.getElementById('transferEmailInput').value.trim();
-                                                            if (!recipientEmail) {
-                                                                alert("Please enter a valid email address.");
-                                                                return;
-                                                            }
-
-                                                            fetch('share_qr_email.php', {
-                                                                method: 'POST',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify({
-                                                                    email: recipientEmail,
-                                                                    qr_id: data.id
-                                                                })
-                                                            })
-                                                                .then(res => res.json())
-                                                                .then(response => {
-                                                                    alert(response.message || "QR Code transferred via email.");
-                                                                    document.getElementById('transferEmailInput').value = ''; // Clear email input
-                                                                    document.getElementById('emailTransferForm').style.display = 'none'; // Hide form
-                                                                })
-                                                                .catch(err => {
-                                                                    console.error('Email transfer failed:', err);
-                                                                    alert("Failed to send email.");
-                                                                });
-                                                        };
-
-                                                        // Share within Account
-                                                        document.getElementById('shareWithinAccountBtn').onclick = () => {
-                                                            document.getElementById('friendShareForm').style.display = 'block';
-
-                                                            fetch('get_friends_list.php')
-                                                                .then(res => res.json())
-                                                                .then(friends => {
-                                                                    const dropdown = document.getElementById('friendListDropdown');
-                                                                    dropdown.innerHTML = '';
-                                                                    if (friends.length === 0) {
-                                                                        dropdown.innerHTML = '<option disabled>No friends found</option>';
-                                                                    } else {
-                                                                        friends.forEach(friend => {
-                                                                            const option = document.createElement('option');
-                                                                            option.value = friend.id;
-                                                                            option.textContent = friend.email;
-                                                                            dropdown.appendChild(option);
-                                                                        });
-                                                                    }
-                                                                })
-                                                                .catch(err => {
-                                                                    console.error("Failed to load friends list:", err);
-                                                                });
-                                                        };
-
-                                                        document.getElementById('submitFriendShare').onclick = () => {
-                                                            const friendId = document.getElementById('friendListDropdown').value;
-                                                            if (!friendId) {
-                                                                alert("Please select a friend.");
-                                                                return;
-                                                            }
-
-                                                            fetch('share_qr_friends.php', {
-                                                                method: 'POST',
-                                                                headers: { 'Content-Type': 'application/json' },
-                                                                body: JSON.stringify({
-                                                                    friend_id: friendId,
-                                                                    qr_id: data.id
-                                                                })
-                                                            })
-                                                                .then(res => res.json())
-                                                                .then(response => {
-                                                                    alert(response.message || "QR Code shared successfully.");
-                                                                    document.getElementById('friendShareForm').style.display = 'none'; // Hide form
-                                                                })
-                                                                .catch(err => {
-                                                                    console.error('QR share failed:', err);
-                                                                    alert("Failed to share QR code.");
-                                                                });
-                                                        };
-
+                                                        // Refresh Button
+                                                        const refreshBtn = document.getElementById('refreshActivityBtn');
+                                                        if (refreshBtn) {
+                                                            refreshBtn.addEventListener('click', () => {
+                                                                loadActivity(data.id);
+                                                            });
+                                                        }
 
                                                         // Email Send Button
-                                                        const emailBtn = document.getElementById('emailSendBtn');
-                                                        if (emailBtn) {
-                                                            emailBtn.addEventListener('click', () => {
-                                                                const email = document.getElementById('emailField').value.trim();
+                                                        // Email Send Button with Spinner
+                                                        const emailverificationBtn = document.getElementById('emailSendBtn');
+                                                        const spinner = document.getElementById('emailVerifySpinner');
+                                                        // const trackAccessBtn = document.getElementById('emailTrackAccess');
+                                                        const emailField = document.getElementById('emailField');
+                                                        if (emailverificationBtn && spinner && emailField) {
+                                                            emailverificationBtn.addEventListener('click', () => {
+                                                                const email = emailField.value.trim();
+                                                                const accessType = document.querySelector('input[name="accessType"]:checked');
+
                                                                 if (!email) {
                                                                     alert("Please enter a valid email address.");
                                                                     return;
                                                                 }
+
+                                                                if (!accessType) {
+                                                                    alert("Please select an access type.");
+                                                                    return;
+                                                                }
+
+                                                                // Lock UI
+                                                                emailverificationBtn.disabled = true;
+                                                                spinner.style.display = 'block';
 
                                                                 fetch('send_qr_email.php', {
                                                                     method: 'POST',
                                                                     headers: { 'Content-Type': 'application/json' },
                                                                     body: JSON.stringify({
                                                                         email: email,
-                                                                        qr_id: data.id
+                                                                        qr_id: data.id,
+                                                                        access_type: accessType.value
                                                                     })
                                                                 })
                                                                     .then(res => res.text())
                                                                     .then(response => {
                                                                         alert(response);
-                                                                        document.getElementById('emailField').value = '';
+                                                                        emailField.value = '';
                                                                     })
                                                                     .catch(err => {
                                                                         console.error('Email send failed:', err);
                                                                         alert("Failed to send email.");
+                                                                    })
+                                                                    .finally(() => {
+                                                                        spinner.style.display = 'none';
+                                                                        emailverificationBtn.disabled = false;
                                                                     });
                                                             });
                                                         }
@@ -1507,9 +1872,9 @@ $name = $_SESSION["username"];
                                 <table id="qrTable">
                                     <thead>
                                         <tr>
-                                            <th>Receive At</th>
+                                            <th style="width: 150px;">Receive At</th>
+                                            <th style="width: 100px;">QR Code Id</th>
                                             <th>QR Filename</th>
-                                            <th>QR Code Id</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -1733,6 +2098,51 @@ $name = $_SESSION["username"];
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>
+    <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
+    <!-- Chatbase Embed -->
+    <script>
+        (function () {
+            if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+                window.chatbase = (...arguments) => {
+                    if (!window.chatbase.q) { window.chatbase.q = [] }
+                    window.chatbase.q.push(arguments)
+                };
+                window.chatbase = new Proxy(window.chatbase, {
+                    get(target, prop) {
+                        if (prop === "q") { return target.q }
+                        return (...args) => target(prop, ...args)
+                    }
+                })
+            }
+
+            const onLoad = function () {
+                const script = document.createElement("script");
+                script.src = "https://www.chatbase.co/embed.min.js";
+                script.id = "fUxbSN5eUMhP3OoW4cHe_";
+                script.domain = "www.chatbase.co";
+                document.body.appendChild(script);
+            };
+
+            if (document.readyState === "complete") {
+                onLoad();
+            } else {
+                window.addEventListener("load", onLoad);
+            }
+        })();
+    </script>
+    <script>
+        async function identifyChatbaseUser() {
+            const response = await fetch('/api/chatbase-token');
+            const data = await response.json();
+
+            if (data.token) {
+                window.chatbase('identify', { token: data.token });
+            }
+        }
+
+        window.addEventListener('load', identifyChatbaseUser);
+    </script>
 
 
 </body>

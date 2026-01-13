@@ -21,19 +21,46 @@ $qrPath = 'images/qr1.png';
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Custom Animated Background -->
+    <style>
+        .step-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 60px;
+        }
 
+        .step {
+            padding: 6px 12px;
+            border-radius: 20px;
+            background-color: #e9ecef;
+            color: #6c757d;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background-color: #007bff;
+            color: white;
+            font-weight: 700;
+        }
+
+        .arrow {
+            color: #ffffffff;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
-<body class="animated-bg">
-
+<body>
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
     <div class="main-container">
         <div class="generator-header">
-            <h1 style="font-weight: bold;">Design & Secure</h1>
+            <h1 style="font-weight: bold; color:white;">Design & Secure</h1>
             <div class="step-wrapper">
-                <div class="step">Upload</div>
-                <div class="arrow">→</div>
-                <div class="step">Generate</div>
-                <div class="arrow">→</div>
                 <div class="step active">Design</div>
                 <div class="arrow">→</div>
                 <div class="step active">Securing</div>
@@ -47,14 +74,16 @@ $qrPath = 'images/qr1.png';
             <!-- Left Column: QR design + save + password -->
             <div class="left-col"
                 style=" border:1px solid black; background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);">
-                <strong>Custom QR Code Design (Optional)</strong>
+                <strong style="color:black;">Custom QR Code Design (Optional)</strong>
                 <p style="color: gray;">Customize your QR code with different colors before securing it.</p>
                 <hr>
                 <div class="qr-design-tool">
                     <div class="qr-controls">
-                        <p style="color: black;">Alert: The front color of the QR code should be darker than the
+                        <p style=" font-size:13px; color: black;">Alert: The front color of the QR code should be darker
+                            than the
                             background so it can be scanned quickly.</p>
-                        <p style="color:red;">Avoid:<br> - Light-colored dots on a dark background (for example, yellow
+                        <p style=" font-size:13px; color:red; font-weight:bold;">Avoid:<br> - Light-colored dots on a
+                            dark background (for example, yellow
                             dots on black).<br> - Bright color blends that make the code hard to see.<br>
                             - See-through or busy backgrounds that hide the edges of the QR code.</p>
                         <label for="fgColor">1.Foreground Color:</label>
@@ -68,7 +97,7 @@ $qrPath = 'images/qr1.png';
 
                         <!-- Save Design Button -->
 
-                        <p style="color: gray;">Click Save to keep your QR code changes.</p>
+                        <p style="color: gray; font-weight: bold;">Click Save to keep your QR code changes.</p>
                         <button id="saveDesign" type="button" class="btn-submit"
                             style="display:flex ; border-radius:20px; align-items:center; justify-content:center; width:30%; height:30px;margin-bottom:15px;">
                             Save
@@ -79,33 +108,104 @@ $qrPath = 'images/qr1.png';
                     <!-- Password Form -->
                     <form id="qrForm" action="finalreview.php" method="POST">
                         <div class="form-group">
-                            <label for="header_text" style="font-weight:bold;">3. Header (Optional)</label><br>
-                            <input type="text" id="header_text" name="header_text"
-                                placeholder="Enter header text (optional)"><br>
-                            <label for="description" style="font-weight: bold;">4. Description (Optional)</label><br>
+                            <label for="header_text" style="font-weight:bold;color: black;">3. Title
+                                (Required)</label><br>
+                            <input type="text" id="header_text" name="header_text" style="color:black;"
+                                placeholder="Enter header text" required><br>
+                            <label for="description" style="font-weight: bold; color: black;">4. Description
+                                (Optional)</label><br>
                             <textarea id="description" name="description" rows="4" maxlength="800"
-                                    placeholder="Add a short description or notes related to this QR code" style="width:100%;padding:8px;border-radius:6px;margin-top:6px;"></textarea>
+                                placeholder="Add a short description or notes related to this QR code"
+                                style="color:black;width:100%;padding:8px;border-radius:6px;margin-top:6px;"></textarea>
 
-                            <strong for="password">5. Password</strong><br>
-                            <p style="color: red;">
-                                Password is optional. But if you decide to create one, it must follow the rules: at
-                                least 8 characters long and include an uppercase letter, a number, and a special
-                                character.
-                                Please make sure your QR design is saved before you continue.
-                            </p><br>
-                            <input type="password" id="password" name="password"
-                                placeholder="Enter password (optional)"><br>
-                            <!-- <label for="header_text" style="font-weight:bold;">4. Header (optional)</label><br>
-                            <input type="text" id="header_text" name="header_text"
-                                placeholder="Enter header text (optional)"><br>
-                            <label for="description" style="font-weight: bold;">5. Description (optional)</label><br>
-                            <textarea id="description" name="description" rows="4" maxlength="800"
-                                    placeholder="Add a short description or notes related to this QR code" style="width:100%;padding:8px;border-radius:6px;margin-top:6px;"></textarea> -->
+                            <strong style="color: black;">5. Password (Optional)</strong><br>
+
+                            <input type="password" id="password" name="password" placeholder="Enter password (optional)"
+                                style="color: black; border-radius: 30px; margin: 0;"><br>
+
+                            <div id="passwordStrength"
+                                style="color:black; font-size:13px; font-weight:bold; margin-top:4px;">
+                                Password strength: <span id="strengthText" style="color:red;">Weak</span>
+                            </div>
+
+                            <div id="passwordHint" style="font-size:12px; color:#444; margin-top:2px;">
+                                Use uppercase, lowercase, number, symbol, and at least 8 characters.
+                            </div>
+                            <script>
+                                const passwordInput = document.getElementById("password");
+                                const strengthText = document.getElementById("strengthText");
+
+                                passwordInput.addEventListener("input", function () {
+                                    const val = passwordInput.value;
+                                    let score = 0;
+
+                                    if (val.length >= 8) score++;
+                                    if (/[A-Z]/.test(val)) score++;
+                                    if (/[a-z]/.test(val)) score++;
+                                    if (/[0-9]/.test(val)) score++;
+                                    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+                                    if (val.length === 0) {
+                                        strengthText.textContent = "Optional";
+                                        strengthText.style.color = "gray";
+                                        return;
+                                    }
+
+                                    if (score <= 2) {
+                                        strengthText.textContent = "Weak";
+                                        strengthText.style.color = "red";
+                                    } else if (score === 3 || score === 4) {
+                                        strengthText.textContent = "Medium";
+                                        strengthText.style.color = "orange";
+                                    } else {
+                                        strengthText.textContent = "Strong";
+                                        strengthText.style.color = "green";
+                                    }
+                                });
+                            </script>
 
                         </div>
+                        <br>
+                        <div class="form-group">
+                            <strong style="color:black;">6. Access Permissions (Choose one of them)</strong><br><br>
 
+                            <div style="
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px; /* Space between the two rows */
+">
+
+                                <label style="
+        color: black;
+        display: flex;
+        align-items: center; /* Changed from flex-start to center */
+        gap: 5px; /* Control the exact distance here */
+        cursor: pointer;
+    ">
+                                    <input type="radio" name="permission" value="1" checked style="margin: 0;">
+                                    Allow user view the QR Code's content only (simple website and single page).
+                                </label>
+
+                                <label style="
+        color: black;
+        display: flex;
+        align-items: center; /* Changed from flex-start to center */
+        gap: 5px; /* Control the exact distance here */
+        cursor: pointer;
+    ">
+                                    <input type="radio" name="permission" value="2" style="margin: 0;">
+                                    Allow user to manage QR Code's content (Recommended for complex website).
+                                </label>
+
+                            </div>
+                        </div>
+
+
+                        <br>
                         <button type="submit"
-                            style="display: flex; border-radius:20px; align-items: center; justify-content: center; width: 30%; height: 30px;"
+                            style="display: flex; border-radius:20px; align-items: center; justify-content: center; width: 50%; min-width: 70%; min-height: auto;height: 30px;"
                             class="btn-submit">
                             Secure QR
                         </button>
@@ -165,12 +265,12 @@ $qrPath = 'images/qr1.png';
             <!-- Right Column: Live QR preview -->
             <div class="right-col"
                 style="border:1px solid black; background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%); justify-content:center; align-items: center;">
-                <strong>Live QR Preview</strong>
+                <strong style="color:black;">Live QR Preview</strong>
                 <br><br><br>
                 <div class="qr-preview-container"
                     style=" display:flex;top:20px; align-items:center; justify-content: center;">
-                    <canvas id="qrCanvas" display="flex" width="420" height="420" align-items="center"
-                        justify-content="center"></canvas>
+                    <canvas id="qrCanvas" display="flex" width="300" min-width="auto" min-height="auto" height="300"
+                        align-items="center" justify-content="center"></canvas>
                 </div>
             </div>
 
@@ -311,7 +411,8 @@ $qrPath = 'images/qr1.png';
             });
         });
     </script>
-
+    <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
 </body>
 
 </html>

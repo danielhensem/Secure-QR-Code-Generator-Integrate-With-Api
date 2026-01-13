@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = isset($_POST['description']) ? trim($_POST['description']) : null;
     $useOtp = isset($_POST['otp']) ? 1 : 0;
     $email = isset($_POST['otp_email']) ? trim($_POST['otp_email']) : null;
+    $permission = isset($_POST['permission']) ? intval($_POST['permission']) : 1;
 
     date_default_timezone_set('Asia/Kuala_Lumpur');
     $createdAt = date('Y-m-d H:i:s');
@@ -46,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Insert into qr_security
     $stmt = $con->prepare("INSERT INTO qr_security (
-        qr_filename, password_hash, otp_enabled, otp_email, qr_image, created_at, user_id
-    ) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssisbsi", $qrFilename, $hashedPassword, $useOtp, $email, $null, $createdAt, $userId);
+        qr_filename, password_hash, otp_enabled, otp_email, qr_image, created_at, user_id, accesspermission
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssisbsii", $qrFilename, $hashedPassword, $useOtp, $email, $null, $createdAt, $userId, $permission);
     $stmt->send_long_data(4, $pngData);
 
     if ($stmt->execute()) {
@@ -91,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($emailRow = $emailResult->fetch_assoc()) {
                 $userEmail = $emailRow['email'];
-                $insertCodeStmt = $con->prepare("INSERT INTO code (email, qr_code_id, status) VALUES (?, ?, 1)");
+                $insertCodeStmt = $con->prepare("INSERT INTO code (email, qr_code_id, status, accesstype) VALUES (?, ?, 1, 2)");
                 $insertCodeStmt->bind_param("si", $userEmail, $qrId);
                 $insertCodeStmt->execute();
                 $insertCodeStmt->close();

@@ -167,13 +167,15 @@ $cname = $cname !== '' ? $cname : null;
         }
 
         .arrow {
-            color: #000000ff;
+            color: #ffffffff;
         }
     </style>
 </head>
 
-<body class="animated-bg">
-
+<body>
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
 
 
     <div class="main-body">
@@ -194,18 +196,8 @@ $cname = $cname !== '' ? $cname : null;
             <div class="bigcontainer">
 
                 <div class="hading" style="margin-top: 50px;">
-                    <h1>Final Preview</h1>
-                    <div class="step-wrapper">
-                        <div class="step">Upload</div>
-                        <div class="arrow">→</div>
-                        <div class="step">Generate</div>
-                        <div class="arrow">→</div>
-                        <div class="step">Design</div>
-                        <div class="arrow">→</div>
-                        <div class="step">Securing</div>
-                        <div class="arrow">→</div>
-                        <div class="step active">Complete</div>
-                    </div>
+                    <h1 style="color: white;font-size: 30px;">Final Preview</h1>
+                    <p style="font-size: 20px;align-items: center; text-align: center;">You have complete generates your QR Code.</p>
                 </div>
 
 
@@ -215,14 +207,14 @@ $cname = $cname !== '' ? $cname : null;
         </section>
 
 
-        <section style="; padding: 60px 20px;">
+        <section style=" padding: 60px 20px;">
             <div class="bigcontainer"
-                style="max-width: 600px; margin: auto;             background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);border-radius: 40px; padding: 40px 20px; box-shadow: 0 70px 110px rgba(2, 0, 134, 0.2); text-align: center;">
+                style="max-width: 600px; min-width: auto; margin: auto;background: linear-gradient(90deg, rgba(255, 255, 255, 1) 35%, rgba(194, 192, 192, 1) 100%);border-radius: 40px; padding: 40px 20px; box-shadow: 0 70px 110px rgba(2, 0, 134, 0.2); text-align: center;">
                 
                 <!-- QR Code Preview -->
                 <!-- <h2 style="color:white; margin-bottom: 20px;">Final QR Code Preview</h2> -->
                 <div
-                    style="width: 500px; height: 500px; margin: 0 auto 30px auto; border: 5px dashed #000000ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+                    style="width: 300px; min-width: 200px; min-height: 200px; height: 300px; margin: 0 auto 30px auto; border: 5px dashed #000000ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
                     <?php
                     if (isset($_SESSION['secured_qr_filename'])) {
                         $qrFilename = $_SESSION['secured_qr_filename'];
@@ -265,7 +257,7 @@ $cname = $cname !== '' ? $cname : null;
                 <div style="margin-top: 30px;">
 
                     <button id="finishBtn" type="button"
-                        style="font-size: 15px; font-weight: bold; width:350px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 12px 24px; margin: 10px; background-color: #021d91ff; color: white; border: none; border-radius: 40px; cursor: pointer;">
+                        style="font-size: 15px; font-weight: bold; width:250px; min-width: 100px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 12px 24px; margin: 10px; background-color: #021d91ff; color: white; border: none; border-radius: 40px; cursor: pointer;">
                         Finish
                     </button>
                 </div>
@@ -327,6 +319,8 @@ $cname = $cname !== '' ? $cname : null;
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>
+        <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
 </body>
 
 </html>

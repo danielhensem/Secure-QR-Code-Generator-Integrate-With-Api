@@ -654,6 +654,7 @@
   font-size: 40px;
   font-weight: bold;
   margin-bottom: 50px;
+  color: black
 }
 
 .single-features .f-icon img {
@@ -665,11 +666,13 @@
 
 .single-features .f-icon .h7 {
   font-size: 30;
+  color:black;
 }
 
 .single-features h6 {
   font-size: 16px;
   margin-bottom: 0;
+  color: black;
 }
 
 .single-features p {

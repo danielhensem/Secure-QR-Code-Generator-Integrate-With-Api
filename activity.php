@@ -153,20 +153,26 @@ $userId = $userRow['id'];
     </style>
 </head>
 
-<body class="animated-bg">
+<body>
+              <div id="stars"></div>
+          <div id="stars2"></div>
+          <div id="stars3"></div>
     <?php include("componet/navbar.php"); ?>
+<h2 class="case-title"
+                        style="display: flex; margin-top:15px;margin-bottom: 0px; font-family: 'Segoe UI', sans-serif; font-size:26px; justify-content:center; align-items:center; font-weight:bold;">
+                        Activity</h2>
 
     <div class="main-body">
         <section>
             <div class="bigcontainer">
                 <div class="cat-products" style="margin:20px 20px; ">
-                    <h2 class="case-title"
+                    <!-- <h2 class="case-title"
                         style="display: flex; font-family: 'Segoe UI', sans-serif; font-size:26px; justify-content:center; align-items:center; font-weight:bold;">
-                        Activity</h2>
+                        Activity</h2> -->
 
                     <div class="filter-container">
                         <select id="filterRange"
-                            style="border-radius: 30px; background:transparent; border: 1px solid black;">
+                            style="border-radius: 30px; background:white; color:black;border: 1px solid black;">
                             <option value="7">Last 7 Days</option>
                             <option value="30">Last 30 Days</option>
                             <option value="all">All Time</option>
@@ -239,6 +245,8 @@ $userId = $userRow['id'];
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>
+           <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
 </body>
 
 </html>

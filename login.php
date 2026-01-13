@@ -105,10 +105,10 @@ if (isset($_POST["loginbtn"])) {
             <div class="form">
                 <div class="left-side" style="width: 300px;">
                     <div class="content" style="width: 250px;">
-                        <img src="img/log.svg" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img"
-                            style="width: 100px; height: 100px;">
-                            <br><br>
-                        <h1 style="color:black;">SQ-TECH SOLVER</h1>
+                        <img src="img/log.svg" alt="SQ-Tech Solver" class="logo-img"
+                            style="width: 100px; height: auto;">
+                        <br><br>
+                        <h1 style="font-size: 25px;font-weight:bold;color:black;">SQ-TECH SOLVER</h1>
                         <h5 style="color:black;">Welcome Back! </h5>
                         <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna aliqua.</p>  -->
@@ -123,8 +123,8 @@ if (isset($_POST["loginbtn"])) {
                             </div> -->
                             <p>Email *</p>
                             <div class="form-inputs">
-                                <input type="email" placeholder="Email" autocomplete='chrome-off' name="email" style="border-radius:30px;"
-                                    required>
+                                <input type="email" placeholder="Email" autocomplete='chrome-off' name="email"
+                                    style="border-radius:30px;" required>
                                 <i class="fa fa-envelope"></i>
                             </div>
                             <p>Password *</p>
@@ -134,20 +134,23 @@ if (isset($_POST["loginbtn"])) {
                                 <i class="fa fa-eye" id="password_eye"></i>
                             </div>
 
-                            <div class="submit-button">
+                            <div class="submit-button" style="align-items: center;">
                                 <button type="submit" name="loginbtn">Login</button>
                             </div>
 
                             <div>
-                                <div class="form-acc">
-                                    <p>Don't have account?</p><a href="signup.php">Create Now</a>
+                                <div class="form-acc"
+                                    style="display: flex; flex-direction: column; gap: 5px; align-items: left; margin-top: 8px;">
+
+                                    <span>Don't have an account? <a href="signup.php">Create Now</a></span>
+
+                                    <span>Forget Password <a href="forgot.php">Click Here</a></span>
+
+                                    <span>Back To <a href="index.php">Home Page</a></span>
+
                                 </div>
-                                <div class="form-acc" style="allign-items:center">
-                                    <p>Forget Password</p><a href="forgot.php">Click Here</a>
-                                </div>
-                                <div class="form-acc" style="allign-items:center">
-                                    <p>Back To</p><a href="index.php">Home Page</a>
-                                </div>
+
+
                             </div>
                     </form>
                 </div>

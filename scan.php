@@ -17,6 +17,23 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
+// Initialize session variable if not exists
+if (!isset($_SESSION['qr_uploaded'])) {
+    $_SESSION['qr_uploaded'] = 0; // 0 = show section, 1 = hide section
+}
+
+// Reset session if clear button clicked
+if (isset($_GET['reset']) && $_GET['reset'] == 'true') {
+    $_SESSION['qr_uploaded'] = 0;
+    header("Location: scan.php"); // reload page without reset param
+    exit;
+}
+
+// Set session when user uploads manually
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['qr_upload'])) {
+    $_SESSION['qr_uploaded'] = 1;
+}
+
 // user is logged in
 $name = $_SESSION["username"];
 // header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -46,16 +63,26 @@ function mime_content_type_from_string($binary)
     return $mime ?: 'application/octet-stream';
 }
 
-if (isset($_GET['reset']) == '1') {
-    header("Location: scan.php"); // redirect to fresh scan page
-    unset($_SESSION['qr_uploaded_base64'], $_SESSION['qr_uploaded_mime']);
-    unset($_SESSION['qr_token'], $_SESSION['otp_code'], $_SESSION['otp_created_at'], $_SESSION['qr_id'], $_SESSION['qr_filename']);
-    $_SESSION['qr_token'] = null;
-    $qr = null;
-    $qrSecond = null;
-    exit();
+// Initialize session variable if not exists
+if (!isset($_SESSION['qr_uploaded'])) {
+    $_SESSION['qr_uploaded'] = 0; // 0 = show QR section
 }
 
+// Reset session variables if called to restore previous state
+if (isset($_GET['restore']) && $_GET['restore'] == '1') {
+    unset(
+        $_SESSION['qr_uploaded_base64'],
+        $_SESSION['qr_uploaded_mime'],
+        $_SESSION['qr_token'],
+        $_SESSION['otp_code'],
+        $_SESSION['otp_created_at'],
+        $_SESSION['qr_id'],
+        $_SESSION['qr_filename']
+    );
+    $_SESSION['qr_uploaded'] = 0; // make QR section visible again
+    header("Location: scan.php"); // reload page cleanly
+    exit();
+}
 // Upload file : read token in qr code
 // Upload file : read token in qr code
 if (isset($_FILES['qr_upload']) && $_FILES['qr_upload']['error'] === UPLOAD_ERR_OK) {
@@ -85,6 +112,20 @@ if (isset($_FILES['qr_upload']) && $_FILES['qr_upload']['error'] === UPLOAD_ERR_
         $_SESSION['qr_token'] = $qrToken;
     } else {
         $accessError = "Failed to decode QR code.";
+        // Initialize session variable if not exists
+        $_SESSION['qr_uploaded'] = 0; // 0 = show QR section
+        unset(
+            $_SESSION['qr_uploaded_base64'],
+            $_SESSION['qr_uploaded_mime'],
+            $_SESSION['qr_token'],
+            $_SESSION['otp_code'],
+            $_SESSION['otp_created_at'],
+            $_SESSION['qr_id'],
+            $_SESSION['qr_filename']
+        );
+        $_SESSION['qr_uploaded'] = 0; // make QR section visible again
+        header("Location: scan.php"); // reload page cleanly
+        exit();
     }
 } elseif (!empty($_POST['qr_token'])) {
     $qrToken = $_POST['qr_token'];
@@ -367,11 +408,18 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                     // Step 2: Use qr_secondlayer.id to get user_id from qr_security
                     $ipkey = $row['id'];
 
-                    $stmtUserId = $con->prepare("SELECT user_id FROM qr_security WHERE id = ?");
+                    $stmtUserId = $con->prepare("
+                        SELECT user_id, accesspermission 
+                        FROM qr_security 
+                        WHERE id = ?
+                    ");
                     $stmtUserId->bind_param("i", $ipkey);
                     $stmtUserId->execute();
                     $resUserId = $stmtUserId->get_result();
-                    $userRow = $resUserId->fetch_assoc();
+                    if ($userRow = $resUserId->fetch_assoc()) {
+                        $_SESSION['accessindex'] = (int) $userRow['accesspermission'];
+                    }
+
 
                     if (!$userRow || empty($userRow['user_id'])) {
                         echo "Could not find user linked to QR.";
@@ -454,6 +502,29 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                     // Get user IP address
                     $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'Unknown IP';
 
+                    $userEmail = strtolower(trim($userEmail));
+$qrId = (int) $_SESSION['qr_id'];
+
+$stmt = $con->prepare("
+    DELETE FROM code
+    WHERE email = ?
+      AND qr_code_id = ?
+      AND accesstype = 1
+    LIMIT 1
+");
+
+$stmt->bind_param("si", $userEmail, $qrId);
+$stmt->execute();
+
+if ($stmt->affected_rows > 0) {
+    error_log("One-time access consumed successfully");
+} else {
+    error_log("No one-time access row to delete");
+}
+
+$stmt->close();
+
+
                     // Get qr_id from session or fetched row
                     $qr_id = $_SESSION['qr_id'] ?? ($row['id'] ?? null);
 
@@ -474,53 +545,111 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                             error_log("Failed to prepare activity insert: " . $con->error);
                         }
                     }
-                    // Step 7: Handle decrypted content based on type
-                    $fileType = $row['file_type'] ?? '';
-                    $fileName = $row['file_name'] ?? 'qr_file';
+                    $accessIndex = $_SESSION['accessindex'] ?? 1; // default safest
 
-                    if ($fileType === 'pdf') {
-                        header('Content-Type: application/pdf');
-                        header('Content-Disposition: inline; filename="' . $fileName . '"');
-                        echo $qrContent;
-                        $_SESSION['scan_done'] = false;
-                        exit;
-                    }
+$fileType = $row['file_type'] ?? '';
+$fileName = $row['file_name'] ?? 'qr_file';
 
-                    if ($fileType === 'image') {
-                        $rawContent = $qrContent;
+/* =====================================================
+   ACCESS LEVEL 1 : VIEW ONLY
+   ===================================================== */
+if ($accessIndex === 1) {
 
-                        // Try decoding safely
-                        $decoded = base64_decode($qrContent, true);
-                        if ($decoded !== false && strlen($decoded) > 0) {
-                            $rawContent = $decoded; // it was base64
-                        }
+    /* ===== PDF : VIEW ONLY (NO DOWNLOAD) ===== */
+    if ($fileType === 'pdf') {
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="' . $fileName . '"'); // inline = no force download
+        echo $qrContent;
+        $_SESSION['scan_done'] = false;
+        exit;
+    }
 
-                        // Detect MIME type
-                        $finfo = new finfo(FILEINFO_MIME_TYPE);
-                        $mime = $finfo->buffer($rawContent) ?: "image/png";
+    /* ===== IMAGE : VIEW ONLY (NO DOWNLOAD) ===== */
+    if ($fileType === 'image') {
 
-                        // Clean output buffer
-                        if (ob_get_level()) {
-                            ob_end_clean();
-                        }
+        $rawContent = $qrContent;
+        $decoded = base64_decode($qrContent, true);
+        if ($decoded !== false && strlen($decoded) > 0) {
+            $rawContent = $decoded;
+        }
 
-                        // Send headers
-                        header("Content-Type: $mime");
-                        header("Content-Length: " . strlen($rawContent));
-                        echo $rawContent;
-                        exit;
-                    }
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->buffer($rawContent) ?: "image/png";
+
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header("Content-Type: $mime");
+        header("Content-Disposition: inline"); // prevent download
+        header("Content-Length: " . strlen($rawContent));
+        echo $rawContent;
+        $_SESSION['scan_done'] = false;
+        exit;
+    }
+
+    /* ===== URL : HIDDEN (PROXY VIEWER ONLY) ===== */
+    if (filter_var($qrContent, FILTER_VALIDATE_URL)) {
+
+        $_SESSION['proxy_url'] = $qrContent; // real URL never exposed
+        header("Location: qr_url_viewer.php");
+        $_SESSION['scan_done'] = false;
+        exit;
+    }
+}
 
 
+/* =====================================================
+   ACCESS LEVEL 2 : VIEW + DOWNLOAD + EDIT
+   ===================================================== */
+if ($accessIndex === 2) {
 
-                    if (filter_var($qrContent, FILTER_VALIDATE_URL)) {
-                        header("Location: $qrContent");
-                        $_SESSION['scan_done'] = false;
-                        exit;
-                    }
+    /* ===== PDF : DOWNLOAD ALLOWED ===== */
+    if ($fileType === 'pdf') {
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        echo $qrContent;
+        $_SESSION['scan_done'] = false;
+        exit;
+    }
 
-                    $showQrContent = true;
-                    $_SESSION['scan_done'] = false;
+    /* ===== IMAGE : DOWNLOAD ALLOWED ===== */
+    if ($fileType === 'image') {
+
+        $rawContent = $qrContent;
+        $decoded = base64_decode($qrContent, true);
+        if ($decoded !== false && strlen($decoded) > 0) {
+            $rawContent = $decoded;
+        }
+
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->buffer($rawContent) ?: "image/png";
+
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header("Content-Type: $mime");
+        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        header("Content-Length: " . strlen($rawContent));
+        echo $rawContent;
+        $_SESSION['scan_done'] = false;
+        exit;
+    }
+
+    /* ===== URL : DIRECT ACCESS + EDITABLE ===== */
+    if (filter_var($qrContent, FILTER_VALIDATE_URL)) {
+        header("Location: $qrContent"); // direct redirect
+        $_SESSION['scan_done'] = false;
+        exit;
+    }
+}
+
+/* =====================================================
+   FALLBACK (TEXT / OTHER CONTENT)
+   ===================================================== */
+$showQrContent = true;
+$_SESSION['scan_done'] = false;
 
                     // Step 8: Clear QR session variables
                     unset(
@@ -667,9 +796,10 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
 
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: #f0f2f5;
+            background: #000000ff;
             padding: 0;
             font-size: 15px;
+            color: white;
         }
 
         .container {
@@ -752,15 +882,39 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
             resize: vertical;
             min-height: 100px;
         }
+
+        .spinner {
+            display: none;
+            margin-left: 10px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
-<body class="animated-bg">
+<body>
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
     <?php include("componet/navbar.php"); ?>
-    <h1 class="case-title-h1" style="margin-left: 10px; margin-right: 10px;">QR Scan & Access</h1>
+    <h1 class="case-title-h1" style="color:white;margin-left: 10px; margin-right: 10px;">QR Scan & Access</h1>
     <div class="container">
         <div class="left">
-            <h3 style="font-weight: bold; font-size:17px;">Upload QR Code</h3>
+            <h3 style="font-weight: bold; font-size:17px;color:black;">Upload QR Code</h3>
             <br>
             <hr class="dashed-line">
             <!-- <div style="margin-top: 20px;">
@@ -779,11 +933,229 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
             </div> -->
             <!-- <br>
                         <h3>Or</h3> -->
-            <form method="post" enctype="multipart/form-data">
-                <input type="file" name="qr_upload" style="border-radius: 40px;" required>
-                <button type="submit" style="border-radius: 40px; color:white; font-weight: bold;">Upload &
-                    Decode</button>
-            </form>
+            <div id="qrSection" style="<?php echo ($_SESSION['qr_uploaded'] == 1) ? 'display:none;' : ''; ?>">
+                <!-- QR Table -->
+                <style>
+                    @keyframes flicker {
+                        0% {
+                            opacity: 1;
+                        }
+
+                        50% {
+                            opacity: 0.2;
+                        }
+
+                        100% {
+                            opacity: 1;
+                        }
+                    }
+
+                    .flicker {
+                        animation: flicker 1s infinite;
+                    }
+
+                    .qr-row {
+                        cursor: pointer;
+                        transition: background-color 0.2s ease;
+                    }
+
+                    .qr-row:hover {
+                        background-color: #14f5d7ff;
+                    }
+
+                    /* HEADER TABLE */
+                    .qr-header-table {
+                        width: 100%;
+                        border: 1px solid;
+                        border-radius: 40px 40px 0 0;
+                        overflow: hidden;
+                        margin-bottom: 0;
+                        color: red;
+                    }
+
+                    .qr-header-table th {
+                        padding: 14px 16px;
+                        text-align: center;
+                        font-weight: 600;
+                        letter-spacing: 0.3px;
+                    }
+
+                    /* SCROLL WRAPPER */
+                    .qr-table-wrapper {
+                        max-height: calc(5 * 50px);
+                        /* 8 rows sahaja */
+                        overflow-y: auto;
+                        overflow-x: hidden;
+                        border: 1px solid #ddd;
+                        border-top: none;
+                        border-radius: 0 0 40px 40px;
+                        background: #ffffffff;
+                    }
+
+                    /* BODY TABLE */
+                    .qr-body-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+
+                    .qr-body-table tr {
+                        /* buang height tetap supaya td yang menentukan tinggi row */
+                        transition: background 0.2s ease;
+                        cursor: pointer;
+                        color: black;
+                    }
+
+
+                    .qr-body-table tr:hover {
+                        background: #4d87dfff;
+                    }
+
+                    .qr-body-table td {
+                        text-align: left;
+                        word-break: break-word;
+                        padding: 12px 16px;
+                        border-bottom: 1px solid #eee;
+                        font-size: 14px;
+                        line-height: 1;
+                        /* pastikan row rapat */
+                    }
+
+
+                    /* REMOVE LAST BORDER */
+                    .qr-body-table tr:last-child td {
+                        border-bottom: none;
+                    }
+
+                    /* SCROLLBAR – PROFESSIONAL LOOK */
+                    .qr-table-wrapper::-webkit-scrollbar {
+                        width: 6px;
+                    }
+
+                    .qr-table-wrapper::-webkit-scrollbar-thumb {
+                        background: #0e0d0dff;
+                        border-radius: 10px;
+                    }
+
+                    .qr-table-wrapper::-webkit-scrollbar-track {
+                        background: transparent;
+                    }
+
+                    .qr-body-table tr:empty {
+                        display: none;
+                    }
+                </style>
+
+                <!-- Header Table -->
+                <table class="flicker qr-header-table">
+                    <thead>
+                        <tr>
+                            <th>Scroll and click your QR Code in the table to scan</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <!-- Scrollable Body -->
+                <div class="qr-table-wrapper">
+                    <table class="qr-body-table">
+                        <tbody id="qrTableBody">
+                            <!-- rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <!-- Upload Form -->
+                <br>
+                <p style="text-align: center; color:black;">Or</p>
+                <br>
+                <form id="qrUploadForm" method="post" enctype="multipart/form-data">
+                    <input type="file" name="qr_upload" style=" color:black;border-radius: 40px;" required>
+                    <button type="submit" style="border-radius: 40px; color:white; font-weight: bold;">
+                        Upload
+                    </button>
+                </form>
+            </div>
+
+            <script>
+                function loadAllQrData() {
+                    Promise.all([
+                        fetch('fetch_qr_data_2.php').then(res => res.text()),
+                        fetch('fetch_shared_data_2.php').then(res => res.text())
+                    ])
+                        .then(([ownedData, sharedData]) => {
+                            document.getElementById('qrTableBody').innerHTML = ownedData + sharedData;
+                            attachQrRowHandlers();
+                        });
+                }
+
+                document.addEventListener('DOMContentLoaded', loadAllQrData);
+
+                function attachQrRowHandlers() {
+                    document.querySelectorAll('.qr-row').forEach(row => {
+
+                        row.addEventListener('click', function () {
+
+                            // Remove highlight from all rows
+                            document.querySelectorAll('.qr-row').forEach(r =>
+                                r.classList.remove('selected')
+                            );
+
+                            // Highlight clicked row (persists)
+                            this.classList.add('selected');
+
+                            // Hide QR section
+                            document.getElementById('qrSection').style.display = 'none';
+
+                            // Show loading overlay
+                            document.getElementById('loadingOverlay').style.display = 'flex';
+
+                            const data = JSON.parse(this.dataset.details);
+                            const imgSrc = `data:image/jpeg;base64,${data.qr_image_base64}`;
+
+                            fetch(imgSrc)
+                                .then(res => res.blob())
+                                .then(blob => {
+                                    const file = new File(
+                                        [blob],
+                                        data.qr_filename || 'qr_code.jpg',
+                                        { type: blob.type }
+                                    );
+
+                                    const form = document.createElement('form');
+                                    form.method = 'POST';
+                                    form.enctype = 'multipart/form-data';
+                                    form.action = 'scan.php';
+
+                                    const input = document.createElement('input');
+                                    input.type = 'file';
+                                    input.name = 'qr_upload';
+
+                                    const dt = new DataTransfer();
+                                    dt.items.add(file);
+                                    input.files = dt.files;
+
+                                    form.appendChild(input);
+                                    document.body.appendChild(form);
+
+                                    setTimeout(() => form.submit(), 50);
+                                });
+                        });
+
+                    });
+                }
+
+
+                // Hide QR section immediately after manual upload
+                document.getElementById('qrUploadForm').addEventListener('submit', function () {
+                    document.getElementById('qrSection').style.display = 'none';
+                });
+
+                // Clear button resets session and reloads page
+                document.getElementById('clearBtn').addEventListener('click', function () {
+                    window.location.href = 'scan.php?reset=true';
+                });
+            </script>
+
 
             <?php
             $qrImageTag = "";
@@ -802,8 +1174,8 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                 $qrIdOut = htmlspecialchars((string) ($_SESSION['qr_id'] ?? ''), ENT_QUOTES, 'UTF-8');
                 $qrFilenameOut = htmlspecialchars((string) ($_SESSION['qr_filename'] ?? ''), ENT_QUOTES, 'UTF-8');
                 $qrImageTag = "<img style='margin-top:20px; max-width:300px;' src='data:" . $mime . ";base64," . $base64 . "' alt='QR Code Image' />";
-                echo "<div style='margin-top:10px; font-weight:bold; text-align:left;'>QR Code Id : {$qrIdOut}</div>";
-                echo "<div style='text-align:left; font-weight:bold;'>Filename : {$qrFilenameOut}</div>";
+                echo "<div style='margin-top:10px; color:black;font-weight:bold; text-align:left;'>QR Code Id : {$qrIdOut}</div>";
+                echo "<div style='text-align:left; color:black;font-weight:bold;'>Filename : {$qrFilenameOut}</div>";
                 echo $qrImageTag;
                 // Enable OTP button again if present
                 echo "<script>if (document.getElementById('sendOtpBtn')) document.getElementById('sendOtpBtn').disabled = false;</script>";
@@ -812,7 +1184,7 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
         </div>
 
         <div class="right">
-            <h3 style="font-weight: bold; font-size:17px;">Secure Access</h3>
+            <h3 style="color:black;font-weight: bold; font-size:17px;">Secure Access</h3>
             <?php if (!empty($accessError))
                 echo "<div class='error'>$accessError</div>"; ?>
             <?php if (!empty($otpError))
@@ -821,10 +1193,11 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                 echo "<div class='success'>OTP has been sent to your email.</div>"; ?>
 
             <?php if ($showQrContent): ?>
-                <label>QR Content:</label>
-                <textarea readonly><?= htmlspecialchars($qrContent) ?></textarea>
-                <button style="border-radius: 40px; color:white; font-weight: bold;" type="button"
-                    onclick="window.location.href='scan.php?reset=true'">Reset</button>
+                <label style="color:black;">QR Content:</label>
+                <textarea readonly style="color:black;"><?= htmlspecialchars($qrContent) ?></textarea>
+                <button type="button" id="restoreBtn" style="border-radius: 40px; color:black; font-weight: bold;">
+                    Clear
+                </button>
 
             <?php elseif ($qr && $qrSecond): ?>
 
@@ -834,43 +1207,83 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                         <button type="submit" name="submit_access"
                             style="border-radius: 40px; color:white; font-weight: bold;">Access QR</button>
                     </form>
-                    <button type="button" onclick="window.location.href='scan.php?reset=true'"
-                        style="border-radius: 40px; color:white; font-weight: bold;">Reset</button>
+                    <button type="button" id="restoreBtn" style="border-radius: 40px; color:white; font-weight: bold;">
+                        Clear
+                    </button>
 
                 <?php else: ?>
-                    <!-- Secured QR: Show OTP + Password fields -->
+                    <!-- Secured QR: Password first, OTP hidden -->
+                    <span style="color:black;">Please enter password or request a One Time Passcode.</span>
+
                     <form method="POST" id="accessForm">
-                        <input type="email" name="otp_email" id="otp_email" placeholder="Enter your email"
-                            style="border-radius: 40px;">
-                        <button type="button" id="sendOtpBtn" style="border-radius: 40px; color:white; font-weight: bold;">Send
-                            OTP</button>
-                        <br><br>
 
-                        <input type="text" name="otp" id="otp_input" placeholder="Enter OTP" style="border-radius: 40px;">
-                        <div id="otp-timer" style="color: red; margin-top: 5px;"></div>
+                        <!-- PASSWORD FIRST -->
+                        <input type="password" name="password" placeholder="Enter Password"
+                            style="color:black;border-radius: 40px;">
 
-                        <br><br>
-                        <input type="password" name="password" placeholder="Enter Password (optional)"
-                            style="border-radius: 40px;">
+                        <br>
+
+                        <!-- TOGGLE TEXT -->
+                        <p id="showOtpText" style="text-align:center; cursor:pointer; font-weight:bold; color:red;">
+                            Click Here for Request One Time Passcode
+                        </p>
+
+                        <!-- OTP SECTION (HIDDEN INITIALLY) -->
+                        <div id="otpSection" style="display:none;">
+
+                            <input type="email" name="otp_email" id="otp_email" placeholder="Enter your email for request otp"
+                                style="border-radius: 40px; color:black;">
+
+                            <button type="button" id="sendOtpBtn" style="border-radius: 40px; color:white; font-weight: bold;">
+                                Send OTP
+                            </button>
+
+                            <div id="otpSpinner" class="spinner"></div>
+
+                            <p style="color:red; font-weight:bold;">
+                                If you are not the owner of this QR code, you must ask the owner to verify your email before
+                                requesting an OTP, otherwise your request and access may fail.
+                            </p>
+
+                            <input type="text" name="otp" id="otp_input" placeholder="Enter OTP"
+                                style=" color:black;border-radius: 40px;">
+
+                            <div id="otp-timer" style="color: red; margin-top: 5px;"></div>
+
+                        </div>
                         <button type="submit" name="submit_access"
                             style="border-radius: 40px; color:white; font-weight: bold;">Access</button>
                     </form>
 
-                    <button type="button" onclick="window.location.href='scan.php?reset=true'"
-                        style=" border-radius: 40px; color:white; font-weight: bold;">Reset</button>
+                    <button type="button" id="restoreBtn" style="border-radius: 40px; color:white; font-weight: bold;">
+                        Clear
+                    </button>
+
+
+                    <!-- TOGGLE SCRIPT -->
+                    <script>
+                        document.getElementById('showOtpText').addEventListener('click', function () {
+                            const otpSection = document.getElementById('otpSection');
+                            otpSection.style.display =
+                                otpSection.style.display === 'none' ? 'block' : 'none';
+                        });
+                    </script>
+
                 <?php endif; ?>
 
             <?php else: ?>
-                <p style="white-space:normal; word-break: break-word;"> Please upload and scan a QR code to begin.<br><br>
+                <p style=" color:black;white-space:normal; word-break: break-word;"> Please upload and scan a QR code to
+                    begin.<br><br>
 
-                    <strong>Additional Information:</strong><br><br>
+                    <strong style="color:black;">Additional Information:</strong><br><br>
 
                     1. If the QR code was created without a password, users can open the content immediately.<br>
 
                     2. If the QR code was created with a password, users must enter the password or request a one-time
                     passcode (OTP).<br>
 
-                    3. To request verification, users must share their email to the QR code owner. After the owner verifies
+                    3. To request OTP, user who want to access the QR Code must share their email to the QR code owner.
+                    After the owner verifies
                     them, the user can request an OTP.
                     If the owner chooses to share the password directly, it becomes the responsibility of both the owner and
                     the receiver.<br>
@@ -879,7 +1292,13 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
 
             <?php endif; ?>
         </div>
+        <script>
+            document.getElementById('restoreBtn').addEventListener('click', function () {
+                // Redirect to scan.php with restore param
+                window.location.href = 'scan.php?restore=1';
+            });
 
+        </script>
 
     </div>
     <div class="footer-note">&copy; 2025 SQ‑Tech Solver. All rights reserved.</div>
@@ -889,10 +1308,50 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>
+    <div id="loadingOverlay" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,0.9);
+    z-index:9999;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+">
+        <div style="
+        width:60px;
+        height:60px;
+        border:6px solid #ddd;
+        border-top:6px solid #3498db;
+        border-radius:50%;
+        animation: spin 1s linear infinite;
+    "></div>
+
+        <p st Upyle="color:black;margin-top:15px; font-weight:bold;">
+            Uploading QR Code, please wait...
+        </p>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
 </body>
 
 </html>
-<!-- <script>
+<script>
 
     window.onpageshow = function (event) {
         const sessionFlag = sessionStorage.getItem("hasActiveSession");
@@ -958,6 +1417,8 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
             sendOtpBtn.addEventListener("click", function () {
                 const email = document.getElementById("otp_email").value.trim();
                 const token = document.getElementById("qr_token").value.trim();
+                const spinner = document.getElementById("otpSpinner");
+
                 if (!qrUploaded) {
                     alert("Please upload and decode a QR code first.");
                     return;
@@ -966,6 +1427,10 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                     alert("Please enter your email.");
                     return;
                 }
+
+                // Show spinner and disable button
+                spinner.style.display = "inline-block";
+                sendOtpBtn.disabled = true;
 
                 const payload = JSON.stringify({ email: email, token: token });
 
@@ -978,6 +1443,10 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                 })
                     .then(response => response.json())
                     .then(data => {
+                        // Hide spinner
+                        spinner.style.display = "none";
+                        sendOtpBtn.disabled = false;
+
                         if (data.success) {
                             startOTPTimer(50);
                             alert("OTP sent successfully to " + email);
@@ -987,10 +1456,13 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
                     })
                     .catch(err => {
                         console.error(err);
+                        spinner.style.display = "none";
+                        sendOtpBtn.disabled = false;
                         alert("Something went wrong.");
                     });
             });
         }
+
 
         if (accessForm) {
             accessForm.addEventListener("submit", function (e) {
@@ -1028,4 +1500,4 @@ if (isset($_POST['submit_access']) && isset($_SESSION['qr_token'])) {
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }
-</script> -->
+</script>

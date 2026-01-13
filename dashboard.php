@@ -198,7 +198,7 @@ $name = $_SESSION["username"];
         .case-title {
             text-align: center;
             font-size: 26px;
-            color: #1a1a1a;
+            color: white;
             margin-top: 20px;
             margin-bottom: 35px;
             font-weight: 700;
@@ -392,14 +392,17 @@ $name = $_SESSION["username"];
     </style>
 </head>
 
-<body class=animated-bg>
+<body>
+        <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
     <?php include("componet/navbar.php"); ?>
 
     <h2 class="case-title" style="margin-left:10px; margin-right:10px;">QR Code Scam, Fraud & Tampering Cases</h2>
 
     <div style=" padding:10px; margin-left:30px;  margin-right: 10px;">
         <small
-            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  margin-top:20px; font-size: 16px; color:black; white-space: normal; word-break: break-word; justify-content: left; align-items: left; text-align: justify;">
+            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  margin-top:20px; font-size: 16px; color:white; white-space: normal; word-break: break-word; justify-content: left; align-items: left; text-align: justify;">
             <strong>Stay Smart. Scan Safe.</strong>
             QR codes make life easier from payments to event check-ins but they can also be a hacker’s hidden doorway.
             In recent years, cybercriminals have turned simple QR scans into powerful tools for data theft, phishing,
@@ -445,7 +448,7 @@ $name = $_SESSION["username"];
     <section class="case-section">
         <div style="margin-left:30px;  margin-right: 10px; margin-bottom:35px;">
             <small
-                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal; margin-top:20px; font-size: 16px; color:black; white-space: normal; word-break: break-word; align-items: left; text-align: justify;">Stay
+                style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: normal; margin-top:20px; font-size: 16px; color:white; white-space: normal; word-break: break-word; align-items: left; text-align: justify;">Stay
                 aware about Real Scams. Real Lessons.
                 Click here to uncover shocking QR fraud stories and learn how to stay one step ahead of scammers.You can
                 choose and view articles related to Qr Code Fraud Cases below ; </small>
@@ -515,6 +518,8 @@ $name = $_SESSION["username"];
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>
+    <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
 </body>
 
 </html>

@@ -157,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #b4b4b4ff;
             box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
             border:1px solid black;
+            color: black;
 
         }
 
@@ -199,9 +200,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 
-<body class="animated-bg">
+<body>
+              <div id="stars"></div>
+          <div id="stars2"></div>
+          <div id="stars3"></div>
     <?php include("componet/navbar.php"); ?>
-    <h1 class="case-title-h1">Feedback</h1>
+    <h1 class="case-title-h1" style="color: white;">Feedback</h1>
 
     <div class="main-container">
         <div class="row">
@@ -218,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
         <div class="feedback-section">
-            <h3 style="font-size:16px;">Submit Your Feedback</h3><br>
+            <h3 style="font-size:16px;color:black;">Submit Your Feedback</h3><br>
             <?php if (!empty($accessError))
                 echo "<div class='error'>$accessError</div>"; ?>
             <?php if (!empty($feedbackSuccess))
@@ -226,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <form method="post">
                 <textarea name="feedback_text" placeholder="Enter your feedback here..." rows="8"
-                    style=" align-items:center; justify-content:center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:15px; border:1px solid black;padding:10px; border-radius: 20px;"
+                    style=" color:black;align-items:center; justify-content:center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:15px; border:1px solid black;padding:10px; border-radius: 20px;"
                     required></textarea>
                 <br>
                 <br>
@@ -244,6 +248,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>
+          <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
 </body>
 
 </html>

@@ -403,9 +403,12 @@ $name = $_SESSION["username"];
     </style>
 </head>
 
-<body class="animated-bg">
+<body>
+        <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
     <?php include("componet/navbar.php"); ?>
-    <h1 class="case-title-h1" style="margin-left: 10px; margin-right: 10px;">Generate Secure QR Code</h1>
+    <h1 class="case-title-h1" style="color:white;margin-left: 10px; margin-right: 10px;">Generate Secure QR Code</h1>
     <div class="row align-items-stretch main-body">
         <div class="col-lg-10 col-md-12" style="margin:10px;">
             <div class="generator-container">
@@ -451,8 +454,8 @@ $name = $_SESSION["username"];
                     <div class="tab-content">
                         <!-- TEXT TAB -->
                         <div id="textTab" class="tab-pane active">
-                            <p style="font-size:16px;">Enter any text or URL you want to embed in the QR code.</p><br>
-                            <textarea name="item_id" id="user_text" style="border-radius: 30px;"
+                            <p style="font-size:16px; color:black;">Enter any text or URL you want to embed in the QR code.</p><br>
+                            <textarea name="item_id" id="user_text" style="color: black;border-radius: 30px;"
                                 placeholder="e.g., https://example.com or your secret message. The text cannot exceed 200 character."><?php echo isset($_POST['item_id']) ? htmlspecialchars($_POST['item_id']) : ''; ?></textarea>
                         </div>
 
@@ -498,7 +501,7 @@ $name = $_SESSION["username"];
 
                 <div id="spinnerOverlay">
                     <div id="rotatingEmoji">🔲</div>
-                    <div id="statusText">Generating QR Code...</div>
+                    <div id="statusText">Start...</div>
                 </div>
 
                 <script>
@@ -942,6 +945,7 @@ $name = $_SESSION["username"];
                     }, 16);
 
                     var statusMessages = [
+                        { max: 15, text: "Validating Input..." },
                         { max: 25, text: "Generating QR Code..." },
                         { max: 75, text: "Securing QR Code..." },
                         { max: 100, text: "Storing securely..." }
@@ -959,7 +963,7 @@ $name = $_SESSION["username"];
                         if (percent >= 100) {
                             clearInterval(percentInterval);
                             clearInterval(rotateInterval);
-                            emoji.innerHTML = "✔️"; // Change to checkmark on completion
+                            emoji.innerHTML = "Successfull"; // Change to checkmark on completion
                             emoji.style.transform = "rotate(0deg)";
                             statusEl.innerHTML = "Done!";
                             setTimeout(function () {
@@ -976,6 +980,8 @@ $name = $_SESSION["username"];
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
                 <script src="index.js"></script>
+                <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
 </body>
 
 </html>

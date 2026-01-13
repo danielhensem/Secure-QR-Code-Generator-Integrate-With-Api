@@ -249,7 +249,8 @@ if (isset($_POST['add_friend_email'])) {
             text-align: center;
             font-size: 26px;
             color: #222;
-            margin-bottom: 30px;
+            margin-top:15px;
+            margin-bottom: 9px;
             font-weight: bold;
         }
 
@@ -328,7 +329,7 @@ if (isset($_POST['add_friend_email'])) {
 
         .add-friend-message {
             text-align: center;
-            color: #444;
+            color: #ffffffff;
             margin-top: 10px;
         }
 
@@ -341,19 +342,23 @@ if (isset($_POST['add_friend_email'])) {
     </style>
 </head>
 
-<body class="animated-bg">
+<body >
+              <div id="stars"></div>
+          <div id="stars2"></div>
+          <div id="stars3"></div>
     <?php include("componet/navbar.php"); ?>
+        <h2 class="case-title" style="color:white;font-size:26px;">Friends</h2>
 
     <div class="main-body">
         <section>
             <div class="bigcontainer">
                 <div class="cat-products" style="margin:20px 20px;">
-                    <h2 class="case-title" style="font-size:26px;">Friends</h2>
+                    <!-- <h2 class="case-title" style="color:white;font-size:26px;">Friends</h2> -->
 
                     <div class="add-friend-form">
                         <form method="POST" action="friends.php">
                             <input type="email" name="add_friend_email" placeholder="Enter email for request to be friend with them."
-                                style="width:300px; text-align: left; font-size: 13px;" required>
+                                style="color:black;width:300px; text-align: left; font-size: 13px;" required>
                             <button type="submit" style="font-size: 13px;">Add</button>
                         </form>
                         <?php if ($addFriendMsg): ?>
@@ -361,7 +366,7 @@ if (isset($_POST['add_friend_email'])) {
                         <?php endif; ?>
                     </div>
                     <div style="padding:5px; margin-left:10px; margin-right:10px;"> <small
-                            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top:20px; font-size:16px; color:black; white-space:normal; word-break:break-word; text-align:justify;">
+                            style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top:20px; font-size:16px; color:white; white-space:normal; word-break:break-word; text-align:justify;">
                             Feel free to send friend requests to anyone you know through email. You can enjoy the best features of this system
                             with your friends. You can also share your QR code with your friends within the system.
                         </small> </div>
@@ -435,6 +440,8 @@ if (isset($_POST['add_friend_email'])) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="index.js"></script>
+           <script src="stars.js"></script>
+    <link rel="stylesheet" href="live-stars.css">
 </body>
 
 </html>

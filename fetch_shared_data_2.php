@@ -1,3 +1,21 @@
+<style>
+.qr-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Hover for desktop only */
+@media (hover: hover) {
+    .qr-row:hover {
+        background-color:#011f72ff;
+    }
+}
+
+/* Persistent selected state */
+.qr-row.selected {
+    background-color: #011f72ff;
+}
+</style>
 <?php
 session_start();
 include 'componet/conn.php';
@@ -56,19 +74,11 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     $details = htmlspecialchars(json_encode($data), ENT_QUOTES, 'UTF-8');
 
-    echo "<tr style='border-bottom: 1px solid #ddd;'>
-            <td style='font-size: 13px;padding: 12px 15px; width:150px; text-align:center;'>{$data['shared_at']}</td>
-            <td style='font-size: 13px;padding: 12px 15px; text-align:center; width:100px;'>{$data['id']}</td>
-            <td style='font-size: 13px;padding: 12px 15px; white-space: normal; word-break: break-word; max-width: 200px; '>{$data['qr_filename']}</td>
-            <td style='font-size: 13px;padding: 12px 15px;'>
-                <button class='view-btn' 
-                data-details='{$details}'
-                style='display: flex; justify-content: center; align-items: center; 
-                padding:4px 4px; background-color: #3498db; color: white; 
-                border: none; border-radius: 5px; cursor: pointer; margin-right: 8px; font-size: 12px;'>
-                <i class='fas fa-eye'></i>
-                </button>
-            </td>
-        </tr>";
+    echo "<tr style='border-bottom: 1px solid #000000ff;'>";
+    echo "<tr class='qr-row'  data-details='{$details}' style='cursor:pointer;'>";
+    echo "  <td style='text-align:left;  width:70px;'>{$data['id']}</td>";
+    echo "  <td>{$data['qr_filename']}</td>";
+    echo "</tr>";
+
 }
 ?>

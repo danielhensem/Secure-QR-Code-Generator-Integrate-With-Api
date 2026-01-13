@@ -152,14 +152,14 @@ if (isset($_POST["signsubmit"])) {
     }
     ?>
     <div class="section">
-        <div class="container" style="width: 1000;">
+        <div class="container" style="width: 1000; height: 85%;">
             <div class="form">
                 <div class="left-side" style="width: 300px;">
                     <div class="content" style="width: 250px;">
-                        <img src="img/log.svg" srcset="img/log@2x.png 2x" alt="SQ-Tech Solver" class="logo-img"
-                            style="width: 100px; height: 100px;">
-                            <br><br>
-                        <h1 style="color:black;">SQ-TECH SOLVER</h1>
+                        <img src="img/log.svg" alt="SQ-Tech Solver" class="logo-img"
+                            style="width: 100px; height: auto;">
+                        <br><br>
+                        <h1 style=" font-size: 25px; font-weight:bold;color:black;">SQ-TECH SOLVER</h1>
                         <h5 style="color:black;">Bring Quality Over Standard</h5>
                         <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna aliqua.</p>  -->
@@ -167,7 +167,7 @@ if (isset($_POST["signsubmit"])) {
                     </div>
 
                 </div>
-                <div class="right-side" style="width:600px;">
+                <div class="right-side" style="width:700px; margin-left: 15px; height: auto;">
                     <form id="signupForm" method="post" action="">
                         <div class="forms">
                             <h1 class="forms-heading">Register Account</h1>
@@ -178,55 +178,67 @@ if (isset($_POST["signsubmit"])) {
 
                             <p>Short name *</p>
                             <div class="form-inputs">
-                                <input type="text" id="shortname" placeholder="Short name" name="shortname" maxlength="20" required
-                                    style="border-radius:30px;">
+                                <input type="text" id="shortname" placeholder="Short name" name="shortname"
+                                    maxlength="20" required style="border-radius:30px;">
                                 <i class="fa fa-user"></i>
                             </div>
 
                             <p>Email *</p>
                             <div class="form-inputs">
-                                <input type="email" id="email" name="email" placeholder="Email" autocomplete="off" required
-                                    style="border-radius:30px;">
+                                <input type="email" id="email" name="email" placeholder="Email" autocomplete="off"
+                                    required style="border-radius:30px;">
                                 <i class="fa fa-envelope"></i>
                             </div>
 
+
+                            <p style="margin: 0 0 4px 0;">Password *</p>
+                            <div class="form-inputs" style="position: relative; margin: 0; padding: 0;">
+                                <input type="password" id="password" name="pwd" placeholder="Password"
+                                    autocomplete="off" required
+                                    style="border-radius: 30px; margin: 0; ">
+
+                                <i class="fa fa-eye" id="confirm_password_eye"></i>
+                                <span style="font-size: 10px; color: red; display: block; margin: 2px 0 0 0;">
+                                    Password must contain uppercase, lowercase, number, special symbol, and be at least
+                                    8 characters.
+                                </span>
+                            </div>
+                                
+                            <p style="margin: 0 0 4px 0;">Confirm Password * </p>
+                            <!-- <span style="font-size : 11px;">Password must contain uppercase, lowercase, number, special symbol, and be at least 8 characters.</span>
+                             -->
+                            <div class="form-inputs" style="position: relative; margin: 0; padding: 0;">
+                                <input type="password" id="confirmPassword" name="confirmpwd" placeholder="Password"
+                                    autocomplete="off" required style="border-radius: 30px; margin: 0; ">
+                                <i class="fa fa-eye" id="confirm_password_eye"></i>
+                                <span style="font-size: 10px; color: red; display: block; margin: 2px 0 0 0;">
+                                    Password must contain uppercase, lowercase, number, special symbol, and be at least
+                                    8 characters.
+                                </span>
+                            </div>
+
                             <!-- Verification code request -->
-                            <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
-                                <input type="text" id="signup_code" name="signup_code"
-                                    placeholder="Enter code from email" style="flex:1;border-radius:30px;padding:10px;"
-                                    required>
+                            <div style="display:flex; flex-direction:column; gap: 8px;align-items:left;margin-top:8px;">
+
                                 <button type="button" id="requestCodeBtn"
-                                    style="padding: 2px 10px;border-radius:20px;cursor:pointer;">
+                                    style="padding: 1px 10px; width: 250px;border-radius:20px;cursor:pointer;">
                                     Request Code
                                 </button>
+                                <div id="codeMessage" style="color:green;margin-top:6px;display:none;"></div>
+
+                                <input type="text" id="signup_code" name="signup_code"
+                                    placeholder="Enter code from email" style="border-radius:30px;" required>
+
                             </div>
                             <div id="codeMessage" style="color:green;margin-top:6px;display:none;"></div>
-
-
-                            <p>Password *</p>
-                            <div class="form-inputs">
-                                <input type="password" id="password" name="pwd" placeholder="Password" autocomplete="off" required
-                                    style="border-radius:30px;">
-                                <i class="fa fa-eye" id="password_eye"></i>
-                            </div>
-
-                            <p>Confirm Password *</p>
-                            <div class="form-inputs">
-                                <input type="password" id="confirmPassword" name="confirmpwd" placeholder="Password" autocomplete="off"
-                                    required style="border-radius:30px;">
-                                <i class="fa fa-eye" id="confirm_password_eye"></i>
-                            </div>
 
                             <div class="submit-button">
                                 <button type="submit" name="signsubmit" style="border-radius:30px;">Submit</button>
                             </div>
 
-                            <div class="form-acc" style="text-align:center;">
-                                <p>Already have account?</p><a href="login.php">Login</a>
-                            </div>
-
-                            <div class="form-acc" style="text-align:center;">
-                                <p>Back To</p><a href="index.php">Home Page</a>
+                            <div class="form-acc" style="display: flex; text-align:left; gap:10px;">
+                                <a href="login.php">Click here to login</a><br>
+                                <a href="index.php">Back to home page</a>
                             </div>
                         </div>
                     </form>
@@ -276,69 +288,69 @@ if (isset($_POST["signsubmit"])) {
                     });
 
 
-    (function () {
-        const btn = document.getElementById('requestCodeBtn');
-        const emailInput = document.getElementById('email') || document.querySelector('input[name="email"]');
-        const msg = document.getElementById('codeMessage');
-        if (!btn) return;
+                    (function () {
+                        const btn = document.getElementById('requestCodeBtn');
+                        const emailInput = document.getElementById('email') || document.querySelector('input[name="email"]');
+                        const msg = document.getElementById('codeMessage');
+                        if (!btn) return;
 
-        btn.addEventListener('click', async function () {
-            try {
-                const email = (emailInput && emailInput.value || '').trim();
-                if (!email) {
-                    alert('Please enter your email first.');
-                    return;
-                }
-                btn.disabled = true;
-                btn.textContent = 'Sending...';
+                        btn.addEventListener('click', async function () {
+                            try {
+                                const email = (emailInput && emailInput.value || '').trim();
+                                if (!email) {
+                                    alert('Please enter your email first.');
+                                    return;
+                                }
+                                btn.disabled = true;
+                                btn.textContent = 'Sending...';
 
-                const res = await fetch('send_signup_code.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email })
-                });
+                                const res = await fetch('send_signup_code.php', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ email: email })
+                                });
 
-                let j;
-                try {
-                    j = await res.json();
-                } catch {
-                    throw new Error('Non-JSON response');
-                }
+                                let j;
+                                try {
+                                    j = await res.json();
+                                } catch {
+                                    throw new Error('Non-JSON response');
+                                }
 
-                if (j.success) {
-                    msg.style.display = 'block';
-                    msg.style.color = 'green';
-                    msg.textContent = 'Verification code sent. It is valid for 1 minute.';
-                    let remaining = 60;
-                    const orig = 'Request Code';
-                    btn.disabled = true;
-                    btn.textContent = 'Wait ' + remaining + 's';
-                    const t = setInterval(() => {
-                        remaining--;
-                        btn.textContent = 'Wait ' + remaining + 's';
-                        if (remaining <= 0) {
-                            clearInterval(t);
-                            btn.disabled = false;
-                            btn.textContent = orig;
-                        }
-                    }, 1000);
-                } else {
-                    msg.style.display = 'block';
-                    msg.style.color = 'red';
-                    msg.textContent = j.error || 'Failed to send code.';
-                    btn.disabled = false;
-                    btn.textContent = 'Request Code';
-                }
-            } catch (err) {
-                console.error('Request code error:', err);
-                alert('Error sending code. Check console/network.');
-                btn.disabled = false;
-                btn.textContent = 'Request Code';
-            }
-        });
-    })();
+                                if (j.success) {
+                                    msg.style.display = 'block';
+                                    msg.style.color = 'green';
+                                    msg.textContent = 'Verification code sent. It is valid for 1 minute.';
+                                    let remaining = 60;
+                                    const orig = 'Request Code';
+                                    btn.disabled = true;
+                                    btn.textContent = 'Wait ' + remaining + 's';
+                                    const t = setInterval(() => {
+                                        remaining--;
+                                        btn.textContent = 'Wait ' + remaining + 's';
+                                        if (remaining <= 0) {
+                                            clearInterval(t);
+                                            btn.disabled = false;
+                                            btn.textContent = orig;
+                                        }
+                                    }, 1000);
+                                } else {
+                                    msg.style.display = 'block';
+                                    msg.style.color = 'red';
+                                    msg.textContent = j.error || 'Failed to send code.';
+                                    btn.disabled = false;
+                                    btn.textContent = 'Request Code';
+                                }
+                            } catch (err) {
+                                console.error('Request code error:', err);
+                                alert('Error sending code. Check console/network.');
+                                btn.disabled = false;
+                                btn.textContent = 'Request Code';
+                            }
+                        });
+                    })();
 
-                     </script>
+                </script>
             </div>
         </div>
     </div>

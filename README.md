@@ -447,32 +447,6 @@ The system implements **multiple layers of security** that work together to prov
 
 ---
 
-## 🧪 Testing & Quality Assurance
-
-The system has undergone comprehensive testing to ensure reliability and security:
-
-### **Testing Methodologies**
-- **Black Box Testing**: Functional testing without knowledge of internal code
-- **White Box Testing**: Code-level security and logic testing
-- **Database Testing**: Data integrity and transaction testing
-- **Performance Testing**: Load testing with JMeter
-- **Security Testing**: SQL injection, XSS, and authentication testing
-- **Automated Testing**: Cypress for end-to-end testing
-- **Code Quality**: SonarQube for code analysis
-
-### **Test Coverage**
-- User registration and authentication
-- QR code generation and encryption
-- Malware scanning integration
-- Access control and permission management
-- OTP generation and validation
-- Email sharing functionality
-- Friend network sharing
-- Access logging and audit trails
-- Error handling and edge cases
-
----
-
 ## 📝 License & Credits
 
 This project was developed as a Final Year Project to address QR code security vulnerabilities in modern digital systems.

@@ -1,12 +1,3 @@
-## PART 1 (Explanation)
-
-[![Watch on YouTube](https://img.youtube.com/vi/AAsuHRUb18s/0.jpg)](https://youtu.be/mbXsyDUpzS0?si=-bibRvyAk0XH96aU)
-
-
-## PART 2 (System Demo)
-
-[![Watch on YouTube](https://img.youtube.com/vi/AAsuHRUb18s/0.jpg)](https://youtu.be/AAsuHRUb18s)
-
 # SQ-Tech Solver: Secure QR Code Generator System
 
 ## 📋 Table of Contents
@@ -503,3 +494,11 @@ For technical documentation, API references, or security advisories, please refe
 ---
 
 **⚠️ Security Notice**: This system is designed for secure data handling. Always keep your passwords and security phrases confidential. Never share your encryption keys or OTP codes with unauthorized parties.
+
+## PART 1 (Explanation)
+
+[![Watch the video](https://img.youtube.com/vi/mbXsyDUpzS0/0.jpg)](https://youtu.be/mbXsyDUpzS0)
+
+## PART 2 (System Demo)
+
+[![Watch on YouTube](https://img.youtube.com/vi/AAsuHRUb18s/0.jpg)](https://youtu.be/AAsuHRUb18s)
